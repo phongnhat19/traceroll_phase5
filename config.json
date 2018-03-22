@@ -1,0 +1,27 @@
+{
+	"url": "http://localhost:8888",
+	"secret": "9174157e-8920-435d-b257-4d1c686d782f",
+	"port": "8888",
+	"upload_path": "/build/img/uploads",
+	"uploadVideo_path": "/build/img/uploads/videos",
+	"image_path": "/img/uploads",
+	"video_path": "/img/uploads/videos",
+	"thumb_path": "/img/uploads/videos/thumbnails",
+	"mongo": {
+		"host":"ds147842.mlab.com",
+		"port":"47842",
+		"username":"dct_owner",
+		"password":"dct00000",
+		"database":"traceroll_db"
+	},
+	"ssl-temp":{
+		"key":"",
+		"cert":""
+	},
+	"newsfeed":{
+		"item":{
+			"height": 150,
+			"widtd": 150
+		}
+	}
+}
