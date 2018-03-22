@@ -1,0 +1,120 @@
+.home_wrapper *{
+	box-sizing: border-box;
+}
+.home_wrapper{
+	width: 100%;
+	min-height: 100vh;
+	background-color: #fcfcfc;
+	// overflow-y: au
+}
+.home_wrapper ul.canvaslist{
+	width: 600px;
+	margin: auto;
+	padding-top: 50px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.home_wrapper ul.canvaslist li{
+	list-style-type: none;
+	display: block;
+	border: 1px solid #f2f2f2;
+	background-color: white;
+	border-radius: 3px;
+	margin-top: 20px;
+}
+.home_wrapper ul.canvaslist li header{
+	height: 50px;
+	line-height: 50px;
+}
+.home_wrapper ul.canvaslist li header a{
+	font-family: Verdana;
+	font-weight: bold;
+	color: #222;
+	padding-left: 20px;
+}
+.home_wrapper ul.canvaslist li header a:hover{
+	color: #ffbb00;
+	text-decoration: none;
+}
+.home_wrapper ul.canvaslist li  .content img{
+	width: 100%;
+	height: auto;
+}
+.home_wrapper ul.canvaslist li h2{
+	margin-bottom: 20px;
+	text-align: center;
+	word-break: break-all;
+	padding: 10px;
+}
+
+.no-border-radius{
+  border-radius: 0px;
+}
+.active-hover li.active{
+  background-color: #ffbb00;
+}
+.active-hover li.active a, .active-hover li.active span {
+  color: black !important;
+  background-color: #ffbb00 !important;
+}
+.active-hover li span{
+	margin-right: 10px;
+}
+.active-hover li:hover *{
+  color: #ffbb00 !important;
+}
+.homelink{
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.homelink span{
+  margin-right: 10px;
+}
+.homelink:hover{
+  color: #ffbb00 !important;
+}
+.homelink:hover *{
+  color: #ffbb00 !important;
+}
+@media only screen and (max-width: 767px){
+	.home_wrapper ul{
+		width: 100%;
+		max-width: 600px;
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+.content-drawing .konvajs-content{
+	border: 0px !important;
+}
+
+.social-button{
+	text-align: -webkit-center;
+	border: none;
+	text-decoration: none;
+	background-color: #fff;
+	outline: none;
+}
+
+.imageCaption{
+	font-size: 1.5em;
+	margin: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 95%;
+    white-space: nowrap;
+    word-break: break-all;
+    line-height: 25px;
+    max-height: 50px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.row-align{
+	margin: 10px;
+}
+
+.align-button{
+	text-align: -webkit-center;
+}

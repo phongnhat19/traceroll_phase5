@@ -1,0 +1,34 @@
+#myCarousel .carousel-control{
+	width: 8%;
+}
+
+.frame {
+    display: table !important;
+    position: relative;
+    margin-left: auto; 
+    margin-right: auto; 
+    display:  block; 
+    padding: 0px; 
+    height: 100%;
+    word-break: break-all;
+    padding: 10px;
+}
+
+.frame img, .frame video {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.frame h3 {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
