@@ -1,0 +1,32 @@
+{
+	"url": "http://localhost:9000",
+	"secret": "9174157e-8920-435d-b257-4d1c686d782f",
+	"port": "9000",
+	"upload_path": "/build/img/uploads",
+	"uploadVideo_path": "/build/img/uploads/videos",
+	"image_path": "/img/uploads",
+	"video_path": "/img/uploads/videos",
+	"thumb_path": "/img/uploads/videos/thumbnails",
+	"mongo": {
+		"host":"192.168.1.253",
+		"port":"27017",
+		"username":"traceroll_owner",
+		"password":"uAC3qu9YRzBCBtra",
+		"database":"traceroll_db"
+	},
+	"ssl-temp":{
+		"key":"",
+		"cert":""
+	},
+	"newsfeed":{
+		"item":{
+			"height": 150,
+			"widtd": 150
+		}
+	},
+	"mail-reciever": "ngoquocdat093@gmail.com",
+	"auth-sender": {
+	    "user": "tracerollsup@gmail.com",
+	    "pass": "traceRoll2018.com"
+	}
+}

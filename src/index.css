@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css?family=Gaegu");
+@font-face {
+  font-family: 'AvenirNext-Regular';
+  /*src: url("/fonts/avenirnext/AvenirNext-Regular.eot");*/
+  src: url("/fonts/avenirnext/AvenirNextLTPro-Regular.woff") format("woff"), url("/fonts/avenirnext/AvenirNextLTPro-Regular.otf") format("opentype"), url("/fonts/avenirnext/AvenirNextLTPro-Regular.ttf") format("truetype"), url("/fonts/avenirnext/AvenirNextLTPro-Regular.svg#svgFontName") format("svg");
+  font-family: 'AvenirNext-Bold';
+  /*	src: url("/fonts/avenirnext/AvenirNext-Bold.eot");*/
+  src: url("/fonts/avenirnext/AvenirNextLTPro-Bold.woff") format("woff"), url("/fonts/avenirnext/AvenirNextLTPro-Bold.otf") format("opentype"), url("/fonts/avenirnext/AvenirNextLTPro-Bold.ttf") format("truetype"), url("/fonts/avenirnext/AvenirNextLTPro-Bold.svg#svgFontName") format("svg"); }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto; }
+  body img {
+    max-width: 100%; }
+
+a {
+  cursor: pointer; }

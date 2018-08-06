@@ -1,0 +1,95 @@
+#home-button {
+  margin: 1%;
+}
+
+#about_wrapper{
+  position: relative; /* needed for footer positioning*/
+  height: 350px; /* real browsers */
+  min-height: 100%; /* real browsers */
+  width: 30%;
+  background-color: white;
+  margin: 0 auto;
+  box-shadow: 0 8px 15px 0 rgba(0, 0, 0, 0.16);
+  padding: 2vw;
+  border-radius: 3px;
+  margin-top: 4%;
+
+  a{
+    text-decoration: underline;
+    color:inherit;
+    &:hover{}
+  }
+
+  img{
+    margin: 8px 8px 0;
+
+    &:first-of-type{
+      margin:8px 8px 0 0;
+    }
+  }
+
+  @at-root body.background{
+    height: auto;
+    background-image: url(/img/login/bg2.jpg);
+    background-size: cover;
+    font-style: 'AvenirNext-Regular', 'Roboto';
+    color: #797979;
+    margin: 0;
+    padding: 0;
+    height: 100%; /* needed for container min-height */
+      p{
+        font-weight: lighter;
+      }
+  }
+}
+
+#about{
+  div.footer_content {
+    position: absolute;
+    width: 100%;
+    bottom: 0; /* stick to bottom */
+  }
+
+  h1{
+    margin-top:0px;
+    font-weight: bold;
+  }
+}
+
+@media only screen and (max-width: 1000px){
+  div#about_wrapper{
+    width:50%;
+    margin-top:5%;
+  }
+}
+
+@media only screen and (max-width: 768px){
+  div#about_wrapper{
+    width:65%;
+    margin-top: 8%;
+  }
+}
+
+@media only screen and (max-width: 640px){
+  div#about_wrapper{
+    @at-root body.background{
+      background-size:contain;
+    }
+  }
+}
+
+@media only screen and (max-width: 420px){
+  div#about_wrapper{
+    height: 300px;
+    margin-top:2vh;
+    padding: 3vw;
+    width:72%;
+    h1{
+      font-size: 30px;
+    }
+
+  }
+  #home-button{
+    display: none;
+  }
+}

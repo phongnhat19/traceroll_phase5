@@ -1,0 +1,247 @@
+/*
+stylesheet for login page
+*/
+/*Examples */
+/*src: url('webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+/*		 url('webfont.woff2') format('woff2'), /* Super Modern Browsers */
+/*		 url('webfont.woff') format('woff'), /* Pretty Modern Browsers */
+/*		 url('webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
+/*		 url('webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
+#root b, strong {
+  font-family: 'AvenirNext-Bold', 'Roboto', Arial, sans-serif; }
+
+@keyframes fade {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@-webkit-keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, -50%, 0);
+    transform: translate3d(0, -50%, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+@-webkit-keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+@-webkit-keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(-15%, 0, 0);
+    transform: translate3d(-15%, 0, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+@-webkit-keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0); }
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none; } }
+
+#home {
+  font-family: 'AvenirNext-Regular', Helvetica, sans-serif; }
+
+#footer {
+  background-image: url(/img/login/bg2.jpg);
+  background-size: contain;
+  font-family: 'AvenirNext-Regular', Helvetica, sans-serif; }
+
+body h2.headline {
+  font-weight: bolder; }
+
+img {
+  max-width: 100%; }
+
+.legal {
+  font-size: smaller;
+  width: 82%; }
+
+.login_wrapper {
+  height: 100vh;
+  width: 100%; }
+  .login_wrapper input {
+    margin: 8px 0px; }
+  .login_wrapper .loginmodal {
+    width: 700px;
+    height: 440px;
+    position: absolute;
+    background-color: white;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.16);
+    /*top: calc((100vh - 500px)/2);*/
+    margin-top: 14vh;
+    left: calc((100vw - 800px)/1.7);
+    animation: fadeInDown 1s; }
+    .login_wrapper .loginmodal .coverimg {
+      height: 100%;
+      width: 50%;
+      position: absolute;
+      z-index: 3;
+      background-size: cover;
+      transition: all 1s ease; }
+    .login_wrapper .loginmodal .signform h2 {
+      width: 90%;
+      text-align: left;
+      font-size: 25px;
+      font-weight: bold;
+      margin-top: 40px;
+      letter-spacing: 1px;
+      color: #797979; }
+    .login_wrapper .loginmodal .signform label {
+      width: 100%;
+      margin-top: 15px;
+      font-family: 'AvenirNext-Regular','Roboto',Arial;
+      color: #444; }
+    .login_wrapper .loginmodal .signform input {
+      width: 88%;
+      background-color: #f4f4f4;
+      border: none;
+      border-radius: 5px;
+      color: #797979;
+      padding-left: 10px;
+      height: 30px;
+      line-height: 30px;
+      letter-spacing: 0.5px; }
+      .login_wrapper .loginmodal .signform input:focus {
+        outline: none; }
+    .login_wrapper .loginmodal .signform .or_wrap {
+      width: 50%;
+      margin: auto;
+      padding: 10px 0px;
+      color: lightgrey; }
+
+/*Error handling */
+.hasDanger {
+  margin: 0px;
+  color: red;
+  font-size: smaller; }
+
+.hasDanger-border {
+  border: 1px solid red !important; }
+
+body .login_wrapper .loginmodal.error {
+  height: 520px; }
+
+.isSafe-border {
+  border: 1px solid green !important; }
+
+.login_wrapper .loginmodal .signup {
+  float: left;
+  height: 100%;
+  width: 50%;
+  opacity: 0;
+  padding: 0 5%;
+  animation: fadeInLeft 1s 1s forwards;
+  text-align: left; }
+
+.login_wrapper .loginmodal .signform {
+  float: left;
+  height: 100%;
+  width: 50%;
+  opacity: 0;
+  padding: 0 5%;
+  animation: fadeInLeft 1s 1s forwards;
+  text-align: left; }
+  .login_wrapper .loginmodal .signform button#btnlogin, .login_wrapper .loginmodal .signform button#btnreg {
+    width: 33%;
+    height: 40px;
+    background-color: #4285f4;
+    margin-top: 20px;
+    display: block;
+    border-radius: 5px;
+    border: 0px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #1d8cc3; }
+  .login_wrapper .loginmodal .signform .br, .login_wrapper .loginmodal .signform .or {
+    float: left;
+    width: 10%;
+    text-align: center; }
+  .login_wrapper .loginmodal .signform .br {
+    height: 1px;
+    background-color: lightgrey;
+    width: 45%;
+    margin-top: 10px; }
+  .login_wrapper .loginmodal .signform button:active {
+    border-bottom: none !important;
+    outline: none; }
+  .login_wrapper .loginmodal .signform button:focus {
+    outline: none; }
+
+.login_wrapper .loginmodal .signup label {
+  margin-bottom: 1px;
+  margin-top: 5px; }
+
+.login_wrapper .loginmodal .coverimg h2 {
+  color: white;
+  font: 50px/5px "Arial black";
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-top: 60%; }
+
+.headline {
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: 1.2px; }
+
+.whiteboards_content_wrapper p, #platforms p, .collaborate_wrapper p, .canvas_content_wrapper p {
+  line-height: 24px;
+  font-weight: lighter;
+  font-size: 15px;
+  letter-spacing: 1.5px; }
+
+.wrapper {
+  padding: 14vh 0; }
+
+/* mobile styling */
+@media only screen and (max-width: 420px) {
+  #login {
+    display: none; }
+  #login_mobile {
+    display: block; }
+  div.login_wrapper .loginmodal .signform {
+    width: 100%; } }
+
+@media only screen and (min-width: 421px) {
+  #login_mobile {
+    display: none; } }
+
+@media only screen and (max-width: 768px) {
+  .login_wrapper .loginmodal {
+    width: 100%;
+    left: 0px; } }
+
+@media only screen and (max-width: 767px) {
+  .login_wrapper .loginmodal {
+    overflow: hidden;
+    width: 90%;
+    left: 5%;
+    background-color: rgba(255, 255, 255, 0.9); }
+    .login_wrapper .loginmodal .coverimg {
+      display: none; }
+    .login_wrapper .loginmodal .signup, .login_wrapper .loginmodal .signform {
+      width: 50%; }
+    .login_wrapper .loginmodal .signup, .login_wrapper .loginmodal .signform {
+      animation: fadeInLeft 1s 0s forwards; } }
