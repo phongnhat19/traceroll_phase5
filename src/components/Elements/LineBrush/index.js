@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Shape, Group, Image } from 'tr-react-konva';
 import Utils from '../../Util/utils.js';
 import Const from '../../Util/const.js';
-import TrService from '../../Util/service.js';
 
 const BASE_POINT = Const.BASE_POINT;
 
@@ -12,17 +11,6 @@ class LineBrush extends Component{
         this.state={
             image: null
         }
-
-        this.handleRemoving = this.handleRemoving.bind(this);
-    }
-
-    handleRemoving = () => {
-        if (this.props.getOptions().mode === 'eraser') {
-            return;
-        }
-        const key = this.props.dbkey,
-            uid = this.props.uid;
-        TrService.deleteElementOnDb(uid, key);
     }
 
     componentDidMount() {
@@ -66,9 +54,9 @@ class LineBrush extends Component{
                 name = {Const.SHAPE_TYPE.BRUSH}
                 image = {this.state.image}
                 points = {this.props.points}
-                onRemove = {this.handleRemoving}
                 rect = { rect }
                 date_created = {this.props.date_created}
+                listening = {false}
             /> :
             <Group
                 ref = {node => (this.group = node)}

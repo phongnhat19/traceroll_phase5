@@ -246,7 +246,7 @@ const Utils = {
     },
 
     validateEmail(email) {
-        const regex = /(\w([.-]?))+@\w+\.\w+/g;
+        const regex = /^(\w([.-]?))+@\w+\.\w+$/g;
         return regex.test(String(email).toLowerCase());
     },
 

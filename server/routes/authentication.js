@@ -96,16 +96,17 @@
 					return next(new Error('User not found'));
 				}
 				uid = _uid;
-				user.isAdministrator(uid, function (err, isAdmin) {
-					if (!err && isAdmin){
-						//Bypass log attempt when account is administrator
-						next();
-					}else{
+				// user.isAdministrator(uid, function (err, isAdmin) {
+				// 	if (!err && isAdmin){
+				// 		//Bypass log attempt when account is administrator
+				// 		next();
+				// 	}else{
 
-						user.auth.logAttempt(uid, req.ip, next);
-					}
-				});
-
+				// 		user.auth.logAttempt(uid, req.ip, next);
+				// 	}
+				// });
+				next();
+				
 				winston.info('userId: ' + uid);
 			},
 			function(next) {
@@ -367,7 +368,18 @@
 					return next(new Error('Password too short'));
 				}
 
-				next(null,userData);
+				if(userData.email) {
+                    db.getSortedSetByValue('email:uid', userData.email, function(err, results){
+                        if(err){
+                            return next(new Error('Error when find user email'));
+                        }
+                        if(results.length > 0){
+                            return next(new Error('Registration email already exists'));
+                        }
+                    })
+                }
+                
+                next(null,userData);
 			},
 			function(data, next) {
 
@@ -389,92 +401,18 @@
 			}
 		], function(err, data) {
 
-			if (err) {
-				return res.status(400).send(err.message);
-			}
-			user.getUsers([uid], function (err, data) {
-								var userObj = data[0];
-								res.status(200).send(userObj);
-			});
+			if (err) return res.status(400).send(err.message)
 
-		});
+            sendRegisterConfirmEmail(req.body, function(err) {
+                if(err) return res.status(400).send(new Error(err))
+
+                user.getUsers([uid], function (err, data) {
+                    var userObj = data[0];
+                    res.status(200).send(userObj);
+                })
+            })
+		})
 	}
-
-	/*New register
-	function register(req, res) {
-
-		if (parseInt(meta.config.allowRegistration, 10) === 0) {
-			return res.sendStatus(403);
-		}
-
-		var userData = {};
-		console.log('register key: ', req.body);
-		for (var key in req.body) {
-			if (req.body.hasOwnProperty(key)) {
-				userData[key] = req.body[key];
-			}
-		}
-		winston.info(userData);
-		var uid;
-		async.waterfall([
-			function(next) {
-				if (!userData.email) {
-					return next(new Error('Invalid email'));
-				}else if (!userData.username || userData.username.length < 3//meta.config.minimumUsernameLength) {
-					return next(new Error('Username too short'));
-				}else if (userData.username.length > 20//meta.config.maximumUsernameLengt) {
-					return next(new Error('Username too long'));
-				}else if (!userData.password || userData.password.length < 3//meta.config.minimumPasswordLength) {
-					return next(new Error('Password too short'));
-				}else if(userData.email){
-					db.getSortedSetByValue('email:uid', userData.email, function(err, results){
-						winston.info('============ Error:', err, '++++ User exist email', results[0]);
-						if(err){
-							return next(new Error('Error when find user email'));
-						}else if(results.length > 0){
-							return next(new Error('Registration email already exists'));
-						}else{
-							next(null,userData);
-						}
-					})
-				}
-			},
-			function(data, next) {
-
-				user.create(data, next);
-			},
-			function(_uid, next) {
-
-				uid = _uid;
-				req.login({uid: uid}, next);
-			},
-			function(next) {
-				//user.logIP(uid, req.ip);
-
-				//user.notifications.sendWelcomeNotification(uid);
-
-				//plugins.fireHook('filter:register.complete', {uid: uid, referrer: req.body.referrer}, next);
-				//console.log(req.body.referrer);
-				next()
-			}
-		], function(err, data) {
-
-			if (err) {
-				return res.status(400).send(err.message);
-			}else{
-				sendRegisterConfirmEmail(req.body, function(err){
-					if(err){
-						return res.status(400).send(new Error(err));
-					}else{
-						user.getUsers([uid], function (err, data) {
-								var userObj = data[0];
-								res.status(200).send(userObj);
-						});
-					}
-				});
-			}
-		});
-	}*/
 
 	function edit(req, res) {
 

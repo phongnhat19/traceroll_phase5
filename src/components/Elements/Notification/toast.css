@@ -1,5 +1,5 @@
 .toast-box {
-  position: absolute;
+  position: fixed;
   opacity: 0;
   transition: 0.25s;
   bottom: 40px;

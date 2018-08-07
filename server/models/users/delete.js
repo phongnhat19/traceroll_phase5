@@ -252,9 +252,9 @@ module.exports = function(Users) {
                                         function(next_stepChild){
                                             db.delete(_keyFollower, function(err) {
                                                 if(err){
-                                                    return next_child(err);
+                                                    return next_stepChild(err);
                                                 }else{
-                                                    next_child();
+                                                    next_stepChild();
                                                 }
                                             });
                                         },
@@ -264,9 +264,9 @@ module.exports = function(Users) {
                                             
                                             db.sortedSetsRemoveNoValuePattern(_keysFollowing, userId, function(err){
                                                 if(err){
-                                                    return next_child(err);
+                                                    return next_stepChild(err);
                                                 }else{
-                                                    next_child();
+                                                    next_stepChild();
                                                 }
                                             });
                                         }

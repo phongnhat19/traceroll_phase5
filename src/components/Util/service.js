@@ -234,6 +234,13 @@ const TrService = {
                 callback && callback(response);
             })
             .catch(Utils.axiosError);
+    },
+    resetPassword(requestBody, callback) {
+        axios.post('/reset-pwd', requestBody)
+            .then(function (response) {
+                callback && callback(response);
+            })
+            .catch(Utils.axiosError);
     }
 }
 

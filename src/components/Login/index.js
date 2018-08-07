@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Utils from '../Util/utils.js';
 import Const from '../Util/const.js';
+import TrService from '../Util/service';
 import CheckBrowser from './Util/CheckBrowser/index';
 import HandleRegister from './Util/HandleRegister/index'
 import Intro from './Intro/index';
@@ -13,8 +14,11 @@ import Collaborate from './Collaborate/index'
 import LoginFooter from './LoginFooter/index';
 import cryptoJS from 'crypto-js';
 import './style.css';
+import TRToast from '../Elements/Notification/toast'
+
 const _ONBOARDING_URL = 'http://onboarding.traceroll.com/tour/1';
 
+const _EmailError = Const.EMAIL_ERROR
 
 //=====================================
 // LOGIN FORM
@@ -40,7 +44,9 @@ export default class Login extends Component {
 				passwordCheck: false,
 				emailCheck: false,
 				passwordMatch: false,
-				formError: ''
+				formError: '',
+                showForgotPwdDialog: false,
+                isValidRecoveryEmail: true,
 			}
 
 			var width = window.innerWidth;
@@ -127,7 +133,6 @@ export default class Login extends Component {
 			const email = e.target.value;
 			const _ErrorClass = 'hasDanger-border';
 			const _NoError = '';
-			const _EmailError = 'Please enter a valid email address';
 
 			if(!Utils.validateEmail(email)) {
 					this.setState({
@@ -259,7 +264,6 @@ export default class Login extends Component {
 		const _UsernameError = 'Please enter a username without caps or special characters';
 		const _PasswordError='Please enter a password';
 		const _PasswordMismatch='Please enter a matching password';
-		const _EmailError='Please enter a valid email';
 		const _NameError = 'Please enter a valid name';
 
 		if(!this.state.usernameCheck){
@@ -336,6 +340,53 @@ export default class Login extends Component {
 		CheckBrowser.check();
 	}
 
+    handleForgotPassword = () => {
+        this.setState({
+            showForgotPwdDialog: true
+        })
+    }
+
+    handleHideDialog = (e) => {
+        const dialog = e.target.dataset.dialog
+        this.setState({
+            [dialog]: false
+        })
+    }
+
+    handleValidateEmail = (e) => {
+        const input = e.target,
+            email = e.target.value,
+            isValid = Utils.validateEmail(email),
+            input_value = input.dataset.input_value,
+            input_error = input.dataset.input_error
+
+        this.setState({
+            [input_value]: email,
+            [input_error]: isValid
+        })
+
+    }
+
+    handleResetPwd = (e) => {
+        const { recoveryEmail, isValidRecoveryEmail } = this.state
+
+        if(isValidRecoveryEmail) {
+
+            const requestBody = {
+                "email": recoveryEmail
+            }
+
+            TrService.resetPassword(requestBody, response => {
+                if(response.data.error !== null) alert(`Send email to ${recoveryEmail} failed.`)
+            })
+
+            this.setState({
+                showForgotPwdDialog: false
+            })
+            this.TRToast.showAutoHide(`We sent an email to ${recoveryEmail}`, 5000)
+        }
+    }
+
 	render() {
 		return (
 			<div id="home">
@@ -363,7 +414,33 @@ export default class Login extends Component {
 											placeholder="Password"
 											onChange = {(e) => this.setState({password_login:e.target.value})} onKeyPress={this.handleLoginPress} required/>
 										<button id="btnlogin" onClick={(event) => this.handleLogin(event)}>Log-in</button>
+										<button className="Login__forgotpwd-btn" onClick={this.handleForgotPassword}>Forgot password?</button>
 								</div>
+
+                                {/* Forgot password dialog */}
+                                {
+                                    this.state.showForgotPwdDialog &&
+                                    <section className="ForgotPwd__container" data-dialog="showForgotPwdDialog" onClick={this.handleHideDialog}>
+                                        <section className="ForgotPwd">
+                                            <h2 className="ForgotPwd__title">Forgot Password</h2>
+                                            <p className="ForgotPwd__info">Type in your email address so we can send your password.</p>
+                                            <input
+                                                className={`ForgotPwd__email-input${this.state.isValidRecoveryEmail?'':' hasDanger-border'}`}
+                                                type="email"
+                                                placeholder="E-mail Address"
+                                                onChange={this.handleValidateEmail}
+                                                data-input_value="recoveryEmail"
+                                                data-input_error="isValidRecoveryEmail"
+                                            />
+                                            {
+                                                !this.state.isValidRecoveryEmail &&
+                                                <p className="hasDanger">{_EmailError}</p>
+                                            }
+                                            <button className="ForgotPwd__send-btn" onClick={this.handleResetPwd}>Send</button>
+                                        </section>
+                                    </section>
+                                }
+
 								{/*Resgister FOrm*/}
 								<div className="signin signform" style={{display:this.state.display}}>
 										<h2>Create an Account</h2>
@@ -423,6 +500,7 @@ export default class Login extends Component {
 					</div>
 					<LoginFooter />
 				</div>
+                <TRToast ref={node => this.TRToast = node}/>
 			</div>
 		);
 	}

@@ -15,7 +15,7 @@ class TRToast extends Component {
 
     }
 
-    showAutoHide = (msg) => {
+    showAutoHide = (msg, length = 2000) => {
         if (this.el) {
             this.setState({
                 msg: msg
@@ -24,7 +24,7 @@ class TRToast extends Component {
                 clearTimeout(this.timeout)
             }
             $(this.el).addClass('show')
-            this.timeout = setTimeout(this.hide, 2000)
+            this.timeout = setTimeout(this.hide, length)
         }
     }
 

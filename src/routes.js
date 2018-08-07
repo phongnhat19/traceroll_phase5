@@ -7,9 +7,10 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Stage from './components/Stage';
 import About from './components/About';
+import ResetPwd from './components/ResetPwd';
+import NonRegistration from './components/NonRegistration';
 import Terms from './components/About';
 import PrivacyPolicy from './components/About';
-//import NonRegistration from './components/NonRegistration';
 
 const Routes = (props) => (
   <Router {...props}>
@@ -23,10 +24,8 @@ const Routes = (props) => (
     <Route path="/stage" component={Stage} />
     <Route path="/stage/:userslug/:elementId" component={Stage} />
     <Route path="/stage/:userslug" component={Stage} />
-    {
-        //<Route path="/reset/password/:token" component={ResetPwd} />
-        //<Route path="/user/non-regis/:tokenNonRegis" component={NonRegistration} />
-    }
+    <Route path="/reset/password/:token" component={ResetPwd} />
+    <Route path="/user/non-regis/:tokenNonRegis" component={NonRegistration} />
     <Route path="*" component={NotFound} />
   </Router>
 );
