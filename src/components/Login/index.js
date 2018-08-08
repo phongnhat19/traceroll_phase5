@@ -85,6 +85,7 @@ export default class Login extends Component {
 		}
 
 	}
+
 	//Event slide Left IMG to show Login Form
 	moveleft(){
 		var width = window.innerWidth;
@@ -100,6 +101,7 @@ export default class Login extends Component {
 			})
 		}
 	}
+
 	//Login handler
 	handleLogin(event){
 		//setting
@@ -134,129 +136,134 @@ export default class Login extends Component {
 			const _ErrorClass = 'hasDanger-border';
 			const _NoError = '';
 
-			if(!Utils.validateEmail(email)) {
-					this.setState({
-							emailClass: _ErrorClass,
-							emailError: _EmailError,
-							emailCheck: false,
-							formError: 'error'
-					});
-					return;
-					//alert(`Email ${email} is invalid.`);
-			}else{
-					this.setState({
-							emailClass: _NoError,
-							emailError: _NoError,
-							emailCheck: true
-					})
-			}
+		if(!Utils.validateEmail(email)) {
+                this.setState({
+                        emailClass: _ErrorClass,
+                        emailError: _EmailError,
+                        emailCheck: false,
+                        formError: 'error'
+                });
+                return;
+                //alert(`Email ${email} is invalid.`);
+        }else{
+                this.setState({
+                        emailClass: _NoError,
+                        emailError: _NoError,
+                        emailCheck: true
+                })
+        }
 
-		}
+    }
 
-		handleUsername(e){
-				const _UsernameError = 'Please enter a username without caps or special characters';
-				const _ErrorClass = 'hasDanger-border';
-				const _NoError = '';
-				this.setState({username:e.target.value})
-				const username=e.target.value;
-				if(!username){
-						this.setState({
-								usernameClass: _ErrorClass,
-								usernameError: _UsernameError,
-								usernameCheck: false,
-								formError: 'error'
-						})
-				}else if( username.match(/[A-Z]|\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s/g) ) {
-						this.setState({
-								usernameClass: _ErrorClass,
-								usernameError: _UsernameError,
-								usernameCheck: false,
-								formError: 'error'
-						})
-				}else{
-						this.setState({
-								usernameClass: _NoError,
-								usernameError: _NoError,
-								usernameCheck: true
-						})
-				}
-		}
-		handlePassword(e){
-			const _ErrorClass = 'hasDanger-border';
-			const _NoError = '';
-			const _PasswordLength = 'Password should atleast have 6 characters';
-			const _PasswordCapital = 'Password must have a capital letter';
-			const _PasswordSmall= 'Password must have a small letter';
-			const _PasswordNumber = 'Password must contain a number';
-			var numberCheck = new RegExp("(?=.*[0-9])");
-			var capitalCheck=new  RegExp("(?=.*[A-Z])");
-			var smallCheck= new RegExp("(?=.*[a-z])");
-			var lengthCheck = new RegExp("(?=.{6,})");
-			this.setState({password:e.target.value});
-			const password=e.target.value;
-			if(!capitalCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordCapital,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else if(!smallCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordSmall,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else if(!numberCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordNumber,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else if(!lengthCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordLength,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else {
-						this.setState({
-								passwordClass: _NoError,
-								passwordError: _NoError,
-								passwordMisMatch: _NoError,
-								passwordCheck:true
-						})
-				}
-		}
-		handlePasswordMatch(e){
-			const _PasswordMismatch = 'Password mismatch';
-			const _ErrorClass = 'hasDanger-border';
-			const _Password=this.state.password;
-			const _ConfirmPassword=e.target.value;
-			const _NoError='';
-			if(_Password!=_ConfirmPassword){
-							this.setState({
-									passwordClass: _ErrorClass,
-									passwordMisMatch: _PasswordMismatch,
-									passwordMatch:false,
-									formError: 'error'
-							})
-			}
-					else {
-							this.setState({
-									passwordClass: _NoError,
-									passwordMisMatch: _NoError,
-									passwordMatch:true
-							})
-					}
-		}
+    handleUsername(e){
+        const _UsernameError = 'Please enter a username without caps or special characters';
+        const _ErrorClass = 'hasDanger-border';
+        const _NoError = '';
+        this.setState({username:e.target.value})
+        const username=e.target.value;
+        if(!username){
+            this.setState({
+                usernameClass: _ErrorClass,
+                usernameError: _UsernameError,
+                usernameCheck: false,
+                formError: 'error'
+            })
+        }else if( username.match(/[A-Z]|\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s/g) ) {
+            this.setState({
+                usernameClass: _ErrorClass,
+                usernameError: _UsernameError,
+                usernameCheck: false,
+                formError: 'error'
+            })
+        }else{
+            this.setState({
+                usernameClass: _NoError,
+                usernameError: _NoError,
+                usernameCheck: true
+            })
+        }
+    }
+
+    handlePassword(e){
+        const _ErrorClass = 'hasDanger-border',
+            _NoError = '',
+            _PasswordLength = 'Password should atleast have 6 characters',
+            _PasswordCapital = 'Password must have a capital letter',
+            _PasswordSmall= 'Password must have a small letter',
+            _PasswordNumber = 'Password must contain a number',
+            numberCheck = new RegExp("(?=.*[0-9])"),
+            capitalCheck=new  RegExp("(?=.*[A-Z])"),
+            smallCheck= new RegExp("(?=.*[a-z])"),
+            lengthCheck = new RegExp("(?=.{6,})")
+
+        this.setState({password:e.target.value});
+        const password=e.target.value;
+        if(!capitalCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordCapital,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else if(!smallCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordSmall,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else if(!numberCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordNumber,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else if(!lengthCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordLength,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else {
+            this.setState({
+                passwordClass: _NoError,
+                passwordError: _NoError,
+                passwordMisMatch: _NoError,
+                passwordCheck:true
+            })
+        }
+    }
+
+    handlePasswordMatch(e){
+        const _PasswordMismatch = 'Password mismatch',
+            _ErrorClass = 'hasDanger-border',
+            _Password = this.state.password,
+            _ConfirmPassword = e.target.value,
+            _NoError = ''
+
+        if(_Password !== _ConfirmPassword){
+            this.setState({
+                passwordClass: _ErrorClass,
+                passwordMisMatch: _PasswordMismatch,
+                passwordMatch:false,
+                formError: 'error'
+            })
+        }
+        else {
+            this.setState({
+                passwordClass: _NoError,
+                passwordMisMatch: _NoError,
+                passwordMatch:true
+            })
+        }
+    }
+
 	//Register handler
 	handleRegister(e){
 		const _SECRETKEY = 'ADtCrhPcSQ';
@@ -324,7 +331,6 @@ export default class Login extends Component {
 			})
 		}else{
 			this.setState({formError: "error"});
-			console.log("issue with registration try again");
 		}
 
 	}
@@ -372,18 +378,21 @@ export default class Login extends Component {
 
         if(isValidRecoveryEmail) {
 
+            this.TRToast.showAutoHide('Sending...')
+
             const requestBody = {
                 "email": recoveryEmail
             }
 
             TrService.resetPassword(requestBody, response => {
-                if(response.data.error !== null) alert(`Send email to ${recoveryEmail} failed.`)
+                const error = response.data.error
+                if (error !== null) this.TRToast.showAutoHide(error)
+                else                this.TRToast.showAutoHide(`We sent a recovery link to ${recoveryEmail}`, 5000)
             })
 
             this.setState({
                 showForgotPwdDialog: false
             })
-            this.TRToast.showAutoHide(`We sent an email to ${recoveryEmail}`, 5000)
         }
     }
 

@@ -633,9 +633,9 @@
 							})
 						}else{
 							/*RECOVER EMAIL NOT EXIST*/
-							// console.log('=============== Recover email not exist ================');
+							console.log('=============== Recovery email not exist ================');
 							res.json({
-								error: new Error('Recover email not exist')
+								error: 'Recovery email not exist'
 							})
 						}
 					}
