@@ -6,41 +6,34 @@ class TRToast extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            msg: ''
+            msg: '',
+            isShow: false
         }
         this.timeout = null
     }
 
-    componentWillMount() {
-
-    }
-
     showAutoHide = (msg, length = 2000) => {
-        if (this.el) {
-            this.setState({
-                msg: msg
-            })
-            if (this.timeout) {
-                clearTimeout(this.timeout)
-            }
-            $(this.el).addClass('show')
-            this.timeout = setTimeout(this.hide, length)
+        this.setState({
+            msg: msg,
+            isShow: true
+        })
+        if (this.timeout) {
+            clearTimeout(this.timeout)
         }
+        this.timeout = setTimeout(this.hide, length)
     }
 
     show = (msg) => {
-        if (this.el) {
-            this.setState({
-                msg: msg
-            })
-            $(this.el).addClass('show')
-        }
+        this.setState({
+            msg: msg,
+            isShow: true
+        })
     }
 
     hide = () => {
-        if (this.el) {
-            $(this.el).removeClass('show')
-        }
+        this.setState({
+            isShow: false
+        })
     }
 
     componentDidMount() {
@@ -54,8 +47,9 @@ class TRToast extends Component {
 
     render() {
         return (
-            <section ref={(node) => {this.el = node}}
-                className="toast-box">
+            <section
+                ref={node => this.el = node}
+                className={`toast-box${this.state.isShow?' show':''}`}>
                 <h4>{ this.state.msg }</h4>
             </section>
         )

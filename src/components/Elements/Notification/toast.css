@@ -8,6 +8,7 @@
   text-align: center;
 }
 .toast-box.show {
+  z-index: 200;
   opacity: 1;
   transform: translateY(-40px);
 }
