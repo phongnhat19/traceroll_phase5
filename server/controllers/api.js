@@ -709,6 +709,8 @@ apiController.sendReportMail = function(req, res, next) {
     	html: '<p><b>user name: '+reportData.fullName+'<br>email: '+reportData.senderEmail+'</b><br><br>'+reportData.reportDetails+'</p>' // html body
 	};
 
+	console.log('sendReportMail: ', mailOptions)
+
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			winston.error(error)

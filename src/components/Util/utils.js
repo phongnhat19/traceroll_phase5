@@ -249,7 +249,13 @@ const Utils = {
         const regex = /^(\w([.-]?))+@\w+\.\w+$/g;
         return regex.test(String(email).toLowerCase());
     },
-
+    isValidPassword(pwd) {
+        const numberCheck = new RegExp("(?=.*[0-9])"),
+            capitalCheck = new  RegExp("(?=.*[A-Z])"),
+            smallCheck = new RegExp("(?=.*[a-z])"),
+            lengthCheck = new RegExp("(?=.{6,})")
+        return lengthCheck.test(pwd) && numberCheck.test(pwd) && capitalCheck.test(pwd) && smallCheck.test(pwd)
+    },
     calculateTextSizeByTextLength(length) {
         if (length > 3000) {
             return 12;
