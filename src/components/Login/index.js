@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Utils from '../Util/utils.js';
 import Const from '../Util/const.js';
+import TrService from '../Util/service';
 import CheckBrowser from './Util/CheckBrowser/index';
 import HandleRegister from './Util/HandleRegister/index'
 import Intro from './Intro/index';
@@ -13,8 +14,11 @@ import Collaborate from './Collaborate/index'
 import LoginFooter from './LoginFooter/index';
 import cryptoJS from 'crypto-js';
 import './style.css';
+import TRToast from '../Elements/Notification/toast'
+
 const _ONBOARDING_URL = 'http://onboarding.traceroll.com/tour/1';
 
+const _EmailError = Const.EMAIL_ERROR
 
 //=====================================
 // LOGIN FORM
@@ -40,7 +44,9 @@ export default class Login extends Component {
 				passwordCheck: false,
 				emailCheck: false,
 				passwordMatch: false,
-				formError: ''
+				formError: '',
+                showForgotPwdDialog: false,
+                isValidRecoveryEmail: true,
 			}
 
 			var width = window.innerWidth;
@@ -79,6 +85,7 @@ export default class Login extends Component {
 		}
 
 	}
+
 	//Event slide Left IMG to show Login Form
 	moveleft(){
 		var width = window.innerWidth;
@@ -94,6 +101,7 @@ export default class Login extends Component {
 			})
 		}
 	}
+
 	//Login handler
 	handleLogin(event){
 		//setting
@@ -127,131 +135,135 @@ export default class Login extends Component {
 			const email = e.target.value;
 			const _ErrorClass = 'hasDanger-border';
 			const _NoError = '';
-			const _EmailError = 'Please enter a valid email address';
 
-			if(!Utils.validateEmail(email)) {
-					this.setState({
-							emailClass: _ErrorClass,
-							emailError: _EmailError,
-							emailCheck: false,
-							formError: 'error'
-					});
-					return;
-					//alert(`Email ${email} is invalid.`);
-			}else{
-					this.setState({
-							emailClass: _NoError,
-							emailError: _NoError,
-							emailCheck: true
-					})
-			}
+		if(!Utils.validateEmail(email)) {
+                this.setState({
+                        emailClass: _ErrorClass,
+                        emailError: _EmailError,
+                        emailCheck: false,
+                        formError: 'error'
+                });
+                return;
+                //alert(`Email ${email} is invalid.`);
+        }else{
+                this.setState({
+                        emailClass: _NoError,
+                        emailError: _NoError,
+                        emailCheck: true
+                })
+        }
 
-		}
+    }
 
-		handleUsername(e){
-				const _UsernameError = 'Please enter a username without caps or special characters';
-				const _ErrorClass = 'hasDanger-border';
-				const _NoError = '';
-				this.setState({username:e.target.value})
-				const username=e.target.value;
-				if(!username){
-						this.setState({
-								usernameClass: _ErrorClass,
-								usernameError: _UsernameError,
-								usernameCheck: false,
-								formError: 'error'
-						})
-				}else if( username.match(/[A-Z]|\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s/g) ) {
-						this.setState({
-								usernameClass: _ErrorClass,
-								usernameError: _UsernameError,
-								usernameCheck: false,
-								formError: 'error'
-						})
-				}else{
-						this.setState({
-								usernameClass: _NoError,
-								usernameError: _NoError,
-								usernameCheck: true
-						})
-				}
-		}
-		handlePassword(e){
-			const _ErrorClass = 'hasDanger-border';
-			const _NoError = '';
-			const _PasswordLength = 'Password should atleast have 6 characters';
-			const _PasswordCapital = 'Password must have a capital letter';
-			const _PasswordSmall= 'Password must have a small letter';
-			const _PasswordNumber = 'Password must contain a number';
-			var numberCheck = new RegExp("(?=.*[0-9])");
-			var capitalCheck=new  RegExp("(?=.*[A-Z])");
-			var smallCheck= new RegExp("(?=.*[a-z])");
-			var lengthCheck = new RegExp("(?=.{6,})");
-			this.setState({password:e.target.value});
-			const password=e.target.value;
-			if(!capitalCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordCapital,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else if(!smallCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordSmall,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else if(!numberCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordNumber,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else if(!lengthCheck.test(password)) {
-						this.setState({
-								passwordClass:_ErrorClass,
-								passwordError:_PasswordLength,
-								passwordCheck: false,
-								formError: 'error'
-						})
-				}
-				else {
-						this.setState({
-								passwordClass: _NoError,
-								passwordError: _NoError,
-								passwordMisMatch: _NoError,
-								passwordCheck:true
-						})
-				}
-		}
-		handlePasswordMatch(e){
-			const _PasswordMismatch = 'Password mismatch';
-			const _ErrorClass = 'hasDanger-border';
-			const _Password=this.state.password;
-			const _ConfirmPassword=e.target.value;
-			const _NoError='';
-			if(_Password!=_ConfirmPassword){
-							this.setState({
-									passwordClass: _ErrorClass,
-									passwordMisMatch: _PasswordMismatch,
-									passwordMatch:false,
-									formError: 'error'
-							})
-			}
-					else {
-							this.setState({
-									passwordClass: _NoError,
-									passwordMisMatch: _NoError,
-									passwordMatch:true
-							})
-					}
-		}
+    handleUsername(e){
+        const _UsernameError = 'Please enter a username without caps or special characters';
+        const _ErrorClass = 'hasDanger-border';
+        const _NoError = '';
+        this.setState({username:e.target.value})
+        const username=e.target.value;
+        if(!username){
+            this.setState({
+                usernameClass: _ErrorClass,
+                usernameError: _UsernameError,
+                usernameCheck: false,
+                formError: 'error'
+            })
+        }else if( username.match(/[A-Z]|\`|\~|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\+|\=|\[|\{|\]|\}|\||\\|\'|\<|\,|\.|\>|\?|\/|\""|\;|\:|\s/g) ) {
+            this.setState({
+                usernameClass: _ErrorClass,
+                usernameError: _UsernameError,
+                usernameCheck: false,
+                formError: 'error'
+            })
+        }else{
+            this.setState({
+                usernameClass: _NoError,
+                usernameError: _NoError,
+                usernameCheck: true
+            })
+        }
+    }
+
+    handlePassword(e){
+        const _ErrorClass = 'hasDanger-border',
+            _NoError = '',
+            _PasswordLength = 'Password should atleast have 6 characters',
+            _PasswordCapital = 'Password must have a capital letter',
+            _PasswordSmall= 'Password must have a small letter',
+            _PasswordNumber = 'Password must contain a number',
+            numberCheck = new RegExp("(?=.*[0-9])"),
+            capitalCheck=new  RegExp("(?=.*[A-Z])"),
+            smallCheck= new RegExp("(?=.*[a-z])"),
+            lengthCheck = new RegExp("(?=.{6,})")
+
+        this.setState({password:e.target.value});
+        const password=e.target.value;
+        if(!capitalCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordCapital,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else if(!smallCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordSmall,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else if(!numberCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordNumber,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else if(!lengthCheck.test(password)) {
+            this.setState({
+                passwordClass:_ErrorClass,
+                passwordError:_PasswordLength,
+                passwordCheck: false,
+                formError: 'error'
+            })
+        }
+        else {
+            this.setState({
+                passwordClass: _NoError,
+                passwordError: _NoError,
+                passwordMisMatch: _NoError,
+                passwordCheck:true
+            })
+        }
+    }
+
+    handlePasswordMatch(e){
+        const _PasswordMismatch = 'Password mismatch',
+            _ErrorClass = 'hasDanger-border',
+            _Password = this.state.password,
+            _ConfirmPassword = e.target.value,
+            _NoError = ''
+
+        if(_Password !== _ConfirmPassword){
+            this.setState({
+                passwordClass: _ErrorClass,
+                passwordMisMatch: _PasswordMismatch,
+                passwordMatch:false,
+                formError: 'error'
+            })
+        }
+        else {
+            this.setState({
+                passwordClass: _NoError,
+                passwordMisMatch: _NoError,
+                passwordMatch:true
+            })
+        }
+    }
+
 	//Register handler
 	handleRegister(e){
 		const _SECRETKEY = 'ADtCrhPcSQ';
@@ -259,7 +271,6 @@ export default class Login extends Component {
 		const _UsernameError = 'Please enter a username without caps or special characters';
 		const _PasswordError='Please enter a password';
 		const _PasswordMismatch='Please enter a matching password';
-		const _EmailError='Please enter a valid email';
 		const _NameError = 'Please enter a valid name';
 
 		if(!this.state.usernameCheck){
@@ -320,7 +331,6 @@ export default class Login extends Component {
 			})
 		}else{
 			this.setState({formError: "error"});
-			console.log("issue with registration try again");
 		}
 
 	}
@@ -335,6 +345,56 @@ export default class Login extends Component {
 	componentDidMount(){
 		CheckBrowser.check();
 	}
+
+    handleForgotPassword = () => {
+        this.setState({
+            showForgotPwdDialog: true
+        })
+    }
+
+    handleHideDialog = (e) => {
+        const dialog = e.target.dataset.dialog
+        this.setState({
+            [dialog]: false
+        })
+    }
+
+    handleValidateEmail = (e) => {
+        const input = e.target,
+            email = e.target.value,
+            isValid = Utils.validateEmail(email),
+            input_value = input.dataset.input_value,
+            input_error = input.dataset.input_error
+
+        this.setState({
+            [input_value]: email,
+            [input_error]: isValid
+        })
+
+    }
+
+    handleResetPwd = (e) => {
+        const { recoveryEmail, isValidRecoveryEmail } = this.state
+
+        if(isValidRecoveryEmail) {
+
+            this.TRToast.showAutoHide('Sending...')
+
+            const requestBody = {
+                "email": recoveryEmail
+            }
+
+            TrService.resetPassword(requestBody, response => {
+                const error = response.data.error
+                if (error !== null) this.TRToast.showAutoHide(error)
+                else                this.TRToast.showAutoHide(`We sent a recovery link to ${recoveryEmail}`, 5000)
+            })
+
+            this.setState({
+                showForgotPwdDialog: false
+            })
+        }
+    }
 
 	render() {
 		return (
@@ -363,7 +423,33 @@ export default class Login extends Component {
 											placeholder="Password"
 											onChange = {(e) => this.setState({password_login:e.target.value})} onKeyPress={this.handleLoginPress} required/>
 										<button id="btnlogin" onClick={(event) => this.handleLogin(event)}>Log-in</button>
+										<button className="Login__forgotpwd-btn" onClick={this.handleForgotPassword}>Forgot password?</button>
 								</div>
+
+                                {/* Forgot password dialog */}
+                                {
+                                    this.state.showForgotPwdDialog &&
+                                    <section className="ForgotPwd__container" data-dialog="showForgotPwdDialog" onClick={this.handleHideDialog}>
+                                        <section className="ForgotPwd">
+                                            <h2 className="ForgotPwd__title">Forgot Password</h2>
+                                            <p className="ForgotPwd__info">Type in your email address so we can send your password.</p>
+                                            <input
+                                                className={`ForgotPwd__email-input${this.state.isValidRecoveryEmail?'':' hasDanger-border'}`}
+                                                type="email"
+                                                placeholder="E-mail Address"
+                                                onChange={this.handleValidateEmail}
+                                                data-input_value="recoveryEmail"
+                                                data-input_error="isValidRecoveryEmail"
+                                            />
+                                            {
+                                                !this.state.isValidRecoveryEmail &&
+                                                <p className="hasDanger">{_EmailError}</p>
+                                            }
+                                            <button className="ForgotPwd__send-btn" onClick={this.handleResetPwd}>Send</button>
+                                        </section>
+                                    </section>
+                                }
+
 								{/*Resgister FOrm*/}
 								<div className="signin signform" style={{display:this.state.display}}>
 										<h2>Create an Account</h2>
@@ -423,6 +509,7 @@ export default class Login extends Component {
 					</div>
 					<LoginFooter />
 				</div>
+                <TRToast ref={node => this.TRToast = node}/>
 			</div>
 		);
 	}

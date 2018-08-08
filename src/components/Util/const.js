@@ -63,8 +63,8 @@ const Const = {
 		SAVING: 1
 	},
 	MENU_HEIGHT: 80,
-	INVALID_PASSWORD: 'Password at least 6 characters',
-	PASSWORD_REGEXP: '[\\d\\W\\w]{6,}' // Old regexp /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\d\W\w]{6,}/gm
+	INVALID_PASSWORD_MSG: 'Password should atleast have 6 characters and must have a capital letter, a small letter, a number',
+	PASSWORD_REGEXP: '[\\d\\W\\w]{6,}', // Old regexp /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\d\W\w]{6,}/gm
+	EMAIL_ERROR: 'Please enter a valid email address',
 }
-
 export default Const

@@ -60,12 +60,9 @@ export default class ResetPwd extends Component {
     handleChangePwd(e){
         const newPassword = this.state.newPwd;
         const confirmPassword = this.state.confirmPwd;
-        const regex = new RegExp(Const.PASSWORD_REGEXP, 'gm');
 
-        if(!regex.test(newPassword)){
-            alert(Const.INVALID_PASSWORD);
-        }else if(newPassword.length >= 3 && confirmPassword.length >= 3 ){
-            if(confirmPassword.localeCompare(newPassword) === 0){
+        if (Utils.isValidPassword(newPassword)) {
+            if (confirmPassword.localeCompare(newPassword) === 0) {
                 const newPwdData = {
                     "recoverPassword": newPassword,
                     "recoverUid": this.state.requestUid,
@@ -73,25 +70,21 @@ export default class ResetPwd extends Component {
                 }
 
                 axios.post('/user/recover-password', newPwdData)
-                .then(function(response){
-                    // console.log('recoverPassword response =================' ,response);
-                    if(response.status === 200){
+                .then(function(response) {
+                    if (response.status === 200) {
                         window.location.href = "/login";
-                    }else{
+                    } else {
                         alert('Can not reset password, try again please!');
                     }
                 })
 
-            }else{
+            } else {
                 // corfirm password not equal
                 alert('Confirm password not matching!');
             }
-        }else if(newPassword.length < 3 && confirmPassword.length < 3 ){
-            // missing input password/ confirm password
-            alert("New password is too short");
-        }else if(newPassword.length == 0 && confirmPassword.length == 0){
-            alert("New password/ Confirm password is empty");
-        } 
+        } else {
+            alert(Const.INVALID_PASSWORD_MSG);
+        }
     }
 
     /*HANLDE REDIRECT LOGIN PAGE*/

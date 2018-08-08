@@ -1,98 +1,114 @@
 import React, { Component } from 'react';
 import './style.css';
-import Jquery from 'jquery';
-import axios from 'axios';
 import Utils from '../../Util/utils.js';
 import Const from '../../Util/const.js';
+import TrService from '../../Util/service.js';
+import TRToast from '../Notification/toast'
 
 class TROptMenu extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            showOptMenu: this.props.showOptMenu ? this.props.showOptMenu : false,
+            showOptMenu: props.showOptMenu ? props.showOptMenu : false,
             editInfo: false,
-            userInfomation: this.props.user_info,
+            userInfomation: props.user_info,
             showReportModal: false,
             showSettingModal: false,
+            currentPwd: '',
+            newPwd: '',
+            confirmPwd: '',
+            issue: '',
         }
-
-        this.handleOptLogout = this.handleOptLogout.bind(this);
-        this.toggleEditUserInfo = this.toggleEditUserInfo.bind(this);
-        this.handleDelUser = this.handleDelUser.bind(this);
-        this.saveEdit = this.saveEdit.bind(this);
-        this.sendMail = this.sendMail.bind(this);
+        this.isSaving = false
+        this.isSending = false
     }
 
-    sendMail(reportDetails) {
+    handleChange = (e) => {
+        const input = e.target,
+            valueField = input.dataset.value_field
 
-        if(reportDetails !== ''){
-            Jquery('.send-report').prop('disabled', true);
-            Jquery('#report_issue .modal-footer').removeClass('hide-element');
-            const userData = this.state.userInfomation;
-            const reportData = {    reportDetails: reportDetails.trim(),
-                                    senderEmail: userData.email,
-                                    fullName: userData.fullname
-                                }
-
-            axios.post("/api/user/report", reportData)
-            .then(function(response){
-                Jquery('.send-report').prop('disabled', false);
-                Jquery('#report_issue .modal-footer').addClass('hide-element');
-
-                if(response.status == 200){
-                    alert('Send report success !');
-                    Jquery('#issueReport').val('');
-                }else{
-                    alert('Can not send report !');
-                }
-            })  
-        }else{
-            alert('Your report is empty !');
-        }
-        
+        this.setState({
+            [valueField]: input.value
+        })
     }
 
-    saveEdit(crPass, newPass, confPass) {
-        const self = this;
-        /*Minimum eight characters, at least one uppercase letter, one lowercase letter and one number:*/
-        const regex = new RegExp(Const.PASSWORD_REGEXP, 'gm');
+    handleSendIssue = () => {
 
-        if(crPass === ""){
-            alert('Please input current password !');
-        }else if(newPass === ""){
-            alert('Please input new password !');
-        }else if(confPass === ""){
-            alert('Please input confirm password !');
-        }else{
-            if(regex.test(newPass)){
-                if(newPass.localeCompare(confPass) == 0 ){
-                    var dataPwd = { uid: this.state.userInfomation.userId,
-                                    data:{ oldpassword: crPass,
-                                        rpassword: newPass} 
-                                    }
+        if (this.isSending) return
 
-                    axios.post("/api/user/change-pass", dataPwd)
-                    .then(function(response){
-                        if(response.data.error == null){
-                            alert('Password changed !');
-                            Jquery('.modal-body').find("#user_password, #new_user_password, #confirm_user_password").val("");
-                            // self.handleOptLogout();
-                        }else{
-                            alert('Cannot change password !')
-                        }               
-                    });
-                    // .catch(Utils.axiosError);
-                }else{
-                    alert('Confirm password not match !');
+        let { issue } = this.state
+        issue = issue.trim()
+
+        const self = this
+
+        if (issue.length > 0) {
+
+            self.TRToast.showAutoHide('Sending...')
+            this.isSending = true
+
+            const userData = this.state.userInfomation,
+                reportData = {
+                    reportDetails: issue,
+                    senderEmail: userData.email,
+                    fullName: userData.fullname
                 }
-            }else{
-                alert(Const.INVALID_PASSWORD);
+
+            TrService.reportIssue(reportData, response => {
+
+                if (response.status === 200) {
+                    this.isSending = false
+                    self.TRToast.showAutoHide('Send report success !')
+                }
+                else alert('Can not send report !')
+            })
+
+        }
+        else alert('Your report is empty !')
+    }
+
+    handleSaveEdit = () => {
+
+        if (this.isSaving) return
+
+        const { currentPwd, newPwd, confirmPwd, userInfomation } = this.state,
+            self = this
+
+        if (Utils.isValidPassword(newPwd)) {
+
+            if (newPwd.localeCompare(confirmPwd) === 0) {
+
+                this.TRToast.showAutoHide('Saving...')
+                this.isSaving = true
+
+                const dataPwd = {
+                    uid: userInfomation.userId,
+                    data: {
+                        oldpassword: currentPwd,
+                        rpassword: newPwd
+                    }
+                }
+
+                TrService.changePassword(dataPwd, response => {
+
+                    if (response.data.error === null) {
+                        self.isSaving = false
+                        self.setState({
+                            currentPwd: '',
+                            newPwd: '',
+                            confirmPwd: ''
+                        })
+                        this.TRToast.showAutoHide('Password changed !')
+                    }
+                    else alert('Cannot change password !')
+                })
             }
+            else alert('Confirm password not match !')
         }
+        else alert(Const.INVALID_PASSWORD_MSG)
     }
 
-    handleDelUser(userKey, userID, userName, userEmail) {
+    handleDelUser = (userKey, userID, userName, userEmail) => {
         const self = this;
 
         let userDelInfo = {
@@ -102,24 +118,16 @@ class TROptMenu extends Component {
                 userEmail: userEmail
             }
 
-        axios.post("/api/user/delete", userDelInfo)
-        .then(function (response) {
-            if (response.status == 200) {
-                self.handleOptLogout();
-            }else {
-                alert('Error when delete user !');
-            }
-        });
-        // .catch(Utils.axiosError);
+        TrService.deleteUser(userDelInfo, response => {
+            if (response.status == 200) self.handleOptLogout()
+            else                        alert('Error when delete user !')
+        })
     }
 
-    handleOptLogout() {
-        axios.post("/logout", {})
-        .then(function (response) {
-            if (response.status == 200) {
-                window.location.href = "/login";
-            }
-        });
+    handleOptLogout = () => {
+        TrService.logout({}, response => {
+            if (response.status === 200) window.location.href = "/login"
+        })
     }
 
     showSettingModal = () => {
@@ -142,7 +150,7 @@ class TROptMenu extends Component {
         this.setState(data)
     }
 
-    toggleEditUserInfo() {
+    toggleEditUserInfo = () => {
         let editInfo = this.state.editInfo;
 
         this.setState((prevState, props) => ({
@@ -160,23 +168,50 @@ class TROptMenu extends Component {
                     <div className="custom-form">
                         <label htmlFor="userpassword" className="control-label-account-setting col-md-3">Current Password</label>
                         <div className="col-md-9">
-                            <input type="password" name="password" className="form-control-account-setting" id="user_password" maxLength="100"/>
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-control-account-setting"
+                                id="user_password"
+                                maxLength="100"
+                                value={this.state.currentPwd}
+                                onChange={this.handleChange}
+                                data-value_field='currentPwd'
+                            />
                         </div>
                     </div>
                     <div className="custom-form">
                         <label htmlFor="new_userpassword" className="control-label-account-setting col-md-3">New Password</label>
                         <div className="col-md-9">
-                            <input type="password" name="password" className="form-control-account-setting" id="new_user_password" maxLength="100"/>
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-control-account-setting"
+                                id="new_user_password"
+                                maxLength="100"
+                                value={this.state.newPwd}
+                                onChange={this.handleChange}
+                                data-value_field='newPwd'
+                            />
                         </div>
                     </div>
                     <div className="custom-form">
                         <label htmlFor="confirm_userpassword" className="control-label-account-setting col-md-3">Confirm Password</label>
                         <div className="col-md-9">
-                            <input type="password" name="password" className="form-control-account-setting" id="confirm_user_password" maxLength="100"/>
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-control-account-setting"
+                                id="confirm_user_password"
+                                maxLength="100"
+                                value={this.state.confirmPwd}
+                                onChange={this.handleChange}
+                                data-value_field='confirmPwd'
+                            />
                         </div>
                     </div>
                     <div className="button-action col-md-9" style={{float: 'right', padding: '0px 8px', display: 'grid',}}>
-                        <input type="submit" className="edit-info info-action" value="Save Edit" onClick={() => this.saveEdit(Jquery('#user_password').val(), Jquery('#new_user_password').val(), Jquery('#confirm_user_password').val())}/>
+                        <input type="submit" className="edit-info info-action" value="Save Edit" onClick={this.handleSaveEdit}/>
                         <input type="submit" className="del-info info-action" value="Cancel Edit"  onClick={this.toggleEditUserInfo}/>
                     </div>
                 </div>
@@ -185,7 +220,15 @@ class TROptMenu extends Component {
                     <div className="custom-form">
                         <label htmlFor="userpassword" className="control-label-account-setting col-md-3">Password</label>
                         <div className="col-md-9">
-                            <input type="password" name="password" className="form-control-account-setting" id="user_password" maxLength="100" readOnly/>
+                            <input
+                                value='************'
+                                type="password"
+                                name="password"
+                                className="form-control-account-setting"
+                                id="user_password"
+                                maxLength="100"
+                                readOnly
+                            />
                         </div>
                     </div>
                     <div className="button-action col-md-9" style={{float: 'right', padding: '0px 8px', display: 'grid',}}>
@@ -267,14 +310,26 @@ class TROptMenu extends Component {
                             {/*<div className="modal-header"></div>*/}
                             <div className="modal-body">
                                 <div className="row" style={{margin: '0px', padding: '20px 50px'}}>
-                                    <textarea id="issueReport" className="textarea-report" rows="4" cols="50" placeholder="Describe your issue or share your ideas" style={{color: 'rgba(153, 153, 153, 1)',}}></textarea>
+                                    <textarea
+                                        id="issueReport"
+                                        className="textarea-report"
+                                        rows="4"
+                                        cols="50"
+                                        placeholder="Describe your issue or share your ideas"
+                                        style={{color: 'rgba(153, 153, 153, 1)', padding: '1rem',}}
+                                        value={this.state.issue}
+                                        onChange={this.handleChange}
+                                        data-value_field='issue'
+                                    />
                                     <div className="button-action">
-                                        <input onClick={() => this.sendMail(Jquery('#issueReport').val())} type="submit" className="send-report edit-info info-action" value="Send"/>
+                                        <input
+                                            onClick={this.handleSendIssue}
+                                            type="submit"
+                                            className="send-report edit-info info-action"
+                                            value="Send"
+                                        />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="modal-footer hide-element">
-                                <p style={{color: 'red', textAlign: 'center',}}>(*) REPORT EMAIL SENDING ....</p>
                             </div>
                         </div>
                     </div>
@@ -297,7 +352,7 @@ class TROptMenu extends Component {
                         </div>
                     </div>
                 </div> 
-
+                <TRToast ref={node => this.TRToast = node} />
             </div>
         )
     }

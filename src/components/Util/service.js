@@ -234,6 +234,41 @@ const TrService = {
                 callback && callback(response);
             })
             .catch(Utils.axiosError);
+    },
+    resetPassword(requestBody, callback) {
+        axios.post('/reset-pwd', requestBody)
+            .then(function (response) {
+                callback && callback(response);
+            })
+            .catch(Utils.axiosError);
+    },
+    reportIssue(requestBody, callback) {
+        axios.post('/api/user/report', requestBody)
+            .then(function (response) {
+                callback && callback(response);
+            })
+            .catch(Utils.axiosError);
+    },
+    changePassword(requestBody, callback) {
+        axios.post('/api/user/change-pass', requestBody)
+            .then(function (response) {
+                callback && callback(response);
+            })
+            .catch(Utils.axiosError);
+    },
+    deleteUser(requestBody, callback) {
+        axios.post('/api/user/delete', requestBody)
+            .then(function (response) {
+                callback && callback(response);
+            })
+            .catch(Utils.axiosError);
+    },
+    logout(requestBody, callback) {
+        axios.post('/logout', requestBody)
+            .then(function (response) {
+                callback && callback(response);
+            })
+            .catch(Utils.axiosError);
     }
 }
 

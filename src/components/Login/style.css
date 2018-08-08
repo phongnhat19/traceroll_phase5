@@ -112,7 +112,7 @@ img {
       font-family: 'AvenirNext-Regular','Roboto',Arial;
       color: #444; }
     .login_wrapper .loginmodal .signform input {
-      width: 88%;
+      width: 100%;
       background-color: #f4f4f4;
       border: none;
       border-radius: 5px;
@@ -162,8 +162,8 @@ body .login_wrapper .loginmodal.error {
   animation: fadeInLeft 1s 1s forwards;
   text-align: left; }
   .login_wrapper .loginmodal .signform button#btnlogin, .login_wrapper .loginmodal .signform button#btnreg {
-    width: 33%;
-    height: 40px;
+    width: 100%;
+    height: 30px;
     background-color: #4285f4;
     margin-top: 20px;
     display: block;
@@ -245,3 +245,69 @@ body .login_wrapper .loginmodal.error {
       width: 50%; }
     .login_wrapper .loginmodal .signup, .login_wrapper .loginmodal .signform {
       animation: fadeInLeft 1s 0s forwards; } }
+
+.Login__forgotpwd-btn {
+  margin-top: 2rem;
+  background: none;
+  border: none; }
+
+.Login__forgotpwd-btn:hover {
+  color: red; }
+
+.ForgotPwd__container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4); }
+
+.ForgotPwd {
+  background: white;
+  padding: 1rem;
+  max-width: 300px;
+  border-radius: 5px; }
+
+.ForgotPwd__title {
+  text-align: left;
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 1rem;
+  letter-spacing: 1px;
+  color: #797979; }
+
+.ForgotPwd__info {
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 2rem; }
+
+.ForgotPwd__email-input {
+  width: 100%;
+  background-color: #f4f4f4;
+  border: none;
+  border-radius: 5px;
+  color: #797979;
+  padding-left: 10px;
+  height: 30px;
+  line-height: 30px;
+  letter-spacing: 0.5px; }
+  .ForgotPwd__email-input:focus {
+    outline: none; }
+
+.ForgotPwd__send-btn {
+  width: 100%;
+  height: 30px;
+  background-color: #4285f4;
+  margin: 1.2rem 0;
+  display: block;
+  border-radius: 5px;
+  border: 0px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #1d8cc3; }
