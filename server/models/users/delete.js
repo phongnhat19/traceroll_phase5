@@ -84,6 +84,14 @@ module.exports = function(Users) {
 
         /*Find and delete user documents*/
         async.parallel([
+            // Delete _key: users:online, value: [uid]
+            function(next) {
+                db.sortedSetRemove('users:online', userId.toString(), next)
+            },
+            // Delete _key: users:joindate, value: [uid]
+            function(next) {
+                db.sortedSetRemove('users:joindate', userId.toString(), next)
+            },
             // Delete user in search => Good Work corfirmed
             function(next){
                 db.removeObjectSearch(userName.toString(), userId, next);
@@ -343,6 +351,15 @@ module.exports = function(Users) {
                         next();
                     }
                 })
+            },
+
+            // Delete _key: uid:[uid]:ip
+            function(next) {
+                db.sortedSetRemove(`uid:${userId}:ip`, '::1', next)
+            },
+            // Delete _key: ip:[ip]:uid
+            function(next) {
+                db.sortedSetRemove('ip:::1:uid', userId, next)
             }
 
         ], function(err){
