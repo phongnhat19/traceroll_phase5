@@ -1,5 +1,5 @@
 {
-	"url": "https://localhost:9000",
+	"url": "http://localhost:9000",
 	"secret": "9174157e-8920-435d-b257-4d1c686d782f",
 	"port": "9000",
 	"upload_path": "/build/img/uploads",
@@ -14,7 +14,7 @@
 		"password":"uAC3qu9YRzBCBtra",
 		"database":"traceroll_db"
 	},
-	"ssl": {
+	"ssl-development": {
 		"ca": "./server/ssl_tsl/ca_bundle.crt",
 		"key":"./server/ssl_tsl/private.key",
 		"cert":"./server/ssl_tsl/certificate.crt"
