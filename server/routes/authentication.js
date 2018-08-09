@@ -618,7 +618,7 @@
 										to: recoverEmail, // list of receivers
 										subject: 'Password Reset Request for Traceroll', // Subject line
 										text: 'Traceroll reset account password', // plain text body
-										html: '<p><b>We have received your request to reset your password for the Traceroll account. To complete this request, simply </b><a href="'+urlClient+'/reset/password/'+stringRandom+'">click here to reset password</a></p>' // template email
+										html: '<img src="/img/logo/traceroll-logo-small.png"/><br /><p><b>We have received your request to reset your password for the Traceroll account. To complete this request, simply </b><a href="'+urlClient+'/reset/password/'+stringRandom+'">click here to reset password</a></p>' // template email
 									};
 
 									transporter.sendMail(mailOptions, (error, info) => {

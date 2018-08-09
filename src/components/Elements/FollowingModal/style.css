@@ -43,7 +43,7 @@
 }
 .following-modal .barrier {
   width: 1px;
-  background: #ccc;
+  background: #707070;
   margin: 0 7px;
 }
 .following-modal .btn-follow {
@@ -61,4 +61,7 @@
   background: orange;
   color: white;
   font-weight: bold;
+}
+.followers, .followings{
+  color: #464646;
 }

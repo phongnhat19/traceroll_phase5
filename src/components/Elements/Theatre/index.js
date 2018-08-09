@@ -8,6 +8,7 @@ import Utils from '../../Util/utils.js';
 import Const from '../../Util/const.js';
 import TrService from '../../Util/service.js';
 import TRSocket from '../../Util/socket.js';
+import moment from 'moment';
 
 class TRTheatre extends Component {
 	constructor(props){
@@ -154,13 +155,10 @@ class TRTheatre extends Component {
 	handleCarouselChangeItem(){
 		$('.carousel').on('click', function(){
 			let currentElement = $('.carousel-inner .active');
-			console.log(currentElement.index());
 			let listItemCarousel = $('.carousel-inner .item');
 			for(var i=0; i < listItemCarousel.length; i++){
 				if($('.active')[i]){
-					console.log(listItemCarousel[i], i);
 				}
-				//console.log(listItemCarousel[i], i);
 			}
 		})
 	}
@@ -188,11 +186,53 @@ class TRTheatre extends Component {
 		return this.currentCommentOpen;
 	}
 
+	/* Calculate element hours and minutes*/
+	differHours = (elementTime, currentTime) => {
+			let differMinutes;
+			let diff = (currentTime.getTime() - elementTime.getTime()) / 1000;
+			let roundHours = Math.abs(Math.round(diff/(60 * 60)));
+
+			if(roundHours == 0){
+					differMinutes = Math.abs(currentTime.getMinutes() - elementTime.getMinutes());
+					return {hours: roundHours, minutes: differMinutes};
+			}else{
+					return {hours: roundHours};
+			}
+	}
+
+	handleTime = (obj) => {
+		let time = new Date(obj.element.date_created);
+		let current_time = new Date();
+		let diffDays = Math.abs(current_time.getDate() - time.getDate());
+		let timeString;
+
+		if (obj && obj.element ){
+			if (diffDays > 0){
+					// show days ago
+					timeString = <a href='' style={{pointerEvents: 'none', cursor: 'default', textDecoration: 'none', float: 'right', padding: '0px 20px',}}>{moment.months(time.getMonth())+' '+time.getDate()}</a>;
+			}else {
+					// show minutes and hours ago
+					let differHours = this.differHours(time, current_time);
+
+					if(differHours.hours != 0 ){
+							timeString = <a href='' style={{pointerEvents: 'none', cursor: 'default', textDecoration: 'none', float: 'right', padding: '0px 20px',}}>{differHours.hours > 1 ? differHours.hours+" hours ago" : differHours.hours+" hour ago"}</a>;
+					}else if(differHours.hours == 0 && differHours.minutes != 0){
+							timeString = <a href='' style={{pointerEvents: 'none', cursor: 'default', textDecoration: 'none', float: 'right', padding: '0px 20px',}}>{differHours.minutes > 1 ? differHours.minutes+" minutes ago" : differHours.minutes+" minute ago"}</a>;
+					}else{
+							timeString = <a href='' style={{pointerEvents: 'none', cursor: 'default', textDecoration: 'none', float: 'right', padding: '0px 20px',}}>seconds ago</a>
+					}
+			}
+			return timeString;
+		}
+	}
+
 	renderInteractive = (obj) =>{
 		return(
 			<div className={obj.elementId+" wrapper-element-right col-lg-4"}>
 		        <div className="col-lg-12 userInfo align-content">
-		        	<a className="userNameTheatre" href={obj.createdUser.userslug}><p className="user-name">{obj.createdUser.username}</p></a>
+							<img className="creator-profile" src={obj.createdUser.picture} width="40" height="40" />
+		        	<p className="user-name"><a  className="userNameTheatre" href={obj.createdUser.userslug}>{obj.createdUser.username}</a></p>
+							<p className="time">{this.handleTime(obj)}</p>
 		        </div>
 				<TRInteractive
 					caption={obj.caption}
