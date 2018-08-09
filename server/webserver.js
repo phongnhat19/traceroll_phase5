@@ -20,11 +20,14 @@ var path = require('path'),
 app.use(compression());*/
 
 if (nconf.get('ssl')) {
+	console.log("Running with SSL/TSL configure")
 	server = require('https').createServer({
 		key: fs.readFileSync(nconf.get('ssl').key),
-		cert: fs.readFileSync(nconf.get('ssl').cert)
-	});
+		cert: fs.readFileSync(nconf.get('ssl').cert),
+		ca: fs.readFileSync(nconf.get('ssl').ca)
+	}, app);
 } else{
+	console.log("Running without SSL/TSL configure")
 	server = require('http').createServer(app);
 };
 
