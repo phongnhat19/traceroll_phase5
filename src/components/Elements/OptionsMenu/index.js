@@ -244,11 +244,11 @@ class TROptMenu extends Component {
         return (
             <div id="options_menu_zone" style={{top: "0", position: "absolute"}}>
                 <div id='options-menu' style={{position: 'fixed'}} className={fullWidthOption ? 'full-width' : ''}> 
-                    <span className="optionTitle"><b>Options</b></span>
+                    <span className="optionTitle"><b>Menu</b></span>
                     <ul className="listOptions">
                         <li>
                             <a onClick={this.showSettingModal}>
-                                Account Settings
+                                Settings
                             </a>
                         </li>
                         <li>
@@ -258,10 +258,13 @@ class TROptMenu extends Component {
                         </li>
                         <li>
                             <a onClick={this.handleOptLogout}>
-                                Sign out
+                                Sign-out
                             </a>
                         </li>
                     </ul>
+                    <footer id="copyright">
+                        <p>&copy;2018 Traceroll • Privacy Policy <br /> • Terms of Service</p>
+                    </footer>
                 </div>
 
                 {/*Modal for account setting*/}
@@ -272,6 +275,7 @@ class TROptMenu extends Component {
                         <div className="modal-content" style={{borderRadius: '0px'}}>
                             {/*<div className="modal-header"></div>*/}
                             <div className="modal-body">
+                                <h2 id="headline-settings">Settings</h2>
                                 <div className="row" style={{margin: '0px', padding: '20px 10px'}}>
                                     <div className="custom-form">
                                         <label htmlFor="username" className="control-label-account-setting col-md-3">Username</label>
@@ -307,8 +311,8 @@ class TROptMenu extends Component {
                     this.state.showReportModal && !this.props.showNotification &&
                     <div id="report_issue" className="modal-dialog custom-modal">
                         <div className="modal-content" style={{borderRadius: '0px'}}>
-                            {/*<div className="modal-header"></div>*/}
                             <div className="modal-body">
+                                <h2 id="headline-report">Report an issue</h2>
                                 <div className="row" style={{margin: '0px', padding: '20px 50px'}}>
                                     <textarea
                                         id="issueReport"
@@ -316,7 +320,6 @@ class TROptMenu extends Component {
                                         rows="4"
                                         cols="50"
                                         placeholder="Describe your issue or share your ideas"
-                                        style={{color: 'rgba(153, 153, 153, 1)', padding: '1rem',}}
                                         value={this.state.issue}
                                         onChange={this.handleChange}
                                         data-value_field='issue'

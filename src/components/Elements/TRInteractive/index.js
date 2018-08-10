@@ -364,7 +364,8 @@ class TRInteractive extends Component {
 		return(
 	        <div className={this.props.element_id+" col-lg-12"} style={{padding: "0px", height: this.state.commentZoneHeight}}>
 	        	<div className="col-lg-12 caption align-content">
-	        		<p className="theatre-caption">{this.props.caption}</p>
+	        		<br />
+                    <p className="theatre-caption">{this.props.caption}</p>
 	        	</div>
 		        <div className="col-lg-12 cover-main-interactive" style={{height: this.state.commentZoneHeight,}}>
 			        <div className="col-lg-12 interactive-zone align-content">
@@ -407,7 +408,8 @@ class TRInteractive extends Component {
 								}
 							</div>
 							<div className="col-lg-12">
-								<button id="countLikes" className="like-counter social-button" name="count" value={this.props.likeTimes ? this.props.likeTimes : '0'} onClick={this.handleToggleModalLike}>
+								<br />
+                                <button id="countLikes" className="like-counter social-button" name="count" value={this.props.likeTimes ? this.props.likeTimes : '0'} onClick={this.handleToggleModalLike}>
 									{ likeCount + ' ' + likeSuffix }
 								</button>
 								{
@@ -420,7 +422,13 @@ class TRInteractive extends Component {
                                         </button>
                                         {
                                             this.state.userLiked.map(function(user, index) {
-                                                return <h4 className='item'>{user.username === undefined ? user : user.username}</h4>;
+                                                let userLiked;
+                                                if (user.userslug === undefined){
+                                                    userLiked = '/stage/' + user;
+                                                }else {
+                                                    userLiked = '/stage/' +  user.userslug;
+                                                }
+                                                return <a className="liked-by" href={userLiked}>{user.userslug === undefined ? user : user.userslug}</a>
                                             })
                                         }
 									</div>

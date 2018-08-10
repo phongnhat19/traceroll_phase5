@@ -1,9 +1,9 @@
 const Const = {
 	ZOOM: {
-		min: 0.2,
+		min: 0.1,
 		max: 6
 	},
-	SCALE_BY: 0.95,
+	SCALE_BY: 0.70,
 	CURSOR: {
 		pen: 'url(/img/tools/pen-tool.cur), url(/img/tools/pen-tool.png), auto',
 		brush: 'url(/img/tools/brush-tool.cur), url(/img/tools/brush-tool.png), auto',

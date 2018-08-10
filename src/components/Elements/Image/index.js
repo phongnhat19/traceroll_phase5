@@ -452,6 +452,7 @@ class TRImage extends Component{
 					y={this.state.y + this.state.height + 5}
 					text={this.props.caption}
 					fontSize={this.textFontSize}
+					fontFamily={"'Gaegu', Helvetica"}
 					width={this.captionWidth}
 					fill={fill}
 				/>

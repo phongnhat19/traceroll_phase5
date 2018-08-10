@@ -14,9 +14,10 @@
 		"password":"uAC3qu9YRzBCBtra",
 		"database":"traceroll_db"
 	},
-	"ssl-temp":{
-		"key":"",
-		"cert":""
+	"ssl-development": {
+		"ca": "./server/ssl_tsl/ca_bundle.crt",
+		"key":"./server/ssl_tsl/private.key",
+		"cert":"./server/ssl_tsl/certificate.crt"
 	},
 	"newsfeed":{
 		"item":{
@@ -24,7 +25,7 @@
 			"widtd": 150
 		}
 	},
-	"mail-reciever": "ngoquocdat093@gmail.com",
+	"mail-reciever": "zojellakup-5581@yopmail.com",
 	"auth-sender": {
 	    "user": "tracerollsup@gmail.com",
 	    "pass": "traceRoll2018.com"

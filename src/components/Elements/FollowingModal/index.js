@@ -121,7 +121,7 @@ class TRFollowingModal extends Component {
                     <div className="body">
                         <div className="followers">{this.state.followersCount} Followers</div>
                         <span className="barrier"></span>
-                        <div>{this.state.followingsCount} Followings</div>
+                        <div className="followings">{this.state.followingsCount} Followings</div>
                     </div>
                     {
                         this.state.isFollow ? (
