@@ -17,6 +17,14 @@ class TRDrawing extends React.Component {
 		this.line = {
 			points: [],
 		}
+    }
+    
+    handleBeforeUnload = (e)=>{
+		let currentCountDrawed = localStorage.getItem('tracerollCountDrawed') || 0
+		currentCountDrawed = parseInt(currentCountDrawed,10)
+		if (currentCountDrawed>0) {
+			e.returnValue = "You have unsaved drawing. Are you sure you want to leave ?"
+		}
 	}
     
     componentDidMount() {
@@ -43,6 +51,7 @@ class TRDrawing extends React.Component {
         stage.on('mousedown', this.handleStageMouseDown)
         window.addEventListener('mouseup', this.handleWindowMouseUp)
         window.addEventListener('wheel', this.handleMouseWheel)
+        window.addEventListener('beforeunload',this.handleBeforeUnload);
 	}
 
     updateCanvas = (canvas) => {
@@ -233,7 +242,9 @@ class TRDrawing extends React.Component {
         const button = e.button
 
         if (button === 2) {
-
+            let currentCountDrawed = localStorage.getItem('tracerollCountDrawed') || 0
+			currentCountDrawed = parseInt(currentCountDrawed,10)
+			localStorage.setItem('tracerollCountDrawed',currentCountDrawed+1)
             this.updateCanvas(this.state.canvas)
         }
 	}
@@ -302,6 +313,9 @@ class TRDrawing extends React.Component {
 			const parent = node.getParent();
 
 			if (parent && parent.hasName(Const.KONVA.NEW_LINES_CONTAINER_NAME)) {
+                let currentCountDrawed = localStorage.getItem('tracerollCountDrawed') || 0
+				currentCountDrawed = parseInt(currentCountDrawed,10) - 1
+				localStorage.setItem('tracerollCountDrawed',currentCountDrawed)
 				node.fire(Const.EVENTS.REMOVE);
 				node.destroy();
 				layer.draw();
@@ -316,7 +330,8 @@ class TRDrawing extends React.Component {
 		stage.off('mousemove', this.handleMouseMove);
 		stage.off('mousedown', this.handleStageMouseDown);
         window.removeEventListener('mouseup', this.handleWindowMouseUp);
-		window.removeEventListener('wheel', this.handleMouseWheel);
+        window.removeEventListener('wheel', this.handleMouseWheel);
+        window.removeEventListener('beforeunload',this.handleBeforeUnload);
 	}
 
     getLineIntersect = (pointer, lines, scale) => {

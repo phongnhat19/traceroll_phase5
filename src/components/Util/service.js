@@ -93,6 +93,7 @@ const TrService = {
     saveDrawingElement(requestBody, callback) {
         axios.post('/api/element/drawing/save', requestBody)
             .then(function (response) {
+                localStorage.removeItem('tracerollCountDrawed')
                 Utils.hideProcessingBar();
                 callback && callback(response);
             })

@@ -82,6 +82,26 @@ apiController.getWorkspace = function (req, res, next) {
 
 }
 
+//GET User Profile
+apiController.getProfile = (req,res)=>{
+	if (!req.user) {
+		res.json({status: RESPONSE_STATUS.FAILED, reason: 'Please login first !!!'});
+	}
+	else {
+		user.getUserById(req.user.uid,(err,userData)=>{
+			if (err) {
+				res.json({status: RESPONSE_STATUS.FAILED, reason: err});
+			}
+			else {
+				delete userData.password
+				delete userData.passwordExpiry
+				res.json({status: RESPONSE_STATUS.SUCCESS, userData:userData});
+			}
+		})
+	}
+	
+}
+
 //API handler for getting join date of user
 apiController.getJoinDate = function(req,res,next){
 	winston.dct_logger.info("Getting join date by user");
