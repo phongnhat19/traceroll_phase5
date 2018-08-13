@@ -121,3 +121,11 @@
 ::1 - - [Mon, 13 Aug 2018 16:03:07 GMT] "POST /api/search/username HTTP/1.1" 200 565 248.381 ms
 ::1 - - [Mon, 13 Aug 2018 16:03:07 GMT] "GET /img/uploads/file-1533721677211.gif HTTP/1.1" 200 - 177.887 ms
 ::1 - - [Mon, 13 Aug 2018 16:03:12 GMT] "POST /api/search/username HTTP/1.1" 200 705 247.619 ms
+::1 - - [Mon, 13 Aug 2018 16:08:37 GMT] "GET /stage/phongnhat19 HTTP/1.1" 200 - 436.484 ms
+::1 - - [Mon, 13 Aug 2018 16:08:43 GMT] "GET /api/user/join-date/phongnhat19 HTTP/1.1" 200 956 406.877 ms
+::1 - - [Mon, 13 Aug 2018 16:08:43 GMT] "GET /api/element/list/phongnhat19 HTTP/1.1" 304 - 601.533 ms
+::1 - - [Mon, 13 Aug 2018 16:08:52 GMT] "POST /api/element/text/update HTTP/1.1" 200 20 330.717 ms
+::1 - - [Mon, 13 Aug 2018 16:08:55 GMT] "POST /api/element/text/update HTTP/1.1" 200 20 323.790 ms
+::1 - - [Mon, 13 Aug 2018 16:09:00 GMT] "POST /api/search/username HTTP/1.1" 200 68 439.139 ms
+::1 - - [Mon, 13 Aug 2018 16:09:00 GMT] "POST /api/search/username HTTP/1.1" 200 565 239.248 ms
+::1 - - [Mon, 13 Aug 2018 16:09:01 GMT] "GET /img/uploads/file-1533721677211.gif HTTP/1.1" 200 - 163.551 ms
