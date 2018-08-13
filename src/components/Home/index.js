@@ -254,7 +254,6 @@ class Home extends Component {
             }else{
                 // show minutes and hours ago
                 let differHours = this.differHours(time, current_time);
-                console.log(differHours);
                 if(differHours.hours != 0 ){
                     timeString = <a href='' style={{pointerEvents: 'none', cursor: 'default', textDecoration: 'none', float: 'right', padding: '0px 20px',}}>{differHours.hours > 1 ? differHours.hours+" hours ago" : differHours.hours+" hour ago"}</a>;
                 }else if(differHours.hours == 0 && differHours.minutes != 0){

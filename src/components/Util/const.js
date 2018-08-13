@@ -36,6 +36,7 @@ const Const = {
 		PROFILE_IMAGE: 'profileImage',
 		TRANSFORM: 'transform'
 	},
+	GROUP_NAME_LINES_SELECTED: "group_name_lines_selected",
 	EVENTS: {
 		REMOVE: 'remove',
 		SHOW_ALERT_PROFILE_IMAGE: 'showalert',

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Group} from 'tr-react-konva';
 import {TRLineSelect, TRSelectedLines} from './../';
+import Const from '../../Util/const';
 
 // check if line has a part or full inside select area
 // pointX, pointY: point of line
@@ -204,19 +205,22 @@ class TRSelectMoveGroup extends React.Component {
 	render() {
 		return (
 			<Group
+				name={Const.GROUP_NAME_LINES_SELECTED}
 				ref={node => this.group = node}
 				x={0}
 				y={0}
 				onDragStart={this.handleDragStart}
 				draggable={true}
-				onMouseDown={this.handleMouseDown}>
+				onMouseDown={this.handleMouseDown}
+                onMouseLeave={this.props.mouseLeaveGroupLinesSelected}>
 				<TRLineSelect
 					line={this.props.line}/>
 				<TRSelectedLines
                     ref={this.props.trSelectedLinesRef}
 					getEndPosition={this.getEndPosition}
 					resetEndPosition={this.resetEndPosition}
-					selectedLines={this.props.selectedLines}/>
+					selectedLines={this.props.selectedLines}
+                />
 			</Group>
 			
 		);

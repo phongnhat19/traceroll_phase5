@@ -512,6 +512,3 @@ li.nav-theatre-container a:hover + div {
   bottom: 0;
   position: fixed;
   background: white; }
-
-#Stage__overlay.is-hidden {
-  display: none; }

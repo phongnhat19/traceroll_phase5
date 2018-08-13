@@ -62,12 +62,6 @@ class TRDrawing extends React.Component {
 		const { button, clientX, clientY } = e.evt
 
 		if (Utils.isLeftClick(button)) {
-			
-            this.isDrawing = true
-
-            const options = this.props.options
-            this.line.mode = options.mode
-            this.line.color = options.color
 
             const mainStage = this.mainStage,
                 scale = mainStage.scaleX(),
@@ -79,6 +73,12 @@ class TRDrawing extends React.Component {
                     x: ~~ (0.5 + (pos.x - mainStage.x()) / scale),
                     y: ~~ (0.5 + (pos.y - mainStage.y()) / scale)
                 }
+
+            this.isDrawing = true
+
+            const options = this.props.options
+            this.line.mode = options.mode
+            this.line.color = options.color
 
             this.line.points.push(start.x, start.y)
             this.lastPointerPosition = pos
@@ -139,7 +139,7 @@ class TRDrawing extends React.Component {
 
                 switch(mode){
                     case Const.MODE.PEN:
-                        context.lineWidth = PEN_SIZE * scale;
+                        context.lineWidth = Math.ceil(PEN_SIZE * scale);
                         strokeWidth = PEN_SIZE
 
                         this.renderLine(startOnCanvas, endOnCanvas);
@@ -288,7 +288,6 @@ class TRDrawing extends React.Component {
 
     getLineIntersect = (pointer, lines, scale) => {
 
-console.log(pointer, lines)
         const offset = 10 / scale
         let line, point1 = {}, point2 = {}, i, n, dist, isInRange
 

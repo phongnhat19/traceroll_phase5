@@ -495,9 +495,14 @@ class TR_Stage extends Component{
 		const mode = this.state.options.mode,
 			showDrawTool = this.state.showDrawTool,
 			stage = this.mainStage.getStage(),
-			button = e.evt.button;
+			{ button, clientX, clientY } = e.evt,
+            pos = {
+                x: clientX,
+                y: clientY
+            }
 
-		if (button === 0) {
+		if (Utils.isLeftClick(button)) {
+
 			if(mode === 'eraser'){
 				this.handlerChangePointer('eraser-on');
 			} else {
@@ -859,7 +864,6 @@ class TR_Stage extends Component{
         Utils.hideOverflow()
 
         window.addEventListener('beforeunload', this.handleBeforeUnload)
-        console.log("Stage: ", this)
 	}
 
 	addWheelListener = () => {
@@ -983,7 +987,21 @@ class TR_Stage extends Component{
             x : e.clientX,
             y : e.clientY
         }
+        const { mainStageMoving } = this.state,
+            shape = this.mainStage.getStage().getIntersection(this.currentPointerPos, "Group")
+
+        if (shape && !mainStageMoving && shape.name() === Const.GROUP_NAME_LINES_SELECTED) {
+            this.setState({
+                mainStageMoving: true
+            })
+        }
 	}
+
+    mouseLeaveGroupLinesSelected = () => {
+        this.setState({
+            mainStageMoving: false
+        })
+    }
 
     setupSocketListener = () => {
         const socket = this.socket
@@ -1875,6 +1893,7 @@ class TR_Stage extends Component{
                                 trSelectedLinesRef={el => this.trSelectedLines = el}
                                 line={this.state.line}
                                 selectedLines={this.state.selectedLines}
+                                mouseLeaveGroupLinesSelected={this.mouseLeaveGroupLinesSelected}
                             />
                             <TRProfileImage
                                 centerPos={this.state.profilePosition}
@@ -1891,7 +1910,7 @@ class TR_Stage extends Component{
                 </section>
 
                 <section id="Stage__overlay"
-                    className={`${showStageOverlay ? '' : 'is-hidden'}`}>
+                    className={`${showStageOverlay ? '' : 'hidden'}`}>
                     <Stage
                         width={window.innerWidth}
                         height={window.innerHeight}>

@@ -41,7 +41,6 @@ const Utils = {
             height: 0
         };
         const children = group.getChildren();
-        console.log(group, children)
         children.map(function(child) {
             const rect = child.attrs.rect
             let x = child.x(),
