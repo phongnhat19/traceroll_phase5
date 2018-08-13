@@ -3,7 +3,7 @@ const Const = {
 		min: 0.01,
 		max: 6
 	},
-	SCALE_BY: 0.70,
+	SCALE_BY: 0.90,
 	CURSOR: {
 		pen: 'url(/img/tools/pen-tool.cur), url(/img/tools/pen-tool.png), auto',
 		brush: 'url(/img/tools/brush-tool.cur), url(/img/tools/brush-tool.png), auto',
