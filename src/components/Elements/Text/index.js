@@ -402,7 +402,7 @@ TRText.defaultProps = {
     x: 0,
     y: 0,
     fontSize: 24,
-    fontFamily: 'Calibri',
+    fontFamily: "'Gaegu', Helvetica",
     color: '#000000',
     date_created: Date.now()
 }

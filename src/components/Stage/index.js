@@ -28,6 +28,7 @@ import { linesInsidePolygon } from '../Elements/SelectMoveGroup';
 
 import './style.css';
 
+const { SELECT } = Const.MODE
 
 class TR_Stage extends Component{
 	constructor(props){
@@ -65,6 +66,7 @@ class TR_Stage extends Component{
             	color: ''
             },
             lines: [],
+            drawings: [],
             groupArr: [],
             showTimeLine: false,
 			showTheatre: false,
@@ -80,9 +82,10 @@ class TR_Stage extends Component{
             y2: window.innerHeight,
 			isValidLink: true,
 			showOptMenu: false,
-      hasPermission: false,
-      hasNewNoti: false,
-      progressPercent: 0,
+            hasPermission: false,
+            hasNewNoti: false,
+            progressPercent: 0,
+            mainStageMoving: false,
 		}
 
 		// Context menu
@@ -103,12 +106,10 @@ class TR_Stage extends Component{
 		this.handlerMenuChange = this.handlerMenuChange.bind(this)
 		this.addNewLine = this.addNewLine.bind(this)
 		this.getCurrentOption = this.getCurrentOption.bind(this)
-		this.handleMouseWheel = this.handleMouseWheel.bind(this)
 		this.addImageOrTextClick=this.addImageOrTextClick.bind(this)
 		this.resetDefaultMode = this.resetDefaultMode.bind(this)
 		this.handleDropElement = this.handleDropElement.bind(this)
 		this.handleAddVideo = this.handleAddVideo.bind(this)
-		this.handleWindowMouseUp = this.handleWindowMouseUp.bind(this);
 		this.handleAddLink = this.handleAddLink.bind(this);
     this.handleLoginUserAvatarCallback = this.handleLoginUserAvatarCallback.bind(this);
     this.getUserInfoCallback = this.getUserInfoCallback.bind(this);
@@ -186,7 +187,9 @@ class TR_Stage extends Component{
 			line.ownerid = this.state.ownerid;
 			let lines = this.state.lines;
 			lines.push(line);
-			this.setState({lines: lines});
+			this.setState({
+                lines: lines
+            })
 		}
 	}
 
@@ -206,7 +209,7 @@ class TR_Stage extends Component{
 
 	getLineArr = () => {
 		const self = this,
-			stage = this.refs.mainStage.getStage(),
+			stage = this.mainStage.getStage(),
 			groupNewLine = stage.findOne('.' + Const.KONVA.NEW_LINES_CONTAINER_NAME);
 		const lineArr = groupNewLine.getChildren(function(node){
 			return Utils.isLine(node);
@@ -280,7 +283,7 @@ class TR_Stage extends Component{
 	}
 
 	resetDefaultMode(showDrawTool, showTimeLine){
-		const stage = this.refs['mainStage'].getStage();
+		const stage = this.mainStage.getStage();
 		if (showDrawTool) {
 			const trSelectedLines = this.trSelectedLines;
 			trSelectedLines.finishSelectMove();
@@ -476,7 +479,7 @@ class TR_Stage extends Component{
     }
 
 	handleChangeTimeline(cur_value){
-		const stage = this.refs['mainStage'].getStage(),
+		const stage = this.mainStage.getStage(),
 			element_list = Utils.getTimeLineElementList(stage);
 		element_list.forEach(function(item){
 			if (item.getAttr('date_created') > cur_value) {
@@ -491,10 +494,15 @@ class TR_Stage extends Component{
 	handleStageContentMouseDown = (e) => {
 		const mode = this.state.options.mode,
 			showDrawTool = this.state.showDrawTool,
-			stage = this.refs.mainStage.getStage(),
-			button = e.evt.button;
+			stage = this.mainStage.getStage(),
+			{ button, clientX, clientY } = e.evt,
+            pos = {
+                x: clientX,
+                y: clientY
+            }
 
-		if (button === 0) {
+		if (Utils.isLeftClick(button)) {
+
 			if(mode === 'eraser'){
 				this.handlerChangePointer('eraser-on');
 			} else {
@@ -507,12 +515,6 @@ class TR_Stage extends Component{
                 const element = showDrawTool ? null : shape
                 this.handleShowElementOptions(element)
             }
-		}
-		else if (button === 2) {
-            this.hideOldTransforms()
-            this.updateElementShowOptions(null)
-			this.handlerChangePointer('select-on');
-			stage.startDrag();
 		}
 	}
 
@@ -583,41 +585,52 @@ class TR_Stage extends Component{
         })
     }
 
-    handleStageContentContextMenu = (e) => {
-        e.evt.preventDefault()
+    handleContextMenu = (e) => {
+        e.preventDefault()
     }
 
 	//==========================================
 	// Handle mouse wheel
 	//==========================================
-	handleMouseWheel = (e) => {
-		e.preventDefault();
-		if (this.windowMouseDown) {
-			return;
-		}
-		let stage = this.refs.mainStage.getStage(),
-			pointerPos = stage.getPointerPosition();
-		if (pointerPos) {
-			let oldScale = stage.scaleX();
-			let mousePointTo = {
-				x: (pointerPos.x - stage.x()) / oldScale,
-				y: (pointerPos.y - stage.y()) / oldScale,
-			};
-			//new scale ratio via scroll delta
-			const newScale = e.deltaY > 0 ? oldScale * Const.SCALE_BY : oldScale / Const.SCALE_BY
-			if (newScale >= Const.ZOOM.max || newScale <= Const.ZOOM.min) {
-	        	return;
-	        }
-			stage.scale({ x: newScale, y: newScale });
-			let newPos = {
-				x: -(mousePointTo.x - pointerPos.x / newScale) * newScale,
-				y: -(mousePointTo.y - pointerPos.y / newScale) * newScale
-			};
-			stage.position(newPos);
-			this.updateTransformCircle(newScale);
-			stage.batchDraw();
-		}
-	}
+    handleMouseWheel = (e) => {
+        e.preventDefault()
+
+        if (this.windowMouseDown) {
+            return
+        }
+
+        const stage = this.mainStage.getStage(),
+            { x, y } = this.currentPointerPos
+
+        if (stage) {
+
+            const oldScale = stage.scaleX(),
+                mousePointTo = {
+                    x: (x - stage.x()) / oldScale,
+                    y: (y - stage.y()) / oldScale,
+                },
+                newScale = e.deltaY > 0 ? oldScale * Const.SCALE_BY : oldScale / Const.SCALE_BY
+
+            if (newScale >= Const.ZOOM.max || newScale <= Const.ZOOM.min) {
+                return
+            }
+
+            const newPos = {
+                x: -(mousePointTo.x - x / newScale) * newScale,
+                y: -(mousePointTo.y - y / newScale) * newScale
+            }
+
+            stage.scale({ x: newScale, y: newScale })
+            stage.position(newPos)
+            stage.batchDraw()
+
+            this.updateTransformCircle(newScale)
+        }
+    }
+
+    getMainStage = () => {
+        return this.mainStage.getStage()
+    }
 
 	updateTransformCircle = (newScale) => {
         if(this.oldTransform) {
@@ -661,7 +674,7 @@ class TR_Stage extends Component{
 
                 this.setState({ profilePosition })
 
-                const stage = this.refs.mainStage.getStage()
+                const stage = this.mainStage.getStage()
 
                 if (stage) {
                     stage.position({
@@ -721,7 +734,7 @@ class TR_Stage extends Component{
 			children = this.state.childs;
 
 		if (focusId !== -1 && children.length !== 0) {
-			const stage = this.refs.mainStage.getStage(),
+			const stage = this.mainStage.getStage(),
 				viewportW = window.innerWidth,
 				viewportH = window.innerHeight;
 
@@ -841,6 +854,8 @@ class TR_Stage extends Component{
 
    componentDidMount() {
 		this.addWheelListener();
+        window.addEventListener("contextmenu", this.handleContextMenu);
+        window.addEventListener("mousedown", this.handleWindowMouseDown);
 		window.addEventListener("mouseup", this.handleWindowMouseUp);
         window.addEventListener("mousemove", this.handleWindowMouseMove);
 		window.addEventListener("resize", this.handleWindowResize)
@@ -865,7 +880,7 @@ class TR_Stage extends Component{
   handleWindowResize = () => {
 
       const size = this.getCanvasSize(),
-          stage = this.refs.mainStage.getStage()
+          stage = this.mainStage.getStage()
 
       stage.width(size.width)
       stage.height(size.height)
@@ -897,12 +912,30 @@ class TR_Stage extends Component{
               e.returnValue = "Do you want to leave?";
           }
       }
-  }
+    }
 
-	handleWindowMouseUp(e) {
+    handleWindowMouseDown = (e) => {
+        const { button } = e,
+            stage = this.mainStage.getStage()
+
+        if (button === 2) {
+            this.hideOldTransforms()
+            this.updateElementShowOptions(null)
+            this.handlerChangePointer('select-on');
+            this.setState({
+                mainStageMoving: true
+            })
+            if (!stage.getPointerPosition()) {
+                stage._setPointerPosition(e)
+            }
+            stage.startDrag();
+        }
+    }
+
+	handleWindowMouseUp = (e) => {
 		const mode = this.state.options.mode,
 			showDrawTool = this.state.showDrawTool,
-			stage = this.refs.mainStage.getStage(),
+			stage = this.mainStage.getStage(),
 			button = e.button;
 		if (button === 0) {
 			if(mode === 'eraser'){
@@ -921,6 +954,9 @@ class TR_Stage extends Component{
 			pageX: e.pageX,
 			pageY: e.pageY
 		};
+        this.setState({
+            mainStageMoving: false
+        })
 	}
 
 	/**
@@ -946,25 +982,26 @@ class TR_Stage extends Component{
 		return false;
 	}
 
-	handleWindowMouseMove = (event) => {
-		if (this.lastMousePos) {
-            const deltaX = this.lastMousePos.x - event.clientX,
-                deltaY = this.lastMousePos.y - event.clientY;
-            if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX > 0) {
-                this.mouseDirection = Const.MOUSE_DIRECTION.Left;
-            } else if (Math.abs(deltaX) > Math.abs(deltaY) && deltaX < 0) {
-                this.mouseDirection = Const.MOUSE_DIRECTION.Right;
-            } else if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY > 0) {
-                this.mouseDirection = Const.MOUSE_DIRECTION.Up;
-            } else if (Math.abs(deltaY) > Math.abs(deltaX) && deltaY < 0) {
-                this.mouseDirection = Const.MOUSE_DIRECTION.Down;
-            }
+	handleWindowMouseMove = (e) => {
+        this.currentPointerPos = {
+            x : e.clientX,
+            y : e.clientY
         }
-        this.lastMousePos = {
-            x : event.clientX,
-            y : event.clientY
-        };
+        const { mainStageMoving } = this.state,
+            shape = this.mainStage.getStage().getIntersection(this.currentPointerPos, "Group")
+
+        if (shape && !mainStageMoving && shape.name() === Const.GROUP_NAME_LINES_SELECTED) {
+            this.setState({
+                mainStageMoving: true
+            })
+        }
 	}
+
+    mouseLeaveGroupLinesSelected = () => {
+        this.setState({
+            mainStageMoving: false
+        })
+    }
 
     setupSocketListener = () => {
         const socket = this.socket
@@ -1038,12 +1075,10 @@ class TR_Stage extends Component{
         TrService.createNotificationAdd(createNotificationParams, createNotificationCallback.bind(this))
     }
 
-	getMouseDirection = () => {
-		return this.mouseDirection;
-	}
-
 	componentWillUnmount() {
 		this.removeWheelListener();
+        window.removeEventListener("contextmenu", this.handleContextMenu);
+        window.removeEventListener("mousedown", this.handleWindowMouseDown);
 		window.removeEventListener("mouseup", this.handleWindowMouseUp);
 		window.removeEventListener("mousemove", this.handleWindowMouseMove);
 	}
@@ -1177,7 +1212,7 @@ class TR_Stage extends Component{
 		video.src = video_link;
 	}
 
-	showAlertFileInvalid() {
+	showAlertFileInvalid = () => {
 		alert('Your file is invalid. The file must be an image or video (mp4, ogg, webm).');
         this.hideToast()
 	}
@@ -1358,7 +1393,8 @@ class TR_Stage extends Component{
             	color: 'black'
             },
 			selectedLines: [],
-			options: options
+			options: options,
+            drawings: this.getLineArr()
 		});
 	}
 
@@ -1510,7 +1546,6 @@ class TR_Stage extends Component{
 				draggable={this.state.hasPermission && !this.state.showDrawTool}
 				drawMode={this.state.showDrawTool}
 				getOptions={this.getCurrentOption}
-				getMouseDirection={this.getMouseDirection}
 			/>
     	)
     }
@@ -1529,9 +1564,11 @@ class TR_Stage extends Component{
 			label: 'NOW'
 		};
 
-		let mode = this.state.options.mode;
+        const { showDrawTool, options, mainStageMoving } = this.state,
+            { mode } = options,
+            showStageOverlay = showDrawTool && !(mainStageMoving)
 
-    const size = this.getCanvasSize()
+        const size = this.getCanvasSize()
 		const stage = {
 			width: window.innerWidth,
 			height: size.height ? size.height : window.innerHeight
@@ -1739,176 +1776,177 @@ class TR_Stage extends Component{
 				</div>
 
 				{/* Main Canvas's zone  */}
-				<Stage ref="mainStage"
-					width={stage.width}
-					height={stage.height}
-					draggable={!this.state.showDrawTool}
-					onContentMouseDown={this.handleStageContentMouseDown}
-          onContentContextMenu={this.handleStageContentContextMenu}
-				>
-					<Layer ref={layer => (this.oldElements = layer)}>
-						{/*Render element on stage which is getting from Database*/}
-						{this.state.childs.map(function(el, i){
-							switch(el.type){
-								case "image":
-									return <TRImage
-										key={el._key}
-										ref={el._key}
-										uid={this.state.uid}
-										ownerid={this.state.ownerid}
-										dbkey={el._key}
-										src={el.content}
-										x={el.stage.x}
-										y={el.stage.y}
-										width={el.stage.width}
-										height={el.stage.height}
-										date_created={el.date_created}
-										createdBy={el.created_by}
-										handleDblClick={this.toggleTheatreMode}
-										el_type={el.type}
-										caption={el.caption}
-                                        hasPermission={this.state.hasPermission}
-                                        showToast={this.showToast}
-										/>
-								case "video":
-									return <TRImageVideo
-										key={el._key}
-										ref={el._key}
-										uid={this.state.uid}
-										ownerid={this.state.ownerid}
-										dbkey={el._key}
-										src={el.content}
-										x={el.stage.x}
-										y={el.stage.y}
-										width={el.stage.width}
-										height={el.stage.height}
-										date_created={el.date_created}
-										createdBy={el.created_by}
-										handleDblClick={this.toggleTheatreMode}
-										el_type={el.type}
-										caption={el.caption}
-                    hasPermission={this.state.hasPermission}
-                    showToast={this.showToast}
-									/>
-							};
-						},this)}
+                <section id="Stage__main">
+                    <Stage ref={node => this.mainStage = node}
+                        width={window.innerWidth}
+                        height={window.innerHeight}
+                        draggable={!this.state.showDrawTool}
+                        onContentMouseDown={this.handleStageContentMouseDown}>
 
-						{this.state.childs.map(function(el, i){
-							switch(el.type){
-								case "text":
-									return <TRText
-										key={el._key}
-										ref={el._key}
-										dbkey={el._key}
-										content={el.content}
-										x={el.stage.x}
-										y={el.stage.y}
-										uid={this.state.uid}
-										fontSize={el.stage.fontSize}
-										date_created={el.date_created}
-										createdBy={el.created_by}
-										handleDblClick={this.toggleTheatreMode}
-                                        hasPermission={this.state.hasPermission}
-									/>;
-							};
-						}, this)}
-					</Layer>
-                    <Layer>
-                        {
-                            this.state.childs.map(function(item, i){
-                                switch(item.type){
-                                    case "drawing:pen":
-                                    case "drawing:pencil":
-                                        return this.renderLine(item)
-                                    case "drawing:brush":
-                                        return this.renderLineBrush(item)
-                                    case "drawing:group":
-                                        return this.renderLineGroup(item)
-                                    default:
-                                        break;
+                        <Layer ref={layer => (this.oldElements = layer)}>
+                            {/*Render element on stage which is getting from Database*/}
+                            {this.state.childs.map(function(el, i){
+                                switch(el.type){
+                                    case "image":
+                                        return <TRImage
+                                            key={el._key}
+                                            ref={el._key}
+                                            uid={this.state.uid}
+                                            ownerid={this.state.ownerid}
+                                            dbkey={el._key}
+                                            src={el.content}
+                                            x={el.stage.x}
+                                            y={el.stage.y}
+                                            width={el.stage.width}
+                                            height={el.stage.height}
+                                            date_created={el.date_created}
+                                            createdBy={el.created_by}
+                                            handleDblClick={this.toggleTheatreMode}
+                                            el_type={el.type}
+                                            caption={el.caption}
+                                            hasPermission={this.state.hasPermission}
+                                            showToast={this.showToast}
+                                            />
+                                    case "video":
+                                        return <TRImageVideo
+                                            key={el._key}
+                                            ref={el._key}
+                                            uid={this.state.uid}
+                                            ownerid={this.state.ownerid}
+                                            dbkey={el._key}
+                                            src={el.content}
+                                            x={el.stage.x}
+                                            y={el.stage.y}
+                                            width={el.stage.width}
+                                            height={el.stage.height}
+                                            date_created={el.date_created}
+                                            createdBy={el.created_by}
+                                            handleDblClick={this.toggleTheatreMode}
+                                            el_type={el.type}
+                                            caption={el.caption}
+                        hasPermission={this.state.hasPermission}
+                        showToast={this.showToast}
+                                        />
                                 };
-                            }, this)
-                        }
-                        {
-                            this.state.groupArr.map(function(item, i) {
-                                return this.renderLineGroup(item)
-                            }, this)
-                        }
-                        {
-                            this.state.showDrawTool && this.state.options.mode === 'eraser' &&
-                            <TRDrawing
-                                addNewLine={this.addNewLine}
-                                uid={this.state.uid}
-                                ownerid={this.state.ownerid}
-                                options={this.state.options}
-                                lines = {this.getLineArr()}
-                            />
-                        }
-                    </Layer>
-					<Layer>
-						<Group
-							ref={node => (this.newLinesGroup = node)}
-							name={Const.KONVA.NEW_LINES_CONTAINER_NAME}>
-							{
-								this.state.lines.map((item, index) => {
-									switch(item.stage.mode){
-										case "pen":
-										case "pencil":
-											return this.renderLine(item)
-										case "brush":
-											return this.renderLineBrush(item)
-										default:
-									}
-								}, this)
-							}
-						</Group>
+                            },this)}
 
-                        {
-                            this.state.showDrawTool && this.state.options.mode !== 'eraser' &&
+                            {this.state.childs.map(function(el, i){
+                                switch(el.type){
+                                    case "text":
+                                        return <TRText
+                                            key={el._key}
+                                            ref={el._key}
+                                            dbkey={el._key}
+                                            content={el.content}
+                                            x={el.stage.x}
+                                            y={el.stage.y}
+                                            uid={this.state.uid}
+                                            fontSize={el.stage.fontSize}
+                                            date_created={el.date_created}
+                                            createdBy={el.created_by}
+                                            handleDblClick={this.toggleTheatreMode}
+                                            hasPermission={this.state.hasPermission}
+                                        />;
+                                };
+                            }, this)}
+                        </Layer>
+                        <Layer>
+                            {
+                                this.state.childs.map(function(item, i){
+                                    switch(item.type){
+                                        case "drawing:pen":
+                                        case "drawing:pencil":
+                                            return this.renderLine(item)
+                                        case "drawing:brush":
+                                            return this.renderLineBrush(item)
+                                        case "drawing:group":
+                                            return this.renderLineGroup(item)
+                                        default:
+                                            break;
+                                    };
+                                }, this)
+                            }
+                            {
+                                this.state.groupArr.map(function(item, i) {
+                                    return this.renderLineGroup(item)
+                                }, this)
+                            }
+                        </Layer>
+                        <Layer>
+                            <Group
+                                ref={node => (this.newLinesGroup = node)}
+                                name={Const.KONVA.NEW_LINES_CONTAINER_NAME}>
+                                {
+                                    this.state.lines.map((item, index) => {
+                                        switch(item.stage.mode){
+                                            case "pen":
+                                            case "pencil":
+                                                return this.renderLine(item)
+                                            case "brush":
+                                                return this.renderLineBrush(item)
+                                            default:
+                                        }
+                                    }, this)
+                                }
+                            </Group>
+                            <TRSelectMoveGroup
+                                trSelectedLinesRef={el => this.trSelectedLines = el}
+                                line={this.state.line}
+                                selectedLines={this.state.selectedLines}
+                                mouseLeaveGroupLinesSelected={this.mouseLeaveGroupLinesSelected}
+                            />
+                            <TRProfileImage
+                                centerPos={this.state.profilePosition}
+                                username={this.state.userslug}
+                                src={this.state.user.picture}
+                                uid={this.state.uid}
+                                ownerid={this.state.ownerid}
+                                showDrawTool={this.state.showDrawTool}
+                                toggleFollowingModal = {this.toggleFollowingModal}
+                                updateAvatar = {this.callUserInfo}
+                            />
+                        </Layer>
+                    </Stage>
+                </section>
+
+                <section id="Stage__overlay"
+                    className={`${showStageOverlay ? '' : 'hidden'}`}>
+                    <Stage
+                        width={window.innerWidth}
+                        height={window.innerHeight}>
+                        <Layer>
                             <TRDrawing
                                 addNewLine={this.addNewLine}
                                 uid={this.state.uid}
                                 ownerid={this.state.ownerid}
                                 options={this.state.options}
+                                getMainStage={this.getMainStage}
+                                drawings={this.state.drawings}
                             />
-                        }
-                        {
-							<TRSelectMoveGroup
-								trSelectedLinesRef={el => this.trSelectedLines = el}
-								line={this.state.line}
-								selectedLines={this.state.selectedLines}
-							/>
-						}
-						<TRProfileImage
-							centerPos={this.state.profilePosition}
-							username={this.state.userslug}
-							src={this.state.user.picture}
-							uid={this.state.uid}
-							ownerid={this.state.ownerid}
-							showDrawTool={this.state.showDrawTool}
-              toggleFollowingModal = {this.toggleFollowingModal}
-              updateAvatar = {this.callUserInfo}
-						/>
-					</Layer>
-				</Stage>
+                        </Layer>
+                    </Stage>
+                </section>
 
                 <TRElementOptions
                     element={this.state.elementShowOptions}
                 />
 
 				{/* Drawing menu*/}
-                <Stage
-                    width={this.state.width}
-                    height={(this.state.showDrawTool ? Const.MENU_HEIGHT : 0)}>
-                    <Layer>
-                        <TRMenu
-                            width={this.state.width}
-                            height={Const.MENU_HEIGHT}
-                            handlerMenuChange={this.handlerMenuChange}
-                            handlerChangePointer={this.handlerChangePointer}
-                            options={this.state.options}/>
-                    </Layer>
-                </Stage>
+                <section id="Stage__drawing-menu">
+                    <Stage
+                        width={this.state.width}
+                        height={(this.state.showDrawTool ? Const.MENU_HEIGHT : 0)}>
+                        <Layer>
+                            <TRMenu
+                                width={this.state.width}
+                                height={Const.MENU_HEIGHT}
+                                handlerMenuChange={this.handlerMenuChange}
+                                handlerChangePointer={this.handlerChangePointer}
+                                options={this.state.options}
+                            />
+                        </Layer>
+                    </Stage>
+                </section>
 
 				{/* To select new profile image */}
 				<input type="file" id="profile_image" name="profile_image" accept="image/*" style={{display:'none'}}/>

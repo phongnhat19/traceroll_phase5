@@ -503,3 +503,12 @@ li.nav-theatre-container a:hover + div {
 @media (min-width: 768px) {
   body .navbar-right {
     margin-right: 0px; } }
+
+#Stage__main, #Stage__overlay {
+  position: fixed;
+  top: 0; }
+
+#Stage__drawing-menu {
+  bottom: 0;
+  position: fixed;
+  background: white; }

@@ -36,7 +36,6 @@ export default class NonRegistration extends Component {
 
         axios.get('/api/user/non-register/'+urlToken)
         .then(function(response){
-            console.log('NonRegistration: ', response);
             if(response.data.status === "FAILED"){
                 self.setState({
                     isNonRegistExist: false,
