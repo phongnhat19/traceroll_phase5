@@ -19,6 +19,7 @@ module.exports =  function(app, middleware, controllers) {
 	router.get('/frame/:userslug', middleware.authorized, controllers.api.getFrame); //API route for getting frame of user
 
 	router.get('/user/join-date/:userslug', middleware.authorized, controllers.api.getJoinDate); //API route for getting join date of user
+	router.get('/profile', middleware.authorized, controllers.api.getProfile) //API route for getting user data
 
 	router.get('/frontend-config/', middleware.authorized, controllers.api.getFrontendConfig); // API route for getting frontend config from server
 	

@@ -5,6 +5,22 @@
 	color: #9e9e9e;
 }
 
+.search-results {
+	padding:10px 7px;
+}
+
+.search-results>a {
+	display:flex;
+	align-items: center;
+}
+
+.search-avatar {
+	width:40px;
+	height:40px;
+	border-radius: 50%;
+	margin-right:20px;
+}
+
 .user-not-found{
 	pointer-events: none;
 	cursor: default;
@@ -24,7 +40,7 @@ ul li {
 	position: absolute;
 	top: 0.65vw;
 	left: 16vw;
-	width: 25%;
+	width: 45%;
 	z-index: 1030;
 	height: 33px;
 	/*added */

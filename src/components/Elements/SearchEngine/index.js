@@ -91,7 +91,15 @@ class Search extends Component {
 
 					} else {
 						if (Jquery("#search-input").val().trim().length !== 0) {
-							userNameArr = list;
+							for(let i = 0; i < list.length; i++){
+								let userObj = {
+									username:list[i].username,
+									userSlug:list[i].userslug,
+									picture:list[i].picture,
+									fullName:list[i].fullname
+								}
+								userNameArr.push(userObj);
+							};
 						} else {
 							userNameArr = [];
 						}
@@ -132,8 +140,18 @@ class Search extends Component {
 						}else{
 							representName = fullName;
 						}
-
-						return <li><a href={"/stage/"+userObj.userslug} onClick={this.props.handleRedirectPage}>{representName}</a></li>
+						return(
+							<li className="search-results">
+								<a href={`/stage/${userObj.userSlug}`} onClick={this.props.handleRedirectPage}>
+									<img className="search-avatar" src={userObj.picture} />
+									<div className="d-inline-block">
+										<span>{userObj.userSlug}</span> <br/>
+										<span className="text-muted">{representName}</span>
+									</div>
+								</a>
+							</li>
+						)
+						//return <li><a href={"/stage/"+userObj.userslug} onClick={this.props.handleRedirectPage}>{representName}</a></li>
 					}, this)}
 				</ul>
 			</div>
