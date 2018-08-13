@@ -21,7 +21,11 @@ class TRText extends Component{
 				strokeWidth: 2
             },
             visibleTransform: false
-        }
+		}
+		
+		this.handleDragEnd = this.handleDragEnd.bind(this);
+		this.handleMouseDown = this.handleMouseDown.bind(this);
+		this.syncToServer = this.syncToServer.bind(this);
     }
 
     componentDidMount(){
@@ -29,12 +33,13 @@ class TRText extends Component{
         if (text) {
             this.setState({
                 width: text.width(),
-                height: text.height()
+				height: text.height(),
+				whRatio: Math.round(text.width()/text.height())
             });
         }
     }
 
-    updateOnDb = () => {
+    syncToServer = () => {
         const text = this.text;
         const requestBody = {
             uid: this.props.uid,
@@ -47,7 +52,37 @@ class TRText extends Component{
             }
         }
         TrService.updateText(requestBody);
-    }
+	}
+	
+	handleDragEnd(){
+		this.frame.listening(true);
+
+		var thisElement = this.text;
+		this.setState({
+			x: thisElement.x(),
+			y: thisElement.y(),
+			fontSize: thisElement.fontSize(),
+			width: thisElement.width(),
+			height: thisElement.height()
+		});
+
+		const group = this.group,
+            stage = group.getStage(),
+            groupAP = group.getAbsolutePosition();
+        let isIntersect = false;
+
+        const intersectResult = (result) => {
+            isIntersect = result;
+        };
+        const newAP = Utils.dragBoundProfileImage.call(this, stage, group, groupAP, Utils.intersectProfileImage, intersectResult);
+        if (isIntersect) {
+            group.setAbsolutePosition(newAP);
+        }
+        
+		//Sync the current image information include X, Y, Width and Height
+		this.syncToServer();
+		this.text.getLayer().draw();
+	}
 
     dragBoundFunc = (pos) => {
         const group = this.group,
@@ -173,7 +208,7 @@ class TRText extends Component{
 
     handleStageWheel = () => {
     	this.updateCircleScale();
-    }
+	}
 
     handleMouseDown = (e) => {
 		this.frame.listening(false);
@@ -253,7 +288,7 @@ class TRText extends Component{
                 date_created = {this.props.date_created}
                 onDblclick = {this.handleOnDoubleClick}
                 dragBoundFunc={this.dragBoundFunc}
-                onDragEnd = {this.updateOnDb}
+                onDragEnd = {this.handleDragEnd}
                 draggable = {true}
                 >
 
@@ -276,7 +311,7 @@ class TRText extends Component{
                     strokeEnabled={false}
                     width={this.state.width}
                     height={this.state.height}
-                    onShowTransform={this.handleShowTransform} ///// Click chuot vo thi se chay ham nay...Ben Image thi la vay :))
+                    onShowTransform={this.handleShowTransform}
                     onHideTransform={this.handleHideTransform}
                     onRemove={this.handleRemoving}
                     onMouseOver={this.handleEnterGroup}

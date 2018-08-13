@@ -130,9 +130,9 @@ class Search extends Component {
 						size="29">
 				</input>
 				<ul id="dropDown-username" className="hide search-style">
-					{this.state.listUser.map(function(userObj, index){
-						const userSlug = userObj.userslug,
-							fullName = userObj.fullname;
+					{this.state.listUser.map((userObj, index)=>{
+						const userSlug = userObj.userSlug || "",
+							fullName = userObj.fullName || "";
 						let representName;
 
 						if(userSlug.length >= searchInfo.length){
@@ -152,7 +152,7 @@ class Search extends Component {
 							</li>
 						)
 						//return <li><a href={"/stage/"+userObj.userslug} onClick={this.props.handleRedirectPage}>{representName}</a></li>
-					}, this)}
+					})}
 				</ul>
 			</div>
 		)

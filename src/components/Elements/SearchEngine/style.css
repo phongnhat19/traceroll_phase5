@@ -40,15 +40,15 @@ ul li {
 	position: absolute;
 	top: 0.65vw;
 	left: 16vw;
-	width: 45%;
+	width: 25%;
 	z-index: 1030;
 	height: 33px;
 	/*added */
-  background-color: #eaeaea;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  margin-left:2vw;
+  	background-color: #eaeaea;
+  	-moz-border-radius: 4px;
+  	-webkit-border-radius: 4px;
+  	border-radius: 4px;
+  	margin-left:2vw;
 }
 
 .canvas-wrapper #search-engine{
@@ -90,13 +90,13 @@ ul li {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     border-radius: 4px;
-		position:relative;
+	position:relative;
     margin-left:2.5 vw;
   }
 
 .searchbutton {
-		vertical-align: middle;
-		margin-left: 1vw;
+	vertical-align: middle;
+	margin-left: 1vw;
 }
 
 /*
