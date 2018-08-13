@@ -59,11 +59,10 @@ class TRElementOptions extends Component {
         if (group) {
             const rect = group.getClientRect(),
                 width = menu.clientWidth,
-                height = menu.clientHeight,
-                mainMenuSize = Utils.getMainMenuSize()
+                height = menu.clientHeight
 
             const x = rect.x + rect.width - width,
-                y = rect.y + mainMenuSize.height - height
+                y = rect.y - height
 
             menu.style.top = `${y}px`
             menu.style.left = `${x}px`
