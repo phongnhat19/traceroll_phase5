@@ -231,7 +231,6 @@ class TRDrawing extends React.Component {
             let currentCountDrawed = localStorage.getItem('tracerollCountDrawed') || 0
 			currentCountDrawed = parseInt(currentCountDrawed,10)
 			localStorage.setItem('tracerollCountDrawed',currentCountDrawed+1)
-            this.updateCanvas(this.state.canvas)
         }
 	}
 
