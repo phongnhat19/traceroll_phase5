@@ -111,7 +111,7 @@ class Search extends Component {
 		const searchInfo = this.state.content_search;
 		return(
 			<div id="search-engine">
-				<input type="image" class="searchbutton" name="search" src="/img/icons/search2.svg" alt="Search" width="18" height="18"></input>
+				<input type="image" className="searchbutton" name="search" src="/img/icons/search2.svg" alt="Search" width="18" height="18"></input>
 				<input 	id="search-input"
 						classame="sfield"
 						type="text"

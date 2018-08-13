@@ -3,14 +3,14 @@ import { Image } from 'tr-react-konva';
 import Const from '../../Util/const.js';
 import Utils from '../../Util/utils.js';
 
+const { PEN_SIZE, PENCIL_SIZE, BRUSH_SIZE } = Const.DRAWING
+
 class TRDrawing extends React.Component {
 	
 	constructor(props){
 		super(props);
 
         this.state = {
-            x: 0,
-            y: 0,
             canvas: null
         }
 
@@ -23,51 +23,28 @@ class TRDrawing extends React.Component {
 
         const stage = this.image.getStage(),
             canvas = document.createElement("canvas"),
-            context = canvas.getContext("2d")
+            context = canvas.getContext("2d"),
+            { width, height } = stage.getSize()
 
         context.lineJoin = "round"
         context.lineCap = "round"
 
+        canvas.width = width
+        canvas.height = height
+
         this.canvas = canvas
         this.ctx = context
-        this.stage = stage
-
-        this.updateCanvas(canvas)
+        this.mainStage = this.props.getMainStage()
 
         this.setState({
             canvas: canvas
         })
 
 		stage.on('mouseover', this.handleMouseOver)
-        stage.on('mousemove', this.handleMouseMove)
         stage.on('mousedown', this.handleStageMouseDown)
+        window.addEventListener('mousemove', this.handleWindowMouseMove)
         window.addEventListener('mouseup', this.handleWindowMouseUp)
-        window.addEventListener('wheel', this.handleMouseWheel)
 	}
-
-    updateCanvas = (canvas) => {
-        const stage = this.image.getStage(),
-            scale = stage.scaleX(),
-            width = stage.width() / scale,
-            height = stage.height() / scale
-
-        if (canvas) {
-            canvas.width = width
-            canvas.height = height
-        }
-
-        this.setState({
-            x: (-stage.getX()) / scale,
-            y: (-stage.getY()) / scale,
-        })
-
-        // This is a trick to solve lag problem when drag drop canvas
-        this.clearLayerDrawing()
-    }
-
-    handleMouseWheel = () => {
-        this.updateCanvas(this.state.canvas)
-    }
 
 	handleStageMouseDown = (e) => {
 		
@@ -82,47 +59,47 @@ class TRDrawing extends React.Component {
 	//Handle mouse down event on canvas
 	handleMouseDown = (e) => {
 
-		const button = e.evt.button;
+		const { button, clientX, clientY } = e.evt
+
 		if (Utils.isLeftClick(button)) {
 			
-            this.setupMouseDown()
+            this.isDrawing = true
+
+            const options = this.props.options
+            this.line.mode = options.mode
+            this.line.color = options.color
+
+            const mainStage = this.mainStage,
+                scale = mainStage.scaleX(),
+                pos = {
+                    x: clientX,
+                    y: clientY
+                },
+                start = {
+                    x: ~~ (0.5 + (pos.x - mainStage.x()) / scale),
+                    y: ~~ (0.5 + (pos.y - mainStage.y()) / scale)
+                }
+
+            this.line.points.push(start.x, start.y)
+            this.lastPointerPosition = pos
+
+            //clear selectd line
+            this.props.addNewLine && this.props.addNewLine({
+                mode: Const.MODE.SELECT,
+                stage: {
+                    points: [],
+                    color: 'black'
+                }
+            })
 		}
 	}
 
-    setupMouseDown = () => {
-        this.isDrawing = true
-
-        const options = this.props.options
-        this.line.mode = options.mode
-        this.line.color = options.color
-
-        const stage = this.stage,
-            pos = stage.getPointerPosition(),
-            start = {
-                x: ~~ (0.5 + (pos.x - 2 * stage.x()) / stage.scaleX() - this.image.x()),
-                y: ~~ (0.5 + (pos.y - 2 * stage.y()) / stage.scaleX() - this.image.y())
-            }
-
-        this.line.points.push(start.x, start.y)
-        this.lastPointerPosition = pos
-
-        //clear selectd line
-        this.props.addNewLine && this.props.addNewLine({
-            mode: Const.MODE.SELECT,
-            stage: {
-                points: [],
-                color: 'black'
-            }
-        })
-    }
-
-	handleMouseMove = (e) => {
-		const node = e.target;
+	handleWindowMouseMove = (e) => {
 
 		const context = this.ctx,
 			isDrawing = this.isDrawing,
             isErasing = this.isErasing,
-            stage = this.stage,
+            stage = this.mainStage,
             mode = this.props.options.mode,
             color = this.props.options.color,
             scale = stage.scaleX();
@@ -130,69 +107,72 @@ class TRDrawing extends React.Component {
         if (isDrawing) {
 
             const stagePos = stage.position(),
-                pointerPos = stage.getPointerPosition(),
+                localPos = {
+                    x: e.clientX,
+                    y: e.clientY
+                },
                 startOnCanvas = {
-                    x: ~~ (0.5 + (this.lastPointerPosition.x - stagePos.x) / scale - this.image.x()),
-                    y: ~~ (0.5 + (this.lastPointerPosition.y - stagePos.y) / scale - this.image.y())
+                    x: this.lastPointerPosition.x - this.image.x(),
+                    y: this.lastPointerPosition.y - this.image.y()
                 },
                 endOnCanvas = {
-                    x: ~~ (0.5 + (pointerPos.x - stagePos.x) / scale - this.image.x()),
-                    y: ~~ (0.5 + (pointerPos.y - stagePos.y) / scale - this.image.y())
+                    x: localPos.x - this.image.x(),
+                    y: localPos.y - this.image.y()
                 },
                 end = {
-                    x: ~~ (0.5 + (pointerPos.x - 2 * stagePos.x) / scale - this.image.x()),
-                    y: ~~ (0.5 + (pointerPos.y - 2 * stagePos.y) / scale - this.image.y())
+                    x: ~~ (0.5 + (localPos.x - stagePos.x) / scale),
+                    y: ~~ (0.5 + (localPos.y - stagePos.y) / scale)
                 }
+
+            let strokeWidth = 1
 
             if (isErasing) {
                 if (true) {
-                    const line = this.getLineIntersect(end, this.props.lines, scale)
+                    const line = this.getLineIntersect(end, this.props.drawings, scale)
                     if (line) {
                         this.handleErasing(line)
                     }
                 }
             } else {
 
-                if (node && node.name() === Const.KONVA.PROFILE_IMAGE) {
-                    node.fire(Const.EVENTS.SHOW_ALERT_PROFILE_IMAGE);
-                    return;
-                }
-
                 context.strokeStyle = color;
-
-                
 
                 switch(mode){
                     case Const.MODE.PEN:
-                        context.lineWidth = 4;
-                        this.updateCanvasByLine(startOnCanvas, endOnCanvas);
+                        context.lineWidth = PEN_SIZE * scale;
+                        strokeWidth = PEN_SIZE
+
+                        this.renderLine(startOnCanvas, endOnCanvas);
                         break;
                     case Const.MODE.PENCIL:
-                        context.lineWidth = 2;
-                        this.updateCanvasByLine(startOnCanvas, endOnCanvas);
+                        context.lineWidth = PENCIL_SIZE * scale;
+                        strokeWidth = PENCIL_SIZE
+
+                        this.renderLine(startOnCanvas, endOnCanvas);
                         break;
                     case Const.MODE.BRUSH:
-                        this.updateCanvasByBrush(startOnCanvas, endOnCanvas, scale);
+
+                        this.renderBrush(startOnCanvas, endOnCanvas, scale);
                         break;
                     case Const.MODE.SELECT:
                         context.strokeStyle = 'black'
                         context.lineWidth = 1;
-                        this.updateCanvasByLine(startOnCanvas, endOnCanvas);
+
+                        this.renderLine(startOnCanvas, endOnCanvas);
                         break;
                     default:
                 };
 
                 this.line.points.push(end.x, end.y);
-                this.line.strokeWidth = context.lineWidth;
+                this.line.strokeWidth = strokeWidth;
 
-                this.lastPointerPosition = pointerPos;
+                this.lastPointerPosition = localPos
             }
-			
 		}
-	};
+	}
 
 	// Drawing Thin & Thick line
-	updateCanvasByLine(start, end) {
+	renderLine(start, end) {
 		const ctx = this.ctx;
 		ctx.globalAlpha = 1;
 		ctx.beginPath();
@@ -203,15 +183,15 @@ class TRDrawing extends React.Component {
 		this.image.getLayer().draw();
 	}
 
-	updateCanvasByBrush(start, end, scale) {
+	renderBrush(start, end, scale) {
 		const ctx = this.ctx;
 		ctx.globalAlpha = 0.1;
         ctx.fillStyle = this.line.color;
 
 		const dist = Utils.distanceBetween(start, end),
 			angle = Utils.angleBetween(start, end),
-			w = 10,
-        	h = 20,
+			w = BRUSH_SIZE.width * scale,
+        	h = BRUSH_SIZE.height * scale,
             sin = Math.sin(angle),
             cos = Math.cos(angle)
         let x, y
@@ -228,18 +208,6 @@ class TRDrawing extends React.Component {
 	handleWindowMouseUp = (e) => {
 
 		//only add new line if real drawing instead of just click
-        this.setupMouseUp()
-
-        const button = e.button
-
-        if (button === 2) {
-
-            this.updateCanvas(this.state.canvas)
-        }
-	}
-
-    setupMouseUp = () => {
-
         if (this.isDrawing && this.line.points.length > 2) {
             this.addNewLine();
         }
@@ -247,7 +215,7 @@ class TRDrawing extends React.Component {
         this.line = {
             points: []
         }
-    }
+	}
 
 	addNewLine = () => {
 		const line = this.line,
@@ -258,8 +226,8 @@ class TRDrawing extends React.Component {
 		rect.y -= padding;
 
 		if (this.props.options.mode === Const.MODE.BRUSH) {
-			rect.width += Const.BASE_POINT.width + padding *  2;
-			rect.height += Const.BASE_POINT.height + padding *  2;
+			rect.width += BRUSH_SIZE.width + padding *  2;
+			rect.height += BRUSH_SIZE.height + padding *  2;
 		} else {
 			rect.width += line.strokeWidth + padding *  2;
 			rect.height += line.strokeWidth + padding *  2;
@@ -313,14 +281,14 @@ class TRDrawing extends React.Component {
         const stage = this.image.getStage();
         
 		stage.off('mouseover', this.handleMouseOver);
-		stage.off('mousemove', this.handleMouseMove);
-		stage.off('mousedown', this.handleStageMouseDown);
+        stage.off('mousedown', this.handleStageMouseDown);
+		window.removeEventListener('mousemove', this.handleWindowMouseMove);
         window.removeEventListener('mouseup', this.handleWindowMouseUp);
-		window.removeEventListener('wheel', this.handleMouseWheel);
 	}
 
     getLineIntersect = (pointer, lines, scale) => {
 
+console.log(pointer, lines)
         const offset = 10 / scale
         let line, point1 = {}, point2 = {}, i, n, dist, isInRange
 
@@ -383,8 +351,8 @@ class TRDrawing extends React.Component {
 	render() {
 		return (
 			<Image
-				x = {this.state.x}
-                y = {this.state.y}
+                stroke="red"
+                strokeWidth={5}
                 image = {this.state.canvas}
 				ref = {node => this.image = node}
 				onMouseDown = {this.handleMouseDown}
