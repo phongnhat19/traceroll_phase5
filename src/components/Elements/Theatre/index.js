@@ -164,7 +164,6 @@ class TRTheatre extends Component {
 	}
 
 	handleEventSlidCarousel(e){
-		console.log(e);
 		alert('run slid carousel');
 	}
 

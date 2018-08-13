@@ -3,7 +3,7 @@ import { Shape, Group, Image } from 'tr-react-konva';
 import Utils from '../../Util/utils.js';
 import Const from '../../Util/const.js';
 
-const BASE_POINT = Const.BASE_POINT;
+const { BRUSH_SIZE } = Const.DRAWING;
 
 class LineBrush extends Component{
     constructor(props){
@@ -66,8 +66,8 @@ class LineBrush extends Component{
                     sceneFunc = { context => {
 
                         const stroke = this.props.stroke,
-                            width = BASE_POINT.width,
-                            height = BASE_POINT.height,
+                            width = BRUSH_SIZE.width,
+                            height = BRUSH_SIZE.height,
                             points = this.props.points
 
                         context.globalAlpha = 0.1

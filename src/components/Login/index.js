@@ -67,7 +67,6 @@ export default class Login extends Component {
 	}
 	//event slide right IMG show Resgister form
 	moveright(condition){
-		console.log(condition);
 		var width = window.innerWidth;
 		if (width<768){
 			this.setState({

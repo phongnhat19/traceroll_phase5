@@ -1,6 +1,6 @@
 const Const = {
 	ZOOM: {
-		min: 0.1,
+		min: 0.01,
 		max: 6
 	},
 	SCALE_BY: 0.70,
@@ -30,17 +30,13 @@ const Const = {
 		BRUSH: 'drawing:brush',
 		GROUP: 'drawing:group'
 	},
-	// Base point for LineBrush
-	BASE_POINT: {
-		width: 10,
-		height: 20
-	},
 	KONVA: {
 		NEW_LINES_CONTAINER_NAME: 'groupNewLine',
 		TIME_LINE_NODE: 'timeLine',
 		PROFILE_IMAGE: 'profileImage',
 		TRANSFORM: 'transform'
 	},
+	GROUP_NAME_LINES_SELECTED: "group_name_lines_selected",
 	EVENTS: {
 		REMOVE: 'remove',
 		SHOW_ALERT_PROFILE_IMAGE: 'showalert',
@@ -66,5 +62,13 @@ const Const = {
 	INVALID_PASSWORD_MSG: 'Password should atleast have 6 characters and must have a capital letter, a small letter, a number',
 	PASSWORD_REGEXP: '[\\d\\W\\w]{6,}', // Old regexp /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\d\W\w]{6,}/gm
 	EMAIL_ERROR: 'Please enter a valid email address',
+    DRAWING: {
+        PEN_SIZE: 4,
+        PENCIL_SIZE: 2,
+        BRUSH_SIZE: {
+            width: 10,
+            height: 20
+        },
+    }
 }
 export default Const
