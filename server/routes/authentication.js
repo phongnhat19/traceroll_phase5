@@ -4,7 +4,6 @@
 
 	var passport = require('passport'),
 		passportLocal = require('passport-local').Strategy,
-		FacebookStrategy = require('passport-facebook').Strategy,
 		nconf = require('nconf'),
 		winston = require('winston'),
 		async = require('async'),
@@ -22,16 +21,6 @@
 		helpers = require('../models/helpers'),
 		meta = {config:{}},
 		loginStrategies = [];
-
-	passport.use(new FacebookStrategy({
-		clientID: '272971793297525',
-		clientSecret: '3c64b8fe280a20a0f24bb8d96a1a053b',
-		callbackURL: "localhost:9000/fbauthcallback"
-	},(accessToken, refreshToken, profile, done) => {
-		console.log(accessToken)
-		console.log(refreshToken)
-		console.log(profile)
-	}));
 
 
 	Auth.initialize = function(app, middleware) {
@@ -76,13 +65,7 @@
 		router.post('/logout', logout);
 		router.post('/register', register);
 		router.post('/login',login);
-		router.get('/auth/facebook', passport.authenticate('facebook'));
-		router.get('/fbauthcallback',
-			passport.authenticate('facebook', { 
-				successRedirect: '/',
-				failureRedirect: '/login' 
-			})
-		);
+		
 		router.post('/editUser',edit);
 		router.post('/reset-pwd', resetPwd);
 		router.post('/user/recover-password/isExpired', checkExpiredEmail);
@@ -175,7 +158,7 @@
 	};
 
 	passport.serializeUser(function(user, done) {
-
+		//console.log(user)
 		done(null, user.uid);
 	});
 
