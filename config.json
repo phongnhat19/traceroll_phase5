@@ -8,11 +8,11 @@
 	"video_path": "/img/uploads/videos",
 	"thumb_path": "/img/uploads/videos/thumbnails",
 	"mongo": {
-		"host":"192.168.1.253:27017/traceroll_db",
-		"port":"27017",
-		"username":"traceroll_owner",
-		"password":"uAC3qu9YRzBCBtra",
-		"database":"traceroll_db"
+		"host":"ds121262.mlab.com:21262/traceroll",
+		"port":"21262",
+		"username":"admin",
+		"password":"admin23101995",
+		"database":"traceroll"
 	},
 	"ssl-development": {
 		"ca": "./server/ssl_tsl/ca_bundle.crt",
