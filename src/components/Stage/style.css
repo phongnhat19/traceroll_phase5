@@ -512,3 +512,9 @@ li.nav-theatre-container a:hover + div {
   bottom: 0;
   position: fixed;
   background: white; }
+
+.sidebar {
+  right: 0;
+  display: inline-block;
+  width: 350px;
+  position: absolute; }

@@ -25,6 +25,7 @@ import Const from '../Util/const.js';
 import Utils from '../Util/utils.js';
 import TrService from '../Util/service.js';
 import { linesInsidePolygon } from '../Elements/SelectMoveGroup';
+import Sidebar from './Sidebar'
 
 import './style.css';
 
@@ -1590,78 +1591,78 @@ class TR_Stage extends Component{
 
 						<div className="collapse navbar-collapse" id="myNavbar">
 							<ul className="nav navbar-nav navbar-right">
-                <li className="nav-avatar-container">
-									<a href={`/stage/${this.state.loginUser.username}`} >
-										<img className="circular nav-container nav-avatar" src={ (this.state.loginUserAvatar) ? this.state.loginUserAvatar : '/img/icons/profilemenubaroutline.svg'} />
-									</a>
-                  <div className="tooltips">
-                      <span className="tooltiptext">My Canvas</span>
-                  </div>
-								</li>
-                <li className="nav-home-container">
-                  <a href="/home" >
-                    <img className="circular nav-container nav-home" src="/img/icons/home_canvas.svg" />
-                  </a>
-                  <div className="tooltips">
-                      <span className="tooltiptext">Home</span>
-                  </div>
-                </li>
-                <li className="nav-notification-container">
-                    <a href="#" onClick={this.toggleNotification} className={this.state.hasNewNoti ? 'new-notification' : ''}>
-                          <img className="circular nav-container nav-notification" src="/img/icons/notifications_canvas.svg" />
-                    </a>
-                    <div className="tooltips">
-                        <span className="tooltiptext">Notifications</span>
-                    </div>
-                </li>
-                <li className="nav-timeline-container">
+                                <li className="nav-avatar-container">
+                                    <a href={`/stage/${this.state.loginUser.username}`} >
+                                        <img className="circular nav-container nav-avatar" src={ (this.state.loginUserAvatar) ? this.state.loginUserAvatar : '/img/icons/profilemenubaroutline.svg'} />
+                                    </a>
+                                    <div className="tooltips">
+                                        <span className="tooltiptext">My Canvas</span>
+                                    </div>
+                                </li>
+                                <li className="nav-home-container">
+                                    <a href="/home" >
+                                        <img className="circular nav-container nav-home" src="/img/icons/home_canvas.svg" />
+                                    </a>
+                                    <div className="tooltips">
+                                        <span className="tooltiptext">Home</span>
+                                    </div>
+                                </li>
+                                <li className="nav-notification-container">
+                                    <a href="#" onClick={this.toggleNotification} className={this.state.hasNewNoti ? 'new-notification' : ''}>
+                                        <img className="circular nav-container nav-notification" src="/img/icons/notifications_canvas.svg" />
+                                    </a>
+                                    <div className="tooltips">
+                                        <span className="tooltiptext">Notifications</span>
+                                    </div>
+                                </li>
+                                <li className="nav-timeline-container">
 									<a href="#" onClick={this.toggleTimeline}>
 										<img className="circular nav-container nav-timeline" src="/img/icons/timeline.svg" />
 									</a>
-                  <div className="tooltips">
-                      <span className="tooltiptext">Timeline</span>
-                  </div>
+                                    <div className="tooltips">
+                                        <span className="tooltiptext">Timeline</span>
+                                    </div>
 								</li>
-                <li className="nav-theatre-container">
-                  <a href="#" onClick={this.toggleTheatreMode}>
-                    <img className="circular nav-container nav-theatre" src="/img/icons/theatre.svg" />
-                  </a>
-                  <div className="tooltips">
-                      <span className="tooltiptext">Theatre</span>
-                  </div>
-                </li>
-                {
-                  this.state.hasPermission &&
-                  <div className="dropdown">
-                    <img className="dropbtn circular nav-add" src="/img/icons/add_canvas.svg" />
-                    <div className="dropdown-content">
-                      {
-                          this.state.hasPermission &&
-                          <li className="nav-image-container">
-                              <a href="#" onClick={this.addImageOrTextClick} id="add_image" data-toggle="modal" data-target="#add_image_modal">
-                                  <img className="circular nav-image" src="/img/icons/add_photo_fill.svg" /> ADD IMAGE
-                              </a>
-                          </li>
-                      }
-                      {
-                          this.state.hasPermission &&
-                          <li className="nav-text-container">
-                              <a href="#" onClick={this.addImageOrTextClick} id="add_text" data-toggle="modal" data-target="#add_text_modal">
-                                  <img className="circular nav-text" src="/img/icons/add_text.svg" /> ADD TEXT
-                              </a>
-                          </li>
-                      }
-                      {
-                          this.state.hasPermission &&
-                          <li className="nav-draw-container">
-                              <a href="#" id="drawing_mode" onClick={this.toggleDrawingMenu}>
-                                  <img className="circular nav-draw" src="/img/icons/add_draw_fill.svg" /> DRAW
-                              </a>
-                          </li>
-                      }
-                    </div>
-                  </div>
-                }
+                                <li className="nav-theatre-container">
+                                    <a href="#" onClick={this.toggleTheatreMode}>
+                                        <img className="circular nav-container nav-theatre" src="/img/icons/theatre.svg" />
+                                    </a>
+                                    <div className="tooltips">
+                                        <span className="tooltiptext">Theatre</span>
+                                    </div>
+                                </li>
+                                {
+                                    this.state.hasPermission &&
+                                    <div className="dropdown">
+                                        <img className="dropbtn circular nav-add" src="/img/icons/add_canvas.svg" />
+                                        <div className="dropdown-content">
+                                        {
+                                            this.state.hasPermission &&
+                                            <li className="nav-image-container">
+                                                <a href="#" onClick={this.addImageOrTextClick} id="add_image" data-toggle="modal" data-target="#add_image_modal">
+                                                    <img className="circular nav-image" src="/img/icons/add_photo_fill.svg" /> ADD IMAGE
+                                                </a>
+                                            </li>
+                                        }
+                                        {
+                                            this.state.hasPermission &&
+                                            <li className="nav-text-container">
+                                                <a href="#" onClick={this.addImageOrTextClick} id="add_text" data-toggle="modal" data-target="#add_text_modal">
+                                                    <img className="circular nav-text" src="/img/icons/add_text.svg" /> ADD TEXT
+                                                </a>
+                                            </li>
+                                        }
+                                        {
+                                            this.state.hasPermission &&
+                                            <li className="nav-draw-container">
+                                                <a href="#" id="drawing_mode" onClick={this.toggleDrawingMenu}>
+                                                    <img className="circular nav-draw" src="/img/icons/add_draw_fill.svg" /> DRAW
+                                                </a>
+                                            </li>
+                                        }
+                                        </div>
+                                    </div>
+                                }
 							</ul>
 						</div>
 					</div>
@@ -1692,9 +1693,9 @@ class TR_Stage extends Component{
 					this.state.showOptMenu &&
 					<TROptMenu
 						toggleOptMenu = {this.toggleOptMenu}
-            showOptMenu = {this.state.showOptMenu}
-            showNotification = {this.state.showNotification}
-            setShowNotification = {this.setShowNotification}
+                        showOptMenu = {this.state.showOptMenu}
+                        showNotification = {this.state.showNotification}
+                        setShowNotification = {this.setShowNotification}
 						user_info = {this.state.loginUser}
 					/>
 				}
@@ -1725,7 +1726,7 @@ class TR_Stage extends Component{
 										<label htmlFor="image_link" className="control-label col-md-2">Link:</label>
 										<div className="col-md-10">
 											<Dropzone onDrop={this.handleDropElement}>
-													<p>DROP FILE OR CLICK TO UPLOAD.</p>
+                                                <p>DROP FILE OR CLICK TO UPLOAD.</p>
 											</Dropzone>
 										</div>
 									</div>
@@ -1824,8 +1825,8 @@ class TR_Stage extends Component{
                                             handleDblClick={this.toggleTheatreMode}
                                             el_type={el.type}
                                             caption={el.caption}
-                        hasPermission={this.state.hasPermission}
-                        showToast={this.showToast}
+                                            hasPermission={this.state.hasPermission}
+                                            showToast={this.showToast}
                                         />
                                 };
                             },this)}
@@ -1953,7 +1954,7 @@ class TR_Stage extends Component{
 
 				{/*Input Edit text*/}
 				<div id="newTextWrapper" style={{display:'none'}}>
-						<input type="text" id="newText"/>
+                    <input type="text" id="newText"/>
 				</div>
 				{/*Saving message*/}
 				<div id="snackbar">Saving...</div>
@@ -1991,14 +1992,15 @@ class TR_Stage extends Component{
                     ref={(node) => {this.Progress = node}}
                     percent = {this.state.progressPercent}
                 />
+                <Sidebar />
                 {
                     this.state.showDrawTool &&
                     [
                         <button key="btn-save-drawing"
                             className="btn-close-feature btn-close-drawing"
                             onClick={this.toggleDrawingMenu}
-                            >
-                                &#x2715;
+                        >
+                            &#x2715;
                         </button>,
                     ]
                 }
