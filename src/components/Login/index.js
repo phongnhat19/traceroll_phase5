@@ -14,7 +14,8 @@ import Collaborate from './Collaborate/index'
 import LoginFooter from './LoginFooter/index';
 import cryptoJS from 'crypto-js';
 import './style.css';
-import TRToast from '../Elements/Notification/toast'
+import TRToast from '../Elements/Notification/toast';
+import fbLogo from './fb_logo.png'
 
 const _ONBOARDING_URL = 'http://onboarding.traceroll.com/tour/1';
 
@@ -410,19 +411,22 @@ export default class Login extends Component {
 						<div className={ (this.state.formError) ? "loginmodal " + this.state.formError : 'loginmodal'}>
 								{/*LOGIN FORM*/}
 								<div className="signin signform" style={{display:this.state.display}}>
-										<h2>Sign-in</h2>
-										<input
-											type="text"
-											id="username"
-											placeholder="Username"
-											onChange = {(e) => this.setState({username_login:e.target.value}) } />
-										<input
-											type="password"
-											id="pass"
-											placeholder="Password"
-											onChange = {(e) => this.setState({password_login:e.target.value})} onKeyPress={this.handleLoginPress} required/>
-										<button id="btnlogin" onClick={(event) => this.handleLogin(event)}>Log-in</button>
-										<button className="Login__forgotpwd-btn" onClick={this.handleForgotPassword}>Forgot password?</button>
+									<h2>Sign-in</h2>
+									<input
+										type="text"
+										id="username"
+										placeholder="Username"
+										onChange = {(e) => this.setState({username_login:e.target.value}) } />
+									<input
+										type="password"
+										id="pass"
+										placeholder="Password"
+										onChange = {(e) => this.setState({password_login:e.target.value})} onKeyPress={this.handleLoginPress} required/>
+									<button id="btnlogin" onClick={(event) => this.handleLogin(event)}>Log-in</button>
+									<button className="Login__forgotpwd-btn" onClick={this.handleForgotPassword}>Forgot password?</button>
+									<a href="/api/auth/facebook">
+										<img src={fbLogo} />
+									</a>
 								</div>
 
                                 {/* Forgot password dialog */}
