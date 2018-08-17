@@ -79,7 +79,7 @@ class TRMenu extends Component {
             <Group ref="menuGroup" x="0" y='0'>
                 <Rect x="0" y="0" width={containerwidth} height="10" />
                 <Rect x="0" y="0" width={containerwidth} height="1" fill="#ccc"/>
-                <Line fill="red" closed="true" stroke="green" strokeWidth="2" points={5, 70, 140, 23, 250, 60, 300, 20} />
+                <Line fill="red" closed="true" stroke="green" strokeWidth="2" points={[5, 70, 140, 23, 250, 60, 300, 20]} />
                 {buttons.map((value, index) => {
                     return <MenuButton key={index} active={value.active} hasActive={value.mode === this.state.mode} mode={value.mode} color={this.state.color} src={value.img} x={value.x} y={value.y} onClick={this.handleModeSelected}/>;
                 })}

@@ -148,7 +148,7 @@ class TR_Stage extends Component{
     handleLoginUserAvatarCallback(response){
         const responseData = response.data;
         this.setState({
-          loginUserAvatar: responseData.data.picture
+            loginUserAvatar: responseData.data.picture
         })
     }
 
@@ -261,6 +261,10 @@ class TR_Stage extends Component{
                 <Handle value={value} {...restProps} />
             </Tooltip>
         );
+    }
+
+    toggleSidebar = () => {
+        $(".sidebar").toggleClass('show')
     }
 
 	toggleTimeline(){
@@ -807,22 +811,22 @@ class TR_Stage extends Component{
 		return this.state.options;
 	}
 
-  //callback function
-  getUserInfoCallback(response){
+    //callback function
+    getUserInfoCallback(response){
 
-       const body = response.data,
-             loginUser = body.user,
-             userId = loginUser.userId,
-             ownerId = body.owner,
-             profilePosition = body.data.profilePosition;
+        const   body = response.data,
+                loginUser = body.user,
+                userId = loginUser.userId,
+                ownerId = body.owner,
+                profilePosition = body.data.profilePosition;
 
-       //checks to set profile data to loginUser
-	   (body.user.username === body.data.username) ? this.setState({loginUserAvatar: body.data.picture}) : 	TrService.getUserJoinDate(body.user.username, this.handleLoginUserAvatarCallback);
-	   
-       this.setState({
+        //checks to set profile data to loginUser
+        (body.user.username === body.data.username) ? this.setState({loginUserAvatar: body.data.picture}) : 	TrService.getUserJoinDate(body.user.username, this.handleLoginUserAvatarCallback);
+
+        this.setState({
            user: body.data,
            loginUser: loginUser,
-       });
+        });
     }
 
     hasPermission = () => {
@@ -855,7 +859,7 @@ class TR_Stage extends Component{
         this.Toast && this.Toast.hide()
     }
 
-   componentDidMount() {
+    componentDidMount() {
 		this.addWheelListener();
         window.addEventListener("contextmenu", this.handleContextMenu);
         window.addEventListener("mousedown", this.handleWindowMouseDown);
@@ -873,48 +877,48 @@ class TR_Stage extends Component{
 		window.addEventListener('wheel', this.handleMouseWheel);
 	}
 
-  callUserInfo(vals){
-    const userslug = this.state.userslug;
-    //Getting join_date of stage owner
+    callUserInfo(vals){
+        const userslug = this.state.userslug;
+        //Getting join_date of stage owner
 
-    TrService.getUserJoinDate(userslug, this.getUserInfoCallback);
-  }
+        TrService.getUserJoinDate(userslug, this.getUserInfoCallback);
+    }
 
-  handleWindowResize = () => {
+    handleWindowResize = () => {
 
-      const size = this.getCanvasSize(),
-          stage = this.mainStage.getStage()
+        const   size = this.getCanvasSize(),
+                stage = this.mainStage.getStage()
 
-      stage.width(size.width)
-      stage.height(size.height)
-      stage.draw()
+        stage.width(size.width)
+        stage.height(size.height)
+        stage.draw()
 
-      this.setState({
-          width: window.innerWidth
-      })
-  }
+        this.setState({
+            width: window.innerWidth
+        })
+    }
 
-  getCanvasSize = () => {
-      const menuSize = Utils.getMainMenuSize(),
-          normalHeight = window.innerHeight - menuSize.height
+    getCanvasSize = () => {
+        const   menuSize = Utils.getMainMenuSize(),
+                normalHeight = window.innerHeight - menuSize.height
 
-      return {
-          width: window.innerWidth,
-          height: (this.state.showDrawTool ? normalHeight - 80 : normalHeight)
-      }
-  }
+        return {
+            width: window.innerWidth,
+            height: (this.state.showDrawTool ? normalHeight - 80 : normalHeight)
+        }
+    }
 
-  handleBeforeUnload = (e) => {
+    handleBeforeUnload = (e) => {
 
-      let showDrawTool = this.state.showDrawTool
-      let showTimeLine = this.state.showTimeLine
+        let showDrawTool = this.state.showDrawTool
+        let showTimeLine = this.state.showTimeLine
 
-      if (showDrawTool) {
+        if (showDrawTool) {
 
-          if (this.getDrawingChildren().length > 0) {
-              e.returnValue = "Do you want to leave?";
-          }
-      }
+            if (this.getDrawingChildren().length > 0) {
+                e.returnValue = "Do you want to leave?";
+            }
+        }
     }
 
     handleWindowMouseDown = (e) => {
@@ -1571,7 +1575,6 @@ class TR_Stage extends Component{
         return this.socket;
     }
 
-
 	//Render stage
 	render() {
 		let marks={};
@@ -1649,35 +1652,14 @@ class TR_Stage extends Component{
                                 </li>
                                 {
                                     this.state.hasPermission &&
-                                    <div className="dropdown">
-                                        <img className="dropbtn circular nav-add" src="/img/icons/add_canvas.svg" />
-                                        <div className="dropdown-content">
-                                        {
-                                            this.state.hasPermission &&
-                                            <li className="nav-image-container">
-                                                <a href="#" onClick={this.addImageOrTextClick} id="add_image" data-toggle="modal" data-target="#add_image_modal">
-                                                    <img className="circular nav-image" src="/img/icons/add_photo_fill.svg" /> ADD IMAGE
-                                                </a>
-                                            </li>
-                                        }
-                                        {
-                                            this.state.hasPermission &&
-                                            <li className="nav-text-container">
-                                                <a href="#" onClick={this.addImageOrTextClick} id="add_text" data-toggle="modal" data-target="#add_text_modal">
-                                                    <img className="circular nav-text" src="/img/icons/add_text.svg" /> ADD TEXT
-                                                </a>
-                                            </li>
-                                        }
-                                        {
-                                            this.state.hasPermission &&
-                                            <li className="nav-draw-container">
-                                                <a href="#" id="drawing_mode" onClick={this.toggleDrawingMenu}>
-                                                    <img className="circular nav-draw" src="/img/icons/add_draw_fill.svg" /> DRAW
-                                                </a>
-                                            </li>
-                                        }
+                                    <li className="nav-sidebar-container">
+                                        <a href="#" onClick={this.toggleSidebar}>
+                                            <img className="circular nav-container nav-sidebar" src="/img/icons/add_canvas.svg" />
+                                        </a>
+                                        <div className="tooltips">
+                                            <span className="tooltiptext">Open Sidebar Menu</span>
                                         </div>
-                                    </div>
+                                    </li>
                                 }
 							</ul>
 						</div>
@@ -1716,46 +1698,6 @@ class TR_Stage extends Component{
 					/>
 				}
 
-				{/* Modal add image zone  */}
-				<div id="add_image_modal" className="modal fade" role="dialog">
-					<div className="modal-dialog">
-						<div className="modal-content">
-							<div className="modal-header">
-								<button type="button" className="close" data-dismiss="modal">×</button>
-								<h4 className="modal-title">Add Image</h4>
-							</div>
-							<div className="modal-body">
-								<form className="form-horizontal">
-									<div className="form-group">
-										<label htmlFor="image_link" className="control-label col-md-2">Link:</label>
-										<div className="col-md-10">
-											<input type="text" className="form-control" id="image_link"/>
-										</div>
-									</div>
-									<div className="form-group" style={{padding: "5px 0px 0px 0px",}}>
-										<label htmlFor="owner-caption" className="control-label col-md-2">Caption:</label>
-										<div className="col-md-10">
-											<input type="text" className="form-control" id="owner-caption" maxLength="100"/>
-										</div>
-									</div>
-									<div className="form-group">
-										<label htmlFor="image_link" className="control-label col-md-2">Link:</label>
-										<div className="col-md-10">
-											<Dropzone onDrop={this.handleDropElement}>
-                                                <p>DROP FILE OR CLICK TO UPLOAD.</p>
-											</Dropzone>
-										</div>
-									</div>
-
-								</form>
-							</div>
-							<div className="modal-footer">
-								<button type="button" className="btn btn-default" onClick={()=>this.handleAddLink($('#image_link').val(), $('#owner-caption').val())}  id="confirm_add_image">Add</button>
-								<button type="button" id="close_add_image_modal" className="btn btn-default" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
 				{
 					this.state.showTheatre &&
 					<TRTheatre
@@ -1766,31 +1708,6 @@ class TR_Stage extends Component{
 						loginUser={this.state.loginUser}
 					/>
 				}
-				{/* Modal add text zone  */}
-				<div id="add_text_modal" className="modal fade" role="dialog">
-					<div className="modal-dialog">
-						<div className="modal-content">
-							<div className="modal-header">
-								<button type="button" className="close" data-dismiss="modal">×</button>
-								<h4 className="modal-title">Add Text</h4>
-							</div>
-							<div className="modal-body">
-								<form className="form-horizontal">
-									<div className="form-group">
-										<label htmlFor="text" className="control-label col-md-2">Content:</label>
-										<div className="col-md-10">
-											<input type="text" className="form-control" id="text" />
-										</div>
-									</div>
-								</form>
-							</div>
-							<div className="modal-footer">
-								<button type="button" className="btn btn-default" id="confirm_add_text" onClick={this.handleAddText}>Add</button>
-								<button type="button" id="close_add_text_modal" className="btn btn-default" data-dismiss="modal">Close</button>
-							</div>
-						</div>
-					</div>
-				</div>
 
 				{/* Main Canvas's zone  */}
                 <section id="Stage__main">
@@ -2009,7 +1926,6 @@ class TR_Stage extends Component{
                     ref={(node) => {this.Progress = node}}
                     percent = {this.state.progressPercent}
                 />
-                <Sidebar />
 				{
 					this.state.openProfileWindow && 
 					<ProfileWindow
@@ -2024,6 +1940,11 @@ class TR_Stage extends Component{
 						closeProfileWindow={this.handleCloseProfileWindow}
 					/>
 				}
+                <Sidebar 
+                    handleAddText={this.handleAddText} 
+                    handleDropElement={this.handleDropElement}
+                    handleAddLink={this.handleAddLink}
+                />
                 {
                     this.state.showDrawTool &&
                     [

@@ -16,7 +16,9 @@ class TRDrawing extends React.Component {
 
 		this.line = {
 			points: [],
-		}
+        }
+        
+        localStorage.setItem('tracerollCountDrawed',0)
     }
     
     handleBeforeUnload = (e)=>{
@@ -28,7 +30,7 @@ class TRDrawing extends React.Component {
 	}
     
     componentDidMount() {
-
+        
         const stage = this.image.getStage(),
             canvas = document.createElement("canvas"),
             context = canvas.getContext("2d"),
@@ -225,11 +227,9 @@ class TRDrawing extends React.Component {
             points: []
         }
 
-        const button = e.button
-
-        if (button === 2) {
+        if (e.button === 2 && this.isDrawing) {
             let currentCountDrawed = localStorage.getItem('tracerollCountDrawed') || 0
-			currentCountDrawed = parseInt(currentCountDrawed,10)
+            currentCountDrawed = parseInt(currentCountDrawed,10)
 			localStorage.setItem('tracerollCountDrawed',currentCountDrawed+1)
         }
 	}
@@ -288,7 +288,7 @@ class TRDrawing extends React.Component {
 
 			if (parent && parent.hasName(Const.KONVA.NEW_LINES_CONTAINER_NAME)) {
                 let currentCountDrawed = localStorage.getItem('tracerollCountDrawed') || 0
-				currentCountDrawed = parseInt(currentCountDrawed,10) - 1
+                currentCountDrawed = parseInt(currentCountDrawed,10) - 1
 				localStorage.setItem('tracerollCountDrawed',currentCountDrawed)
 				node.fire(Const.EVENTS.REMOVE);
 				node.destroy();

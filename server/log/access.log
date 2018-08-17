@@ -129,3 +129,8 @@
 ::1 - - [Mon, 13 Aug 2018 16:09:00 GMT] "POST /api/search/username HTTP/1.1" 200 68 439.139 ms
 ::1 - - [Mon, 13 Aug 2018 16:09:00 GMT] "POST /api/search/username HTTP/1.1" 200 565 239.248 ms
 ::1 - - [Mon, 13 Aug 2018 16:09:01 GMT] "GET /img/uploads/file-1533721677211.gif HTTP/1.1" 200 - 163.551 ms
+::1 - - [Fri, 17 Aug 2018 09:24:40 GMT] "GET /stage/asd HTTP/1.1" 200 - 1897.502 ms
+::1 - - [Fri, 17 Aug 2018 09:24:43 GMT] "GET /api/user/join-date/asd HTTP/1.1" 200 769 1767.964 ms
+::1 - - [Fri, 17 Aug 2018 09:24:44 GMT] "GET /api/element/list/asd HTTP/1.1" 304 - 2074.256 ms
+::1 - - [Fri, 17 Aug 2018 09:24:46 GMT] "POST /api/user/follow-detail HTTP/1.1" 200 142 830.602 ms
+::1 - - [Fri, 17 Aug 2018 09:24:48 GMT] "POST /api/user/follow-detail HTTP/1.1" 200 142 825.554 ms

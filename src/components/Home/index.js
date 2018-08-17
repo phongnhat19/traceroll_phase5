@@ -450,22 +450,22 @@ class Home extends Component {
                                         </div>
                                         <div className="collapse navbar-collapse" id="myNavbar">
                                             <ul className="nav navbar-nav navbar-right">
-                                              <li className="nav-avatar-container">
-                            											<a href={"/stage/"+this.state.user.userslug} id="add_image">
-                            													<img className="circular nav-avatar" src={this.state.user.picture} />
-                            											</a>
-                                                  <div className="tooltips">
-                                                      <span className="tooltiptext">My Canvas</span>
-                                                  </div>
-                            									</li>
-                                              <li className="nav-home-container">
-                                                <a href="/home" >
-                                                  <img className="circular nav-home" src="/img/icons/home_home.svg" />
-                                                </a>
-                                                <div className="tooltips">
-                                                    <span className="tooltiptext">Home</span>
-                                                </div>
-                                              </li>
+                                              	<li className="nav-avatar-container">
+													<a href={"/stage/"+this.state.user.userslug} id="add_image">
+														<img className="circular nav-avatar" src={this.state.user.picture} />
+													</a>
+													<div className="tooltips">
+														<span className="tooltiptext">My Canvas</span>
+													</div>
+												</li>
+                                              	<li className="nav-home-container">
+													<a href="/home" >
+														<img className="circular nav-home" src="/img/icons/home_home.svg" />
+													</a>
+													<div className="tooltips">
+														<span className="tooltiptext">Home</span>
+													</div>
+                                              	</li>
                                                 <li className="nav-notification-container">
                                                     <a onClick={this.toggleNotification} className={this.state.hasNewNoti ? 'new-notification' : ''}>
                                                         <img className="circular nav-notification" src="/img/icons/notifications_home.svg" />
