@@ -499,6 +499,9 @@ li.nav-timeline-container a:hover + div {
 li.nav-theatre-container a:hover + div {
   display: block; }
 
+li.nav-sidebar-container a:hover + div {
+  display: block; }
+
 /*overwriting bootstrap*/
 @media (min-width: 768px) {
   body .navbar-right {
@@ -514,7 +517,25 @@ li.nav-theatre-container a:hover + div {
   background: white; }
 
 .sidebar {
-  right: 0;
+  right: -350px;
   display: inline-block;
   width: 350px;
-  position: absolute; }
+  position: absolute;
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  border: solid 0.5px #95989a;
+  height: 100%;
+  background-color: #fff;
+  -webkit-transition: right 1s;
+  /* Safari */
+  transition: right 1s;
+  transition-timing-function: ease; }
+
+.sidebar.show {
+  right: 0;
+  -webkit-transition: right 1s;
+  /* Safari */
+  transition: right 1s;
+  transition-timing-function: ease; }
+
+.sidebar-item {
+  padding: 5px; }
