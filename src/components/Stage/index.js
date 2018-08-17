@@ -465,11 +465,6 @@ class TR_Stage extends Component{
             showTimeLine = this.state.showTimeLine
             this.setShowNotification(!showNotification, !showNotification);
 
-        if (showNotification) {
-            this.addWheelListener();
-        } else {
-            this.removeWheelListener();
-        }
         this.resetDefaultMode(showDrawTool, showTimeLine)
     }
 
