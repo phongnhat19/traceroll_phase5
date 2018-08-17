@@ -25,7 +25,8 @@ import Const from '../Util/const.js';
 import Utils from '../Util/utils.js';
 import TrService from '../Util/service.js';
 import { linesInsidePolygon } from '../Elements/SelectMoveGroup';
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar';
+import ProfileWindow from './ProfileWindow';
 
 import './style.css';
 
@@ -86,7 +87,8 @@ class TR_Stage extends Component{
             hasPermission: false,
             hasNewNoti: false,
             progressPercent: 0,
-            mainStageMoving: false,
+			mainStageMoving: false,
+			openProfileWindow: false
 		}
 
 		// Context menu
@@ -712,9 +714,9 @@ class TR_Stage extends Component{
                     ownerId: ownerId
                 }, checkPermissionCallback.bind(this));
             }
-        }
+		}
 
-        TrService.getUserJoinDate(userslug, getUserJoinDateCallback.bind(this));
+		TrService.getUserJoinDate(userslug, getUserJoinDateCallback.bind(this));
 
         const getElementListCallback = function(response) {
             let elementList = response.data;
@@ -724,7 +726,7 @@ class TR_Stage extends Component{
             })
         }
 
-        TrService.getElementList(userslug, getElementListCallback.bind(this));
+		TrService.getElementList(userslug, getElementListCallback.bind(this));
     }
 
     componentDidUpdate() {
@@ -815,8 +817,8 @@ class TR_Stage extends Component{
              profilePosition = body.data.profilePosition;
 
        //checks to set profile data to loginUser
-       (body.user.username === body.data.username) ? this.setState({loginUserAvatar: body.data.picture}) : 	TrService.getUserJoinDate(body.user.username, this.handleLoginUserAvatarCallback);
-
+	   (body.user.username === body.data.username) ? this.setState({loginUserAvatar: body.data.picture}) : 	TrService.getUserJoinDate(body.user.username, this.handleLoginUserAvatarCallback);
+	   
        this.setState({
            user: body.data,
            loginUser: loginUser,
@@ -996,6 +998,20 @@ class TR_Stage extends Component{
                 mainStageMoving: true
             })
         }
+	}
+
+	handleOpenProfileWindow = () => {
+		this.setState({
+			...this.state,
+			openProfileWindow: true
+		})
+	}
+
+	handleCloseProfileWindow = () => {
+		this.setState({
+			...this.state,
+			openProfileWindow: false
+		})
 	}
 
     mouseLeaveGroupLinesSelected = () => {
@@ -1904,7 +1920,8 @@ class TR_Stage extends Component{
                                 ownerid={this.state.ownerid}
                                 showDrawTool={this.state.showDrawTool}
                                 toggleFollowingModal = {this.toggleFollowingModal}
-                                updateAvatar = {this.callUserInfo}
+								updateAvatar = {this.callUserInfo}
+								showProfileWindow={this.handleOpenProfileWindow}
                             />
                         </Layer>
                     </Stage>
@@ -1993,6 +2010,20 @@ class TR_Stage extends Component{
                     percent = {this.state.progressPercent}
                 />
                 <Sidebar />
+				{
+					this.state.openProfileWindow && 
+					<ProfileWindow
+						openProfileWindow={this.state.openProfileWindow}
+						username={this.state.userslug}
+						profileImage={this.state.user.picture}
+						uid={this.state.uid}
+						ownerid={this.state.ownerid}
+						showDrawTool={this.state.showDrawTool}
+						toggleFollowingModal = {this.toggleFollowingModal}
+						updateAvatar = {this.callUserInfo}
+						closeProfileWindow={this.handleCloseProfileWindow}
+					/>
+				}
                 {
                     this.state.showDrawTool &&
                     [
