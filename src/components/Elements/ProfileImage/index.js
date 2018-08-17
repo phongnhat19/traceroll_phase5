@@ -148,8 +148,7 @@ class TRProfileImage extends Component {
             !this.props.showDrawTool && Utils.isLeftClick(button)) {
             // If is owner
             if (this.props.uid === this.props.ownerid) {
-                let input = this.getInputFile();
-                input.click();
+                this.props.showProfileWindow();
             } else {
                 // $('.following-modal-container').removeClass('hidden');
                 this.props.toggleFollowingModal && this.props.toggleFollowingModal();
