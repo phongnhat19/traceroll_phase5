@@ -132,6 +132,14 @@ const TrService = {
                 callback && callback(response);
             })
             .catch(Utils.axiosError);
+    },
+    getUserProfile(callback) {
+        axios.get('/api/profile')
+        .then(function(response){
+            console.log(response);
+            callback && callback(response);
+        })
+        .catch(Utils.axiosError);
     }
 }
 

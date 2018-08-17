@@ -132,14 +132,15 @@ class TRProfileImage extends Component {
     }
 
     handleClickProfileImage = (e) => {
-        const button = e.evt.button
-        if (this.props.uid !== 0 &&
-            this.props.ownerid !== 0 &&
-            this.props.uid === this.props.ownerid &&
-            !this.props.showDrawTool && Utils.isLeftClick(button)) {
-            let input = this.getInputFile();
-            input.click();
-        }
+        this.props.showProfileWindow();
+        // const button = e.evt.button
+        // if (this.props.uid !== 0 &&
+        //     this.props.ownerid !== 0 &&
+        //     this.props.uid === this.props.ownerid &&
+        //     !this.props.showDrawTool && Utils.isLeftClick(button)) {
+        //     let input = this.getInputFile();
+        //     input.click();
+        // }
     }
 
     updateImageDisplay = (e) => {

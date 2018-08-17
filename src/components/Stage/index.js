@@ -70,7 +70,8 @@ class TR_Stage extends Component{
             x2: window.innerWidth,
             y2: window.innerHeight,
 			showContextMenu: false,
-			isValidLink: true
+			isValidLink: true,
+			openProfileWindow: false
 		}
 
 		// Context menu
@@ -455,7 +456,18 @@ class TR_Stage extends Component{
 			});
 			TrService.getElementList(userslug, getElementListCallback.bind(this));
 		}
+
+		const getUserProfileCallback = (response) => {
+			const body = response.data;
+			console.log(body);
+			// this.setState({
+			// 	...this.state,
+			// 	profile: body.data
+			// })
+		}
+
 		TrService.getUserJoinDate(userslug, getUserJoinDateCallback.bind(this));
+		TrService.getUserProfile(getUserProfileCallback);
 
 		//Getting list of element from server
 		const getElementListCallback = function(response) {
@@ -639,10 +651,10 @@ class TR_Stage extends Component{
 	}
 
 	componentWillUnmount() {
-		this.removeWheelListener();
-		window.removeEventListener("mouseup", this.handleWindowMouseUp);
-		window.removeEventListener("mousedown", this.handleWindowMouseDown);
-		window.removeEventListener("mousemove", this.handleWindowMouseMove);
+	this.removeWheelListener();
+	window.removeEventListener("mouseup", this.handleWindowMouseUp);
+	window.removeEventListener("mousedown", this.handleWindowMouseDown);
+	window.removeEventListener("mousemove", this.handleWindowMouseMove);
 	}
 
 	removeWheelListener = () => {
@@ -1022,6 +1034,21 @@ class TR_Stage extends Component{
         this.oldTransform = null;
 	}
 
+	handleOpenProfileWindow = () => {
+		console.log(123);
+		this.setState({
+			...this.state,
+			openProfileWindow: true
+		})
+	}
+
+	handleCloseProfileWindow = () => {
+		this.setState({
+			...this.state,
+			openProfileWindow: false
+		})
+	}
+
 
 	
 	//Render stage
@@ -1061,7 +1088,7 @@ class TR_Stage extends Component{
 								</li>
 								<li>
 									<a href="#" onClick={this.toggleTheatreMode}>
-										<span className="glyphicon glyphicon-film"></span> THEATRE MODE
+									<span className="glyphicon glyphicon-film"></span> THEATRE MODE
 									</a>
 								</li>
 								<li>
@@ -1173,6 +1200,39 @@ class TR_Stage extends Component{
 						</div>
 					</div>
 				</div>
+
+				{
+					this.state.openProfileWindow &&
+					<div id="profile-window" className="profile-window-container">
+						<div className="user-name">forrestgump</div>
+						<div>
+							<span className="user-follower">452 Followers</span>
+							<span className="user-following">17 Following</span>
+						</div>
+						{/* <div className="modal-dialog">
+							<div className="modal-content">
+								<div className="modal-header">
+									<button type="button" className="close" data-dismiss="modal">×</button>
+									<h4 className="modal-title">asdasd</h4>
+								</div>
+								<div className="modal-body">
+									<form className="form-horizontal">
+										<div className="form-group">
+											<label htmlFor="text" className="control-label col-md-2">Content:</label>
+											<div className="col-md-10">
+												<input type="text" className="form-control" id="text" />
+											</div>
+										</div>
+									</form>
+								</div>
+								<div className="modal-footer">
+									<button type="button" className="btn btn-default" id="confirm_add_text" onClick={this.handleAddText}>Add</button>
+									<button type="button" id="close_add_text_modal" className="btn btn-default" data-dismiss="modal" onClick={this.handleCloseProfileWindow}>Close</button>
+								</div>
+							</div>
+						</div> */}
+					</div>
+				}
 				
 				{/* Main Canvas's zone  */}
 				<Stage ref="mainStage"
@@ -1326,6 +1386,7 @@ class TR_Stage extends Component{
 							uid={this.state.uid}
 							ownerid={this.state.ownerid}
 							showDrawTool={this.state.showDrawTool}
+							showProfileWindow={this.handleOpenProfileWindow}
 						/>
 					</Layer>
 				</Stage>
