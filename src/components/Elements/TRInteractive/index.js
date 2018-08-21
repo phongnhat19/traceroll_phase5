@@ -166,7 +166,11 @@ class TRInteractive extends Component {
             this.props.setCurrentCommentOpen && this.props.setCurrentCommentOpen(currentCommentOpen);
 
             const onKeyPress = function(e){
-                const content = Jquery('.'+elementId+' .comment-input').val().trim(),
+                const value = Jquery('.'+elementId+' .comment-input').val()
+                if (value === undefined) {
+                    return
+                }
+                const content = value.trim(),
                     elementID = "element:"+elementId,
                     isFocus = !currentCommentOpen[0].getAttribute('class').includes('hide-commentZone');
                 if (e.keyCode === 13 && content !== '' && isFocus){ // 13 is enter press
@@ -276,7 +280,7 @@ class TRInteractive extends Component {
 								classHide = '';
 							}
 							return (
-								<a href={`/stage/${comment.userslug}`}>
+								<a key={index} href={`/stage/${comment.userslug}`}>
 									<li className={classHide}>
 										<strong>{comment.username}:&nbsp;&nbsp;</strong>
 	                                    <p className='comment-content'>{comment.content}</p>
