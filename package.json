@@ -23,6 +23,7 @@
     "forever": "^0.15.3",
     "gravatar": "^1.6.0",
     "jquery": "^3.2.1",
+    "jsgif": "^1.0.2",
     "konva-tr": "^1.0.1",
     "method-override": "^2.3.9",
     "moment": "^2.22.2",

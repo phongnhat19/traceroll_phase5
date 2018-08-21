@@ -99,7 +99,8 @@ class TRImageVideo extends Component{
                 el_type={this.props.el_type}
                 caption={this.props.caption}
                 hasPermission={this.props.hasPermission}
-                showToast={this.props.showToast}
+				showToast={this.props.showToast}
+				isVideo={true}
             />
 		);
 	}
