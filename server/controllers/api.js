@@ -216,9 +216,21 @@ apiController.getNewsfeed = function (req, res, next) {
         lastId1 = req.body.lastId1,
         lastId2 = req.body.lastId2;
 
-    winston.dct_logger.info("current page size: "+pageSize);
+	winston.dct_logger.info("current page size: "+pageSize);
+	let page = req.body.page || 1
+	let limit = req.body.limit || pageSize
+	
+	element.getPagingElements(page,limit,(err,data)=>{
+		if (err) {
+            res.json({status:RESPONSE_STATUS.FAILED, reason:err});
+        } else {
+            users.getUserFields(req.user.uid, user_fields, function(err, user){
+                res.json({status:RESPONSE_STATUS.SUCCESS, data : data, user:user});
+            });
+        }
+	})
 
-    element.getAllElements(userId, pageSize, lastId1, lastId2, function (err, data) {
+   /*  element.getAllElements(userId, pageSize, lastId1, lastId2, function (err, data) {
         if (err) {
             res.json({status:RESPONSE_STATUS.FAILED, reason:err});
         } else {
@@ -226,7 +238,7 @@ apiController.getNewsfeed = function (req, res, next) {
                 res.json({status:RESPONSE_STATUS.SUCCESS, data : data, user:user});
             });
         }
-    });
+    }); */
 }
 
 //POST Request controller to save an element (Text or Image)

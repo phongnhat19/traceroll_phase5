@@ -78,8 +78,8 @@ class Home extends Component {
             this.setState({
                 user: user,
                 ownerid: user.userId,
-                lastId1: data.lastId1,
-                lastId2: data.lastId2,
+                page: data.pageNum,
+                limit: data.pageSize,
             });
 
             this.socket.emit('join', {userId: user.userId})
@@ -93,8 +93,8 @@ class Home extends Component {
         }
 
         const requestBody = {
-            lastId1: this.state.lastId1,
-            lastId2: this.state.lastId2,
+            page:1,
+            limit:10,
         }
 
         TrService.getNewsfeed(requestBody, callback.bind(this));
@@ -165,7 +165,7 @@ class Home extends Component {
 	//Handle scroll to bottom event - lazyload
 	handleScroll(event) {
 		//if user scroll to the bottom of the page
-		 if(Jquery(window).scrollTop() + Jquery(window).height() >= (Jquery(document).height()-2)) {
+		if(Jquery(window).scrollTop() + Jquery(window).height() >= (Jquery(document).height()-2)) {
 
             this.setState({
                 loading:"block",
@@ -183,14 +183,14 @@ class Home extends Component {
                 this.setState({
                     list: items,
                     loading:"none",
-                    lastId1: data.lastId1,
-                    lastId2: data.lastId2,
+                    page: data.pageNum,
+                    limit: data.pageSize,
                 });
             }
 
             const requestBody = {
-            	lastId1: this.state.lastId1,
-            	lastId2: this.state.lastId2,
+            	page: this.state.page+1,
+            	limit:this.state.limit,
             }
 
             TrService.getNewsfeed(requestBody, callback.bind(this))

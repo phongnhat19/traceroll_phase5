@@ -114,11 +114,11 @@ class TR_Stage extends Component{
 		this.handleDropElement = this.handleDropElement.bind(this)
 		this.handleAddVideo = this.handleAddVideo.bind(this)
 		this.handleAddLink = this.handleAddLink.bind(this);
-    this.handleLoginUserAvatarCallback = this.handleLoginUserAvatarCallback.bind(this);
-    this.getUserInfoCallback = this.getUserInfoCallback.bind(this);
+        this.handleLoginUserAvatarCallback = this.handleLoginUserAvatarCallback.bind(this);
+        this.getUserInfoCallback = this.getUserInfoCallback.bind(this);
 		this.toggleOptMenu = this.toggleOptMenu.bind(this);
-    this.socket = io(config.url, {transports: ['websocket']});
-    this.callUserInfo = this.callUserInfo.bind(this);
+        this.socket = io(config.url, {transports: ['websocket']});
+        this.callUserInfo = this.callUserInfo.bind(this);
 	}
 
     isOwner = () => {

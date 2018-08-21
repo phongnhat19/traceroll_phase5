@@ -140,6 +140,28 @@ var async = require('async'),
 		});
 	}
 
+	// GET Elements for newsfeed
+	Elements.getPagingElements = (page,limit,callback)=>{
+		db.getSortedSetRevRange('elements:created-date', 0, -1, (err, elementIds)=>{
+			if (!elementIds || elementIds.length <= 0) {
+				return callback(new Error('Element is null by user'));
+			}
+			else {
+
+				var outElementsIds = elementIds.slice((page-1)*limit, page*limit);
+				Elements.getElements(outElementsIds, function(err, dataElements){
+					var data = {
+						"total" : elementIds.length,
+						"pageNum" : page,
+						"pageSize" : limit,
+						"elements" : dataElements,
+					}
+					callback(null, data);
+				});
+			}
+		})
+	}
+
 	/**
 	 * Retrieve array of elements
 	 * @param  {Number}   offset   Page Index
