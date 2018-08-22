@@ -28,3 +28,10 @@
 ::1 - - [Wed, 22 Aug 2018 13:58:08 GMT] "POST /api/element/text/update HTTP/1.1" 200 20 1443.899 ms
 ::1 - - [Wed, 22 Aug 2018 13:58:14 GMT] "POST /api/element/image/update HTTP/1.1" 200 20 1439.941 ms
 ::1 - - [Wed, 22 Aug 2018 13:58:16 GMT] "POST /api/element/text/update HTTP/1.1" 200 20 1440.612 ms
+::1 - - [Wed, 22 Aug 2018 14:15:46 GMT] "GET /stage/asd HTTP/1.1" 200 - 1685.225 ms
+::1 - - [Wed, 22 Aug 2018 14:15:49 GMT] "GET /css/bootstrap.min.css.map HTTP/1.1" 200 - 1430.935 ms
+::1 - - [Wed, 22 Aug 2018 14:15:50 GMT] "GET /api/user/join-date/asd HTTP/1.1" 200 769 2845.480 ms
+::1 - - [Wed, 22 Aug 2018 14:15:52 GMT] "GET /api/element/list/asd HTTP/1.1" 200 - 4300.074 ms
+::1 - - [Wed, 22 Aug 2018 14:15:53 GMT] "GET /img/tools/youtube.png HTTP/1.1" 200 - 720.155 ms
+::1 - - [Wed, 22 Aug 2018 14:16:03 GMT] "POST /api/element/text/update HTTP/1.1" 200 20 1438.527 ms
+::1 - - [Wed, 22 Aug 2018 14:16:07 GMT] "POST /api/element/delete HTTP/1.1" 200 20 1910.879 ms

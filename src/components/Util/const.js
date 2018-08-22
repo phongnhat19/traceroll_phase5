@@ -69,6 +69,8 @@ const Const = {
             width: 10,
             height: 20
         },
-    }
+	},
+	DEFAULT_IMAGE_SIZE: 24576, //bytes
+	DEFAULT_VIDEO_SIZE: 204800 //bytes
 }
 export default Const
