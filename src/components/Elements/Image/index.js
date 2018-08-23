@@ -4,11 +4,11 @@ import './style.css';
 import Utils from '../../Util/utils.js';
 import Const from '../../Util/const.js';
 import TrService from '../../Util/service.js';
+import SuperGif from 'jsgif';
 
 class TRImage extends Component{
 	constructor(props){
 		super(props);
-
 		this.state = {
 			key: this.props.dbkey,
 			x: this.props.x,
@@ -42,15 +42,52 @@ class TRImage extends Component{
 	}
 
 	componentDidMount() {
-		//Create image object
-		const img = new window.Image();
-		img.src = this.state.src;
-		img.onload = () => {
-			this.setState({
-				image: img
+		if (this.props.isVideo) {
+			const video = document.createElement('video');
+			  video.src = this.state.src;
+			  video.muted = true;
+			  video.loop = true;
+			  this.setState({
+				image: video
+				})
+			video.addEventListener('canplay', () => {
+				this.nodeImage.getLayer().batchDraw();
+				this.requestUpdate();
 			});
+		} else {
+			let img = new window.Image();
+			img.src = this.state.src;
+
+			if (/.*\.gif/.test(this.state.src)) {
+				const gif = new SuperGif({gif: img});
+				gif.load( (e) => {
+					this.setState({
+						image:  gif.get_canvas(),
+					});
+				})
+			}
+
+			// Create image object
+			img.onload = () => {
+				this.setState({
+					image: img
+				});
+			}
 		}
+		
         this.updatePosition()
+	}
+
+	// animateGif = (gif) => {
+	// 	console.log(gif.get_length(), gif.get_current_frame(),  gif.get_canvas());
+	// 	gif.move_relative(10);
+	// 	console.log(gif.get_current_frame())
+	// 	this.group.draw();
+	// }
+
+	requestUpdate = () => {
+		this.nodeImage.getLayer().batchDraw();
+		requestAnimationFrame(this.requestUpdate);
 	}
 
     // update image position if it intersect profile image
@@ -335,6 +372,9 @@ class TRImage extends Component{
 
 	render(){
 		let fill = "black";
+		if (this.props.isVideo && this.state.image) {
+			this.state.image.play();
+		}
 
 		return (
 			<Group
@@ -371,7 +411,7 @@ class TRImage extends Component{
                     onHideTransform={this.handleHideTransform}
                     onMouseOver={this.handleEnterGroup}
                     onMouseOut={this.handleLeaveGroup}
-                    onStageWheel={this.handleStageWheel}
+					onStageWheel={this.handleStageWheel}
                 />
                 
                 {/* Top Left Anchor  */}

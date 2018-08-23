@@ -1764,7 +1764,7 @@ class TR_Stage extends Component{
                                             uid={this.state.uid}
                                             ownerid={this.state.ownerid}
                                             dbkey={el._key}
-                                            src={el.content}
+                                            src={el.content_video}
                                             x={el.stage.x}
                                             y={el.stage.y}
                                             width={el.stage.width}
