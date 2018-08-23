@@ -155,9 +155,14 @@ const Utils = {
 
             const ap = intersectFunc.call(this, rect1, rect2, pos, offset);
             if (ap) {
-                callback && callback(true);
-                profileFrame.fire(Const.EVENTS.SHOW_ALERT_PROFILE_IMAGE);
-                return ap;
+                // callback && callback(true);
+                // profileFrame.fire(Const.EVENTS.SHOW_ALERT_PROFILE_IMAGE);
+                // return ap;
+
+                // Allow content to drag through profile image
+                callback && callback(false); 
+                return pos;
+                
             }
             callback && callback(false);
             return pos;
