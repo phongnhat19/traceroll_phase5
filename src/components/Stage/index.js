@@ -73,7 +73,7 @@ class TR_Stage extends Component{
             groupArr: [],
             showTimeLine: false,
 			showTheatre: false,
-            showDrawTool: false,
+            showDrawTool: true,
             showFollowingModal: false,
             showNotification: false,
             elementShowOptions: null,
@@ -1860,7 +1860,7 @@ class TR_Stage extends Component{
                     </Stage>
                 </section>
 
-                <section id="Stage__overlay"
+                {/* <section id="Stage__overlay"
                     className={`${showStageOverlay ? '' : 'hidden'}`}>
                     <Stage
                         width={window.innerWidth}
@@ -1876,14 +1876,14 @@ class TR_Stage extends Component{
                             />
                         </Layer>
                     </Stage>
-                </section>
+                </section> */}
 
                 <TRElementOptions
                     element={this.state.elementShowOptions}
                 />
 
 				{/* Drawing menu*/}
-                <section id="Stage__drawing-menu">
+               {/*  <section id="Stage__drawing-menu">
                     <Stage
                         width={this.state.width}
                         height={(this.state.showDrawTool ? Const.MENU_HEIGHT : 0)}>
@@ -1897,7 +1897,7 @@ class TR_Stage extends Component{
                             />
                         </Layer>
                     </Stage>
-                </section>
+                </section> */}
 
 				{/* To select new profile image */}
 				<input type="file" id="profile_image" name="profile_image" accept="image/*" style={{display:'none'}}/>
@@ -1960,6 +1960,9 @@ class TR_Stage extends Component{
                     handleAddText={this.handleAddText} 
                     handleDropElement={this.handleDropElement}
                     handleAddLink={this.handleAddLink}
+                    handlerMenuChange={this.handlerMenuChange}
+                    handlerChangePointer={this.handlerChangePointer}
+                    options={this.state.options}
                 />
                 {
                     this.state.showDrawTool &&
