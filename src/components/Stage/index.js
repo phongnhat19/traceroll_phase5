@@ -31,6 +31,7 @@ import ProfileWindow from './ProfileWindow';
 import './style.css';
 
 const { SELECT } = Const.MODE
+const { DEFAULT_IMAGE_SIZE, DEFAULT_VIDEO_SIZE } = Const;
 
 class TR_Stage extends Component{
 	constructor(props){
@@ -72,7 +73,7 @@ class TR_Stage extends Component{
             groupArr: [],
             showTimeLine: false,
 			showTheatre: false,
-            showDrawTool: false,
+            showDrawTool: true,
             showFollowingModal: false,
             showNotification: false,
             elementShowOptions: null,
@@ -1231,6 +1232,10 @@ class TR_Stage extends Component{
 	showAlertFileInvalid = () => {
 		alert('Your file is invalid. The file must be an image or video (mp4, ogg, webm).');
         this.hideToast()
+    }
+    
+    showAlertFileInvalidSize() {
+		alert('File is too large. The file must be less than 3MB for image and 25MB for video.');
 	}
 
 	//=============================================
@@ -1352,12 +1357,18 @@ class TR_Stage extends Component{
         if (!file || file.length < 1) {
             return;
         }
+		
+        const fileUpload = file[0];
 
-		if(!this.validFileType(file[0])) {
+        if(!this.validFileType(fileUpload)) {
             this.showAlertFileInvalid();
             return;
         };
-        const fileUpload = file[0];
+
+        if (!this.validFileSize(fileUpload)) {
+			this.showAlertFileInvalidSize();
+			return false;
+		}
 
 		document.getElementById('confirm_add_image').disabled = true;
 
@@ -1399,6 +1410,16 @@ class TR_Stage extends Component{
         const type = file.type;
         return type.includes('image/') || type === 'video/mp4' || type === 'video/ogg' || type === 'video/webm';
     }
+
+    validFileSize(file) {
+		const type = file.type;
+		const size = file.size;
+		if (type.includes('image')) {
+			return size <= DEFAULT_IMAGE_SIZE;
+		} else {
+			return size <= DEFAULT_VIDEO_SIZE;
+		}
+	}
 
 	// ========== MENU ==
 	/* MENU EVENT */
@@ -1839,7 +1860,7 @@ class TR_Stage extends Component{
                     </Stage>
                 </section>
 
-                <section id="Stage__overlay"
+                {/* <section id="Stage__overlay"
                     className={`${showStageOverlay ? '' : 'hidden'}`}>
                     <Stage
                         width={window.innerWidth}
@@ -1855,14 +1876,14 @@ class TR_Stage extends Component{
                             />
                         </Layer>
                     </Stage>
-                </section>
+                </section> */}
 
                 <TRElementOptions
                     element={this.state.elementShowOptions}
                 />
 
 				{/* Drawing menu*/}
-                <section id="Stage__drawing-menu">
+               {/*  <section id="Stage__drawing-menu">
                     <Stage
                         width={this.state.width}
                         height={(this.state.showDrawTool ? Const.MENU_HEIGHT : 0)}>
@@ -1876,7 +1897,7 @@ class TR_Stage extends Component{
                             />
                         </Layer>
                     </Stage>
-                </section>
+                </section> */}
 
 				{/* To select new profile image */}
 				<input type="file" id="profile_image" name="profile_image" accept="image/*" style={{display:'none'}}/>
@@ -1939,6 +1960,9 @@ class TR_Stage extends Component{
                     handleAddText={this.handleAddText} 
                     handleDropElement={this.handleDropElement}
                     handleAddLink={this.handleAddLink}
+                    handlerMenuChange={this.handlerMenuChange}
+                    handlerChangePointer={this.handlerChangePointer}
+                    options={this.state.options}
                 />
                 {
                     this.state.showDrawTool &&

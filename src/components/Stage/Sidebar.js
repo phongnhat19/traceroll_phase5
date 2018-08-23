@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone';
+import {
+    TRMenu
+} from './../Elements';
+import {Stage, Layer} from 'tr-react-konva';
 import $ from 'jquery';
 import './style.css'
 
@@ -8,13 +12,31 @@ class Sidebar extends Component {
         super(props)
         this.state = {
             selectedDraw:0,
-            text:""
+            text:"",
+            width:"100%"
         }
     }
 
     render(){
         return(
             <div className="sidebar container">
+                <div className="sidebar-item row" >
+                    <section id="Stage__drawing-menu">
+                        <Stage
+                            width={this.state.width}
+                            height={80}>
+                            <Layer>
+                                <TRMenu
+                                    width={this.state.width}
+                                    height={80}
+                                    handlerMenuChange={this.props.handlerMenuChange}
+                                    handlerChangePointer={this.props.handlerChangePointer}
+                                    options={this.props.options}
+                                />
+                            </Layer>
+                        </Stage>
+                    </section>
+                </div>
                 <div className="sidebar-item row">
                     <div className="col-md-12 col-xs-12 col-sm-12">
                         <strong>Add stuff</strong>
@@ -61,6 +83,7 @@ class Sidebar extends Component {
                         <button type="button" className="btn btn-primary" id="confirm_add_text" onClick={this.props.handleAddText}>Post text</button>
                     </div>
                 </div>
+                
             </div>
         )
     }
