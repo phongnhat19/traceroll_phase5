@@ -1799,8 +1799,7 @@ class TR_Stage extends Component{
                                         />;
                                 };
                             }, this)}
-                        </Layer>
-                        <Layer>
+
                             {
                                 this.state.childs.map(function(item, i){
                                     switch(item.type){
@@ -1821,8 +1820,7 @@ class TR_Stage extends Component{
                                     return this.renderLineGroup(item)
                                 }, this)
                             }
-                        </Layer>
-                        <Layer>
+
                             <Group
                                 ref={node => (this.newLinesGroup = node)}
                                 name={Const.KONVA.NEW_LINES_CONTAINER_NAME}>
@@ -1839,6 +1837,46 @@ class TR_Stage extends Component{
                                     }, this)
                                 }
                             </Group>
+                        </Layer>
+                        {/* <Layer>
+                            {
+                                this.state.childs.map(function(item, i){
+                                    switch(item.type){
+                                        case "drawing:pen":
+                                        case "drawing:pencil":
+                                            return this.renderLine(item)
+                                        case "drawing:brush":
+                                            return this.renderLineBrush(item)
+                                        case "drawing:group":
+                                            return this.renderLineGroup(item)
+                                        default:
+                                            break;
+                                    };
+                                }, this)
+                            }
+                            {
+                                this.state.groupArr.map(function(item, i) {
+                                    return this.renderLineGroup(item)
+                                }, this)
+                            }
+                        </Layer> */}
+                        <Layer>
+                            {/* <Group
+                                ref={node => (this.newLinesGroup = node)}
+                                name={Const.KONVA.NEW_LINES_CONTAINER_NAME}>
+                                {
+                                    this.state.lines.map((item, index) => {
+                                        switch(item.stage.mode){
+                                            case "pen":
+                                            case "pencil":
+                                                return this.renderLine(item)
+                                            case "brush":
+                                                return this.renderLineBrush(item)
+                                            default:
+                                        }
+                                    }, this)
+                                }
+                            </Group> */}
                             <TRSelectMoveGroup
                                 trSelectedLinesRef={el => this.trSelectedLines = el}
                                 line={this.state.line}

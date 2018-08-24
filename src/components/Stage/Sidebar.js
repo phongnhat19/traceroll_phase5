@@ -13,14 +13,14 @@ class Sidebar extends Component {
         this.state = {
             selectedDraw:0,
             text:"",
-            width:"100%"
+            width: window.innerWidth,
         }
     }
 
     render(){
         return(
             <div className="sidebar container">
-                <div className="sidebar-item row" >
+                {/* <div className="sidebar-item row" >
                     <section id="Stage__drawing-menu">
                         <Stage
                             width={this.state.width}
@@ -36,7 +36,7 @@ class Sidebar extends Component {
                             </Layer>
                         </Stage>
                     </section>
-                </div>
+                </div> */}
                 <div className="sidebar-item row">
                     <div className="col-md-12 col-xs-12 col-sm-12">
                         <strong>Add stuff</strong>
