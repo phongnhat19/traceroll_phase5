@@ -13,15 +13,28 @@ class Sidebar extends Component {
         this.state = {
             selectedDraw:0,
             text:"",
-            width:"100%"
+            width:350
         }
+    }
+
+    mouseOut = () => {
+        window.addEventListener('wheel',this.props.handleMouseWheel)
+    }
+
+    mouseOver = () => {
+        window.removeEventListener('wheel',this.props.handleMouseWheel)
     }
 
     render(){
         return(
-            <div className="sidebar container">
+            <div className="sidebar container" onMouseOut={() => this.mouseOut()} onMouseOver={() => this.mouseOver()}>
+                <div className="sidebar-item row">
+                    <div className="col-md-12 col-xs-12 col-sm-12">
+                        <strong>Drawing</strong>
+                    </div>
+                </div>
                 <div className="sidebar-item row" >
-                    <section id="Stage__drawing-menu">
+                    <section>
                         <Stage
                             width={this.state.width}
                             height={80}>
@@ -32,6 +45,7 @@ class Sidebar extends Component {
                                     handlerMenuChange={this.props.handlerMenuChange}
                                     handlerChangePointer={this.props.handlerChangePointer}
                                     options={this.props.options}
+                                    toggleDrawingMenu={this.props.toggleDrawingMenu}
                                 />
                             </Layer>
                         </Stage>

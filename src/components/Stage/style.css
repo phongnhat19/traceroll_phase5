@@ -528,7 +528,8 @@ li.nav-sidebar-container a:hover + div {
   -webkit-transition: right 1s;
   /* Safari */
   transition: right 1s;
-  transition-timing-function: ease; }
+  transition-timing-function: ease;
+  overflow-y: auto; }
 
 .sidebar.show {
   right: 0;

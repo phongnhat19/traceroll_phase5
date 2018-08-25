@@ -43,6 +43,7 @@
     "rc-tooltip": "^3.5.0",
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
+    "react-color": "^2.14.1",
     "react-dom": "^16.2.0",
     "react-dropzone": "^3.13.3",
     "react-fontawesome": "^1.6.1",

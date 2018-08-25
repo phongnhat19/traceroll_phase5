@@ -73,7 +73,7 @@ class TR_Stage extends Component{
             groupArr: [],
             showTimeLine: false,
 			showTheatre: false,
-            showDrawTool: true,
+            showDrawTool: false,
             showFollowingModal: false,
             showNotification: false,
             elementShowOptions: null,
@@ -1455,7 +1455,9 @@ class TR_Stage extends Component{
 
     	if (!showDrawTool) {
 			this.handlerChangePointer('pen')
-    	}
+        }
+        
+        console.log(123)
 
 		this.resetDefaultMode(showDrawTool, showTimeLine);
     }
@@ -1860,7 +1862,7 @@ class TR_Stage extends Component{
                     </Stage>
                 </section>
 
-                {/* <section id="Stage__overlay"
+                <section id="Stage__overlay"
                     className={`${showStageOverlay ? '' : 'hidden'}`}>
                     <Stage
                         width={window.innerWidth}
@@ -1876,7 +1878,7 @@ class TR_Stage extends Component{
                             />
                         </Layer>
                     </Stage>
-                </section> */}
+                </section>
 
                 <TRElementOptions
                     element={this.state.elementShowOptions}
@@ -1963,18 +1965,10 @@ class TR_Stage extends Component{
                     handlerMenuChange={this.handlerMenuChange}
                     handlerChangePointer={this.handlerChangePointer}
                     options={this.state.options}
+                    handleMouseWheel={this.handleMouseWheel}
+                    toggleDrawingMenu={this.toggleDrawingMenu}
                 />
-                {
-                    this.state.showDrawTool &&
-                    [
-                        <button key="btn-save-drawing"
-                            className="btn-close-feature btn-close-drawing"
-                            onClick={this.toggleDrawingMenu}
-                        >
-                            &#x2715;
-                        </button>,
-                    ]
-                }
+                
 			</div>
 		);
 	}

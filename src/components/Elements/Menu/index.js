@@ -20,12 +20,6 @@ class TRMenu extends Component {
         }
     }
 
-    componentDidMount() {
-        // log Konva.Circle instance
-        //console.log(this.refs.circle);
-        
-    }
-
     /* Event change color */
     handleColorSelected = (color) => {
         this.setState({color: color});
@@ -34,9 +28,14 @@ class TRMenu extends Component {
     
     /* Event change mode */
     handleModeSelected = (mode) => {
-        this.setState({mode: mode});
-        this.handlerMenuChange();
-        this.handlerChangePointer(mode);
+        if (this.state.mode===mode) {
+            this.props.toggleDrawingMenu && this.props.toggleDrawingMenu()
+        }
+        else {
+            this.setState({mode: mode});
+            this.handlerMenuChange();
+            this.handlerChangePointer(mode);
+        }
     }
 
     /* Change cursor*/
@@ -49,12 +48,12 @@ class TRMenu extends Component {
         this.props.handlerMenuChange && this.props.handlerMenuChange(this.state);
     }
 
-     componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps){
         this.setState({
             color: nextProps.options.color,
             mode: nextProps.options.mode
         })
-     }
+    }
 
     render() {
         let containerwidth = this.props.width;
