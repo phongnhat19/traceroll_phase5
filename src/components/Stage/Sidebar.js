@@ -50,7 +50,7 @@ class Sidebar extends Component {
                             </Layer>
                         </Stage>
                     </section>
-                </div>
+                </div> */}
                 <div className="sidebar-item row">
                     <div className="col-md-12 col-xs-12 col-sm-12">
                         <strong>Add stuff</strong>
