@@ -8,11 +8,11 @@
 	"video_path": "/img/uploads/videos",
 	"thumb_path": "/img/uploads/videos/thumbnails",
 	"mongo": {
-		"host":"ds121262.mlab.com:21262/traceroll",
-		"port":"21262",
-		"username":"admin",
-		"password":"admin23101995",
-		"database":"traceroll"
+		"host":"cluster0-shard-00-00-e5spm.mongodb.net:27017,cluster0-shard-00-01-e5spm.mongodb.net:27017,cluster0-shard-00-02-e5spm.mongodb.net:27017/test?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true",
+		"port":"27017",
+		"username":"adminDev",
+		"password":"Password",
+		"database":"traceroll_dev"
 	},
 	"ssl-development": {
 		"ca": "./server/ssl_tsl/ca_bundle.crt",
@@ -25,7 +25,7 @@
 			"widtd": 150
 		}
 	},
-	"mail-reciever": "zojellakup-5581@yopmail.com",
+	"mail-reciever": "info@traceroll.com",
 	"auth-sender": {
 	    "user": "tracerollsup@gmail.com",
 	    "pass": "traceRoll2018.com"

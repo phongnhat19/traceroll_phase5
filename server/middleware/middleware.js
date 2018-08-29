@@ -114,7 +114,7 @@ middleware.buildHeader = function(req, res, next) {
 				results.user.userId = parseInt(results.user.userId, 10);
 				res.locals.isAdmin = results.user.isAdmin;
 				res.locals.isAgent =  results.isAgent;
-				
+
 				res.locals.config = results.config;
 				res.locals.configJSON = JSON.stringify(results.config);
 				res.locals.userObj = results.user;
@@ -122,7 +122,7 @@ middleware.buildHeader = function(req, res, next) {
 				next();
 			});
 		});
-			
+
 		}
 		], next);
 
@@ -170,7 +170,7 @@ middleware.redirectToLoginIfNotAdmin = function (req, res, next) {
 			}else{
 				next();
 			}
-			
+
 		});
 	}else{
 		next();

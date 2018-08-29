@@ -131,6 +131,4 @@ function log_configuration(){
 	  });
 	winston.dct_logger = logger;
 
-
-
 }

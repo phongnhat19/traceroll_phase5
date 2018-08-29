@@ -1,6 +1,7 @@
 /*
 style stheet for stage
 */
+@import '../mixins.scss';
 
 .App {
   text-align: center;
@@ -56,18 +57,20 @@ nav{
 .homelink{
   font-weight: bold;
   letter-spacing: 1px;
-  left: 135%;
+  left: 130px;
   position: relative;
+  span{
+    margin-right: 8px;
+  }
+  &:hover{
+    color: #ffbb00;
+    *{
+      color: #ffbb00;
+    }
+  }
+
 }
-.homelink span{
-  margin-right: 8px;
-}
-.homelink:hover{
-  color: #ffbb00;
-}
-.homelink:hover *{
-  color: #ffbb00;
-}
+
 .dropinput{
   padding-top: 10px;
   min-height: 120px;
@@ -138,13 +141,13 @@ nav{
   width:100%;
   z-index:100;
   background-color: #ffffff;
-  height:60px;
-  padding-left:10px;
-  padding-right:15px;
-  padding-top:10px;
-  -webkit-box-shadow: 0px 5px 12px 0px rgba(0,0,0,0.6);
-  -moz-box-shadow: 0px 5px 12px 0px rgba(0,0,0,0.6);
-  box-shadow: 0px 5px 12px 0px rgba(0,0,0,0.6);
+  height: 50px;
+  padding-left: 10px;
+  padding-right: 15px;
+  padding-top: 10px;
+  -webkit-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  -moz-box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
 }
 
 #theater_mode_div {
@@ -175,6 +178,7 @@ nav{
 .canvas-wrapper .navbar-inverse{
   background-color: #a8a8a8;
   border: none;
+  -moz-box-shadow: 0 1px 8px rgba(0,0,0,.3);
   -webkit-box-shadow: 0 1px 8px rgba(0,0,0,.3);
   box-shadow: 0 1px 8px rgba(0,0,0,.3);
 }
@@ -207,6 +211,10 @@ nav{
 
 .image-slide img {
   margin:auto;
+}
+
+#myNavbar{
+  min-width: 1600px;
 }
 
 #theater_mode_div h3 {
@@ -273,6 +281,8 @@ However, delay the fade out process for 2.5 seconds */
   width: 180px;
   background-color: #fff;
   border: solid 1px #dfdfdf;
+  -webkit-box-shadow: 1px 1px 2px #cfcfcf;
+  -moz-box-shadow: 1px 1px 2px #cfcfcf;
   box-shadow: 1px 1px 2px #cfcfcf;
 }
 
@@ -383,22 +393,24 @@ span.rc-slider-mark-text {
 }
 
 .new-notification:after {
-  content: '';
+  content: "";
   border-radius: 50%;
-  background-color: #00fff3;
+  background-color: #ff2020;
   display: flex;
   margin: 0;
   position: absolute;
   width: 10px;
   height: 10px;
-  bottom: 15px;
-  left: 20px;
+  top: 11px;
+  left: 29px;
 }
 
 .btn-close-feature {
   position: absolute;
   border-radius: 100px;
   border: none;
+  -webkit-box-shadow: 1px 1px 4px #000;
+  -moz-box-shadow: 1px 1px 4px #000;
   box-shadow: 1px 1px 4px #000;
   color: white;
   background-color: #afafaf;
@@ -406,7 +418,7 @@ span.rc-slider-mark-text {
   z-index: 1000;
 }
 .btn-close-drawing {
-  left: 15px;
+  right: 15px;
   bottom: 15px;
   width: 50px;
   height: 50px;
@@ -415,9 +427,9 @@ span.rc-slider-mark-text {
 .btn-close-timeline {
   right: 10px;
   top: 10px;
-  width: 40px;
-  height: 40px;
-  font-size: 28px;
+  width: 30px;
+  height: 30px;
+  font-size: 21px;
 }
 .btn-save-drawing {
   right: 90px;
@@ -426,8 +438,27 @@ span.rc-slider-mark-text {
   height: 50px;
   font-size: 35px;
 }
+.btn-close-feature.btn-close-drawing.save{
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  background-color: white;
+  width: 115px;
+  right: 50px;
+}
+/* mouse hover functionality */
+.grab{
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+.grabbing{
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
 .pen {
   cursor: url(/img/tools/pen-tool.cur), url(/img/tools/pen-tool.png), auto;
+}
+.pointer {
+  cursor: pointer;
 }
 .brush {
   cursor: url(/img/tools/brush-tool.cur), url(/img/tools/brush-tool.png), auto;
@@ -453,12 +484,22 @@ span.rc-slider-mark-text {
 .default {
   cursor: default;
 }
+.undefined{
+  cursor: -webkit-grab;
+  cursor: grab;
+}
 
 /*positioning of navigation only on Canvas */
-.canvas-wrapper .nav{
-  margin-left: 46%;
-  width: 55%;
-  max-width: 100%;
+.canvas-wrapper {
+  .navbar{
+    cursor:default;
+  }
+  .nav{
+    min-width: 897px;
+    //margin-left: 46%;
+    //width: 55%;
+    //max-width: 100%;
+  }
 }
 
 .nav-timeline-container{
@@ -492,6 +533,8 @@ span.rc-slider-mark-text {
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 
@@ -507,7 +550,11 @@ span.rc-slider-mark-text {
 .tooltips{
   position: absolute;
   display: none;
-  margin-top:0.75vh;
+  margin-top:1.25vh;
+
+  &.first{
+    margin-top:0.74vh;
+  }
 
     .tooltiptext {
       color:#fff;
@@ -539,16 +586,43 @@ li.nav-timeline-container a:hover + div{
 li.nav-theatre-container a:hover + div{
   display: block;
 }
-li.nav-sidebar-container a:hover + div{
-  display: block;
-}
 
 /*overwriting bootstrap*/
 @media (min-width: 768px){
-  body .navbar-right{
-    margin-right:0px;
+  body {
+    /*.navbar-right{
+      margin-right:0px;
+    }*/
+
   }
+
 }
+
+/*hiding responsive menu*/
+@media (max-width: 768px){
+  body {
+    .navbar-header.controll-style{
+      &:before{
+        content: none;
+      }
+    }
+    .navbar-toggle{
+      display: none;
+    }
+    .navbar{
+      &>.container-fluid{
+      .navbar-brand.hamburgerMenu{
+        margin-left:  0.5px;
+      }
+      .navbar-brand.homelink{
+        margin-left:  -15px;
+      }
+     }
+    }
+  }
+
+}
+
 
 #Stage__main, #Stage__overlay {
   position: fixed;
@@ -559,152 +633,4 @@ li.nav-sidebar-container a:hover + div{
   bottom: 0;
   position: fixed;
   background: white;
-}
-
-.sidebar {
-  right:-350px;
-  display:inline-block;
-  width:350px;
-  position: absolute;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  border: solid 0.5px #95989a;
-  height:100%;
-  background-color: #fff;
-  -webkit-transition: right 1s; /* Safari */
-  transition: right 1s;
-  transition-timing-function: ease;
-  overflow-y:auto;
-}
-
-.sidebar.show {
-  right:0;
-  -webkit-transition: right 1s; /* Safari */
-  transition: right 1s;
-  transition-timing-function: ease;
-}
-
-.sidebar-item {
-  padding: 5px;
-}
-
-.profile-window-container {
-  width: 450px;
-  height: 212px;
-  border-radius: 5px;
-  background-color: #ffffff;
-  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-  position: absolute;
-  top: 35%;
-  left: 35%;
-}
-
-.profile-window-container .user-picture {
-  width: 59.2px;
-  height: 59.2px;
-  border-radius: 50%;
-  float: left;
-  background-position: center;
-  background-size: contain;
-  margin-left: 17px;
-  margin-top: 13px;
-}
-
-.profile-window-container .user-overview {
-  float: left;
-  margin-top: 13px;
-  margin-left: 13px;
-}
-
-.profile-window-container .profile-user-name {
-  width: 122px;
-  height: 27px;
-  font-size: 20px;
-  font-weight: bold;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.35;
-  letter-spacing: normal;
-  color: #464646;
-  margin-top: 16px;
-}
-
-.profile-window-container .user-follow-container {
-  margin-top: 16px;
-}
-
-.profile-window-container .user-following {
-  display: inline-block;
-  padding-left: 30px;
-  width: 150px;
-  height: 27px;
-  font-size: 20px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.35;
-  letter-spacing: 0.6px;
-  text-align: left;
-  color: #464646;
-}
-
-.profile-window-container .user-follower {
-  display: inline-block;
-  border-right: 1px solid #707070;
-  width: 150px;
-  height: 27px;
-  font-size: 20px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.35;
-  letter-spacing: 0.6px;
-  text-align: left;
-  color: #464646;
-}
-
-.profile-window-container .user-change-image {
-  width: 209px;
-  height: 27px;
-  font-size: 20px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.35;
-  letter-spacing: 0.6px;
-  text-align: left;
-  color: #464646;
-  margin-top: 16px;
-  cursor: pointer;
-}
-
-.profile-window-container .user-hide-image-container {
-  width: 100%;
-}
-
-.profile-window-container .user-hide-image {
-  width: 178px;
-  height: 27px;
-  font-size: 20px;
-  font-weight: normal;
-  font-style: normal;
-  font-stretch: normal;
-  line-height: 1.35;
-  letter-spacing: 0.6px;
-  text-align: left;
-  color: #464646;
-  margin-top: 16px;
-}
-
-.profile-window-container .user-toggle-button {
-  position: absolute;
-  top: 160px;
-  right: 60px;
-}
-
-.profile-window-container .user-close-button {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  color: #000;
-  cursor: pointer;
 }

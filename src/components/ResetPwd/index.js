@@ -93,41 +93,37 @@ export default class ResetPwd extends Component {
     }
 
     render() {
-        // console.log('token ================', this.state.token);
 
         return (
             /*container*/
-            <div className="login_wraper">
-                <div className="loginmodal">
-                    {/*Resgister FOrm*/}
-                    <div className="signup signform" style={{display:this.state.display}}>
-                        {/*Resgister FOrm*/}
-                        <div id="registerWrapper">
+            <div id="forgot-password">
+              <div className="forgot-password_wrapper">
+                  <div className="loginmodal">
+                      {/*Resgister FOrm*/}
+                      <div className="signin signform" style={{display:this.state.display}}>
+                        {/*CHANGE PASSWORD FORM*/}
+                        <div className="signform-header">
+                          <img src="/img/logo/traceroll-logo-small.png" width="65" height="65" />
+                          <h2>Traceroll</h2><br />
+                          <h3 className="sub-headline">Change Password</h3>
                         </div>
-                    </div>
-                    {/*CHANGE PASSWORD FORM*/}
-                    {   this.state.emailExpired &&
-                        <div className="signin signform" style={{display:this.state.displayop}}>
-                            <h2 style={{marginTop: "100px"}}>CHANGE PASSWORD</h2>
-                            <label htmlFor="newpwd">New Password</label>
-                            <input type="password" id="newpwd" onChange={(e) => this.setState({newPwd: e.target.value})}/>
-                            <label htmlFor="confirmpwd">Confirm Password</label>
-                            <input type="password" id="confirmpwd" onChange={(e) => this.setState({confirmPwd: e.target.value})}/>
-                            <button id="btnlogin" onClick={(event) => this.handleChangePwd(event)}>CHANGE PASSWORD</button>
-                        </div>
-                    }
-                    {/*RECOVER EMAIL EXPIRED*/}
-                    {   this.state.emailExpired === false &&
-                        <div className="signin signform" style={{display:this.state.displayop}}>
-                            <h2 style={{marginTop: "100px"}}>RECOVER EMAIL EXPIRED</h2>
-                            <button id="btnlogin" onClick={(event) => this.handleRedirectLogin(event)}>LOGIN OR REGISTER</button>
-                        </div>
-                    }
-                    {/*SPLASH IMG*/}
-                    <div className="coverimg" id="coverimg" style={{transform:this.state.transform}}>
-                        <h2>TRACEROLL</h2>
-                    </div>
-                </div>
+                        {   this.state.emailExpired &&
+                            <div>
+                                <input type="password" 	placeholder="New Password" id="newpwd" onChange={(e) => this.setState({newPwd: e.target.value})}/>
+                                <input type="password" 	placeholder="Confirm Password" id="confirmpwd" onChange={(e) => this.setState({confirmPwd: e.target.value})}/>
+                                <button id="btn-change-passwd" onClick={(event) => this.handleChangePwd(event)}>Change Password</button>
+                            </div>
+                        }
+                        {/*RECOVER EMAIL EXPIRED*/}
+                        {   this.state.emailExpired === false &&
+                            <div id="expiration">
+                                <h3>Time expired to reset password</h3>
+                                <button id="btnlogin" onClick={(event) => this.handleRedirectLogin(event)}>Return Home</button>
+                            </div>
+                        }
+                      </div>
+                  </div>
+              </div>
             </div>
         );
     }

@@ -78,8 +78,8 @@ class Home extends Component {
             this.setState({
                 user: user,
                 ownerid: user.userId,
-                page: data.pageNum,
-                limit: data.pageSize,
+                lastId1: data.lastId1,
+                lastId2: data.lastId2,
             });
 
             this.socket.emit('join', {userId: user.userId})
@@ -93,8 +93,8 @@ class Home extends Component {
         }
 
         const requestBody = {
-            page:1,
-            limit:10,
+            lastId1: this.state.lastId1,
+            lastId2: this.state.lastId2,
         }
 
         TrService.getNewsfeed(requestBody, callback.bind(this));
@@ -153,7 +153,7 @@ class Home extends Component {
 		axios.post("/logout", {})
 		.then(function (response) {
 			if (response.status === 200) {
-				window.location.href = "/login";
+				window.location.href = "/infinite-space";
 			}
 		});
 	}
@@ -165,7 +165,7 @@ class Home extends Component {
 	//Handle scroll to bottom event - lazyload
 	handleScroll(event) {
 		//if user scroll to the bottom of the page
-		if(Jquery(window).scrollTop() + Jquery(window).height() >= (Jquery(document).height()-2)) {
+		 if(Jquery(window).scrollTop() + Jquery(window).height() >= (Jquery(document).height()-2)) {
 
             this.setState({
                 loading:"block",
@@ -183,14 +183,14 @@ class Home extends Component {
                 this.setState({
                     list: items,
                     loading:"none",
-                    page: data.pageNum,
-                    limit: data.pageSize,
+                    lastId1: data.lastId1,
+                    lastId2: data.lastId2,
                 });
             }
 
             const requestBody = {
-            	page: this.state.page+1,
-            	limit:this.state.limit,
+            	lastId1: this.state.lastId1,
+            	lastId2: this.state.lastId2,
             }
 
             TrService.getNewsfeed(requestBody, callback.bind(this))
@@ -222,7 +222,7 @@ class Home extends Component {
 				getCurrentCommentOpen={this.getCurrentCommentOpen}
 				isShowTheatre= {this.state.isShowTheatre}
 				loginUser={this.state.user}
-                socket={this.socket}
+        socket={this.socket}
 			/>
 		)
 	}
@@ -280,8 +280,8 @@ class Home extends Component {
 					<li>
 						<article className="canvasitem">
 							<header>
-                                <a href={"/stage/"+item.createdUser.userslug}><img className="represent-image" src={item.createdUser.picture}/>{item.createdUser.username}</a>
-                                {timeString}
+                <a href={"/stage/"+item.createdUser.userslug}><img className="represent-image" src={item.createdUser.picture}/>{item.createdUser.username}</a>
+                {timeString}
 							</header>
 							<a href={"/stage/"+item.owner.userslug+"/"+item.id}>
 								<div className="content">
@@ -430,7 +430,7 @@ class Home extends Component {
 			return (
 				<div>
 						{/*Loading message*/ }
-						<p className="loading" style={{display: this.state.loading, position: 'fixed', bottom:'0px'}}>LOADING ... </p>
+					  <p className="loading loader" style={{display: this.state.loading, position: 'fixed', bottom:'0px'}}></p>
                         <div className="home-wrapper">
                             <nav className="navbar navbar-inverse no-border-radius active-hover navbar-fixed-top">
                                 <div className="container-fluid">
@@ -450,22 +450,22 @@ class Home extends Component {
                                         </div>
                                         <div className="collapse navbar-collapse" id="myNavbar">
                                             <ul className="nav navbar-nav navbar-right">
-                                              	<li className="nav-avatar-container">
-													<a href={"/stage/"+this.state.user.userslug} id="add_image">
-														<img className="circular nav-avatar" src={this.state.user.picture} />
-													</a>
-													<div className="tooltips">
-														<span className="tooltiptext">My Canvas</span>
-													</div>
-												</li>
-                                              	<li className="nav-home-container">
-													<a href="/home" >
-														<img className="circular nav-home" src="/img/icons/home_home.svg" />
-													</a>
-													<div className="tooltips">
-														<span className="tooltiptext">Home</span>
-													</div>
-                                              	</li>
+                                              <li className="nav-avatar-container">
+                            											<a href={"/stage/"+this.state.user.userslug} id="add_image">
+                            													<img className="circular nav-avatar" src={this.state.user.picture} />
+                            											</a>
+                                                  <div className="tooltips">
+                                                      <span className="tooltiptext">My Canvas</span>
+                                                  </div>
+                            									</li>
+                                              <li className="nav-home-container">
+                                                <a href="/home" >
+                                                  <img className="circular nav-home" src="/img/icons/home_home.svg" />
+                                                </a>
+                                                <div className="tooltips">
+                                                    <span className="tooltiptext">Home</span>
+                                                </div>
+                                              </li>
                                                 <li className="nav-notification-container">
                                                     <a onClick={this.toggleNotification} className={this.state.hasNewNoti ? 'new-notification' : ''}>
                                                         <img className="circular nav-notification" src="/img/icons/notifications_home.svg" />

@@ -22,7 +22,6 @@
 		meta = {config:{}},
 		loginStrategies = [];
 
-
 	Auth.initialize = function(app, middleware) {
 		app.use(passport.initialize());
 		app.use(passport.session());
@@ -65,7 +64,6 @@
 		router.post('/logout', logout);
 		router.post('/register', register);
 		router.post('/login',login);
-		
 		router.post('/editUser',edit);
 		router.post('/reset-pwd', resetPwd);
 		router.post('/user/recover-password/isExpired', checkExpiredEmail);
@@ -108,7 +106,7 @@
 				// 	}
 				// });
 				next();
-				
+
 				winston.info('userId: ' + uid);
 			},
 			function(next) {
@@ -158,7 +156,7 @@
 	};
 
 	passport.serializeUser(function(user, done) {
-		//console.log(user)
+
 		done(null, user.uid);
 	});
 
@@ -183,7 +181,7 @@
 			req.session.returnTo = req.body.returnTo;
 		}
 
-		var loginWith = 'username-email-facebook';
+		var loginWith = 'username-email';
 
 		if (req.body.username && utils.isEmailValid(req.body.username) && loginWith.indexOf('email') !== -1) {
 			user.getUsernameByEmail(req.body.username, function(err, username) {
@@ -380,7 +378,7 @@
                         }
                     })
                 }
-                
+
                 next(null,userData);
 			},
 			function(data, next) {

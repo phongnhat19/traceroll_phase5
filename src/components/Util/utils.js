@@ -155,14 +155,9 @@ const Utils = {
 
             const ap = intersectFunc.call(this, rect1, rect2, pos, offset);
             if (ap) {
-                // callback && callback(true);
-                // profileFrame.fire(Const.EVENTS.SHOW_ALERT_PROFILE_IMAGE);
-                // return ap;
-
-                // Allow content to drag through profile image
-                callback && callback(false); 
-                return pos;
-                
+                callback && callback(true);
+                profileFrame.fire(Const.EVENTS.SHOW_ALERT_PROFILE_IMAGE);
+                return ap;
             }
             callback && callback(false);
             return pos;
@@ -241,7 +236,7 @@ const Utils = {
         if (res) {
             if (res.status === 401) {
                 //alert('Your session has expired. Please login again!')
-                window.location.href = '/login';
+                window.location.href = '/intro';
             }
             else if (res.status === 404) {
                 alert('Page not found!')

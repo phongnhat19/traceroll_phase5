@@ -25,13 +25,10 @@ import Const from '../Util/const.js';
 import Utils from '../Util/utils.js';
 import TrService from '../Util/service.js';
 import { linesInsidePolygon } from '../Elements/SelectMoveGroup';
-import Sidebar from './Sidebar';
-import ProfileWindow from './ProfileWindow';
 
 import './style.css';
 
 const { SELECT } = Const.MODE
-const { DEFAULT_IMAGE_SIZE, DEFAULT_VIDEO_SIZE } = Const;
 
 class TR_Stage extends Component{
 	constructor(props){
@@ -48,7 +45,7 @@ class TR_Stage extends Component{
 				picture: null
 			},
 			loginUser: {},
-            loginUserAvatar: '',
+      loginUserAvatar: '',
 			focusId: this.props.params.elementId || -1,
 			joinDate:0,
 			now:Date.now(),
@@ -88,8 +85,7 @@ class TR_Stage extends Component{
             hasPermission: false,
             hasNewNoti: false,
             progressPercent: 0,
-			mainStageMoving: false,
-			openProfileWindow: false
+            mainStageMoving: false,
 		}
 
 		// Context menu
@@ -115,11 +111,11 @@ class TR_Stage extends Component{
 		this.handleDropElement = this.handleDropElement.bind(this)
 		this.handleAddVideo = this.handleAddVideo.bind(this)
 		this.handleAddLink = this.handleAddLink.bind(this);
-        this.handleLoginUserAvatarCallback = this.handleLoginUserAvatarCallback.bind(this);
-        this.getUserInfoCallback = this.getUserInfoCallback.bind(this);
+    this.handleLoginUserAvatarCallback = this.handleLoginUserAvatarCallback.bind(this);
+    this.getUserInfoCallback = this.getUserInfoCallback.bind(this);
 		this.toggleOptMenu = this.toggleOptMenu.bind(this);
-        this.socket = io(config.url, {transports: ['websocket']});
-        this.callUserInfo = this.callUserInfo.bind(this);
+    this.socket = io(config.url, {transports: ['websocket']});
+    this.callUserInfo = this.callUserInfo.bind(this);
 	}
 
     isOwner = () => {
@@ -149,7 +145,7 @@ class TR_Stage extends Component{
     handleLoginUserAvatarCallback(response){
         const responseData = response.data;
         this.setState({
-            loginUserAvatar: responseData.data.picture
+          loginUserAvatar: responseData.data.picture
         })
     }
 
@@ -262,10 +258,6 @@ class TR_Stage extends Component{
                 <Handle value={value} {...restProps} />
             </Tooltip>
         );
-    }
-
-    toggleSidebar = () => {
-        $(".sidebar").toggleClass('show')
     }
 
 	toggleTimeline(){
@@ -495,30 +487,42 @@ class TR_Stage extends Component{
 	}
 
 	handleStageContentMouseDown = (e) => {
+
 		const mode = this.state.options.mode,
 			showDrawTool = this.state.showDrawTool,
 			stage = this.mainStage.getStage(),
 			{ button, clientX, clientY } = e.evt,
-            pos = {
-                x: clientX,
-                y: clientY
-            }
+      pos = {
+          x: clientX,
+          y: clientY
+      }
 
-		if (Utils.isLeftClick(button)) {
+		if (Utils.isLeftClick(button) && typeof(this.state.cursor) != 'undefined' ) {
 
 			if(mode === 'eraser'){
 				this.handlerChangePointer('eraser-on');
 			} else {
-                let shape = this.handleStageContentClick(e)
+            let shape = this.handleStageContentClick(e)
 
-                if (shape && !Utils.isObjectContainString(Const.SHAPE_TYPE, shape.name())) {
-                    shape = null;
-                }
-
-                const element = showDrawTool ? null : shape
-                this.handleShowElementOptions(element)
+            if (shape && !Utils.isObjectContainString(Const.SHAPE_TYPE, shape.name())) {
+                shape = null;
             }
-		}
+
+            const element = showDrawTool ? null : shape
+            this.handleShowElementOptions(element)
+
+            if(this.state.cursor === 'grab'){
+              this.handlerChangePointer('grabbing');
+            }
+        }
+		} else if (button === 2 && typeof(this.state.cursor) != 'undefined') {
+            this.hideOldTransforms()
+            this.updateElementShowOptions(null)
+			      this.handlerChangePointer('select-on');
+			      stage.startDrag();
+		}else{
+      this.handlerChangePointer('grabbing');
+    }
 	}
 
     /* Event change pointer in drawing*/
@@ -714,9 +718,9 @@ class TR_Stage extends Component{
                     ownerId: ownerId
                 }, checkPermissionCallback.bind(this));
             }
-		}
+        }
 
-		TrService.getUserJoinDate(userslug, getUserJoinDateCallback.bind(this));
+        TrService.getUserJoinDate(userslug, getUserJoinDateCallback.bind(this));
 
         const getElementListCallback = function(response) {
             let elementList = response.data;
@@ -726,7 +730,7 @@ class TR_Stage extends Component{
             })
         }
 
-		TrService.getElementList(userslug, getElementListCallback.bind(this));
+        TrService.getElementList(userslug, getElementListCallback.bind(this));
     }
 
     componentDidUpdate() {
@@ -807,22 +811,22 @@ class TR_Stage extends Component{
 		return this.state.options;
 	}
 
-    //callback function
-    getUserInfoCallback(response){
+  //callback function
+  getUserInfoCallback(response){
 
-        const   body = response.data,
-                loginUser = body.user,
-                userId = loginUser.userId,
-                ownerId = body.owner,
-                profilePosition = body.data.profilePosition;
+       const body = response.data,
+             loginUser = body.user,
+             userId = loginUser.userId,
+             ownerId = body.owner,
+             profilePosition = body.data.profilePosition;
 
-        //checks to set profile data to loginUser
-        (body.user.username === body.data.username) ? this.setState({loginUserAvatar: body.data.picture}) : 	TrService.getUserJoinDate(body.user.username, this.handleLoginUserAvatarCallback);
+       //checks to set profile data to loginUser
+       (body.user.username === body.data.username) ? this.setState({loginUserAvatar: body.data.picture}) : 	TrService.getUserJoinDate(body.user.username, this.handleLoginUserAvatarCallback);
 
-        this.setState({
+       this.setState({
            user: body.data,
            loginUser: loginUser,
-        });
+       });
     }
 
     hasPermission = () => {
@@ -855,7 +859,7 @@ class TR_Stage extends Component{
         this.Toast && this.Toast.hide()
     }
 
-    componentDidMount() {
+   componentDidMount() {
 		this.addWheelListener();
         window.addEventListener("contextmenu", this.handleContextMenu);
         window.addEventListener("mousedown", this.handleWindowMouseDown);
@@ -873,48 +877,48 @@ class TR_Stage extends Component{
 		window.addEventListener('wheel', this.handleMouseWheel);
 	}
 
-    callUserInfo(vals){
-        const userslug = this.state.userslug;
-        //Getting join_date of stage owner
+  callUserInfo(vals){
+    const userslug = this.state.userslug;
+    //Getting join_date of stage owner
 
-        TrService.getUserJoinDate(userslug, this.getUserInfoCallback);
-    }
+    TrService.getUserJoinDate(userslug, this.getUserInfoCallback);
+  }
 
-    handleWindowResize = () => {
+  handleWindowResize = () => {
 
-        const   size = this.getCanvasSize(),
-                stage = this.mainStage.getStage()
+      const size = this.getCanvasSize(),
+          stage = this.mainStage.getStage()
 
-        stage.width(size.width)
-        stage.height(size.height)
-        stage.draw()
+      stage.width(size.width)
+      stage.height(size.height)
+      stage.draw()
 
-        this.setState({
-            width: window.innerWidth
-        })
-    }
+      this.setState({
+          width: window.innerWidth
+      })
+  }
 
-    getCanvasSize = () => {
-        const   menuSize = Utils.getMainMenuSize(),
-                normalHeight = window.innerHeight - menuSize.height
+  getCanvasSize = () => {
+      const menuSize = Utils.getMainMenuSize(),
+          normalHeight = window.innerHeight - menuSize.height
 
-        return {
-            width: window.innerWidth,
-            height: (this.state.showDrawTool ? normalHeight - 80 : normalHeight)
-        }
-    }
+      return {
+          width: window.innerWidth,
+          height: (this.state.showDrawTool ? normalHeight - 80 : normalHeight)
+      }
+  }
 
-    handleBeforeUnload = (e) => {
+  handleBeforeUnload = (e) => {
 
-        let showDrawTool = this.state.showDrawTool
-        let showTimeLine = this.state.showTimeLine
+      let showDrawTool = this.state.showDrawTool
+      let showTimeLine = this.state.showTimeLine
 
-        if (showDrawTool) {
+      if (showDrawTool) {
 
-            if (this.getDrawingChildren().length > 0) {
-                e.returnValue = "Do you want to leave?";
-            }
-        }
+          if (this.getDrawingChildren().length > 0) {
+              e.returnValue = "Do you want to leave?";
+          }
+      }
     }
 
     handleWindowMouseDown = (e) => {
@@ -941,15 +945,17 @@ class TR_Stage extends Component{
 			stage = this.mainStage.getStage(),
 			button = e.button;
 		if (button === 0) {
-			if(mode === 'eraser'){
-				this.handlerChangePointer(mode);
-			}
+      if(this.state.cursor === 'grabbing'){
+        this.handlerChangePointer('grab');
+      } else if(mode === 'eraser'){
+        this.handlerChangePointer(mode);
+      }
 		}
 		else if (button === 2) {
 			if (showDrawTool) {
 				this.handlerChangePointer(mode);
 			} else {
-				this.handlerChangePointer('default');
+				this.handlerChangePointer('grab');
 			}
 		}
 		this.windowMouseDown = false;
@@ -998,20 +1004,6 @@ class TR_Stage extends Component{
                 mainStageMoving: true
             })
         }
-	}
-
-	handleOpenProfileWindow = () => {
-		this.setState({
-			...this.state,
-			openProfileWindow: true
-		})
-	}
-
-	handleCloseProfileWindow = () => {
-		this.setState({
-			...this.state,
-			openProfileWindow: false
-		})
 	}
 
     mouseLeaveGroupLinesSelected = () => {
@@ -1232,10 +1224,6 @@ class TR_Stage extends Component{
 	showAlertFileInvalid = () => {
 		alert('Your file is invalid. The file must be an image or video (mp4, ogg, webm).');
         this.hideToast()
-    }
-    
-    showAlertFileInvalidSize() {
-		alert('File is too large. The file must be less than 3MB for image and 25MB for video.');
 	}
 
 	//=============================================
@@ -1357,18 +1345,12 @@ class TR_Stage extends Component{
         if (!file || file.length < 1) {
             return;
         }
-		
-        const fileUpload = file[0];
 
-        if(!this.validFileType(fileUpload)) {
+		if(!this.validFileType(file[0])) {
             this.showAlertFileInvalid();
             return;
         };
-
-        if (!this.validFileSize(fileUpload)) {
-			this.showAlertFileInvalidSize();
-			return false;
-		}
+        const fileUpload = file[0];
 
 		document.getElementById('confirm_add_image').disabled = true;
 
@@ -1411,16 +1393,6 @@ class TR_Stage extends Component{
         return type.includes('image/') || type === 'video/mp4' || type === 'video/ogg' || type === 'video/webm';
     }
 
-    validFileSize(file) {
-		const type = file.type;
-		const size = file.size;
-		if (type.includes('image')) {
-			return size <= DEFAULT_IMAGE_SIZE;
-		} else {
-			return size <= DEFAULT_VIDEO_SIZE;
-		}
-	}
-
 	// ========== MENU ==
 	/* MENU EVENT */
 	handlerMenuChange(options) {
@@ -1455,7 +1427,7 @@ class TR_Stage extends Component{
 
     	if (!showDrawTool) {
 			this.handlerChangePointer('pen')
-        }
+    	}
 
 		this.resetDefaultMode(showDrawTool, showTimeLine);
     }
@@ -1504,7 +1476,7 @@ class TR_Stage extends Component{
     	let rect = Utils.getRect(data);
     	return (
     		<TRLine
-                key={data._key}
+          key={data._key}
   				ref={data._key}
   				points={data.stage.points}
   				stroke={data.stage.color}
@@ -1591,6 +1563,7 @@ class TR_Stage extends Component{
         return this.socket;
     }
 
+
 	//Render stage
 	render() {
 		let marks={};
@@ -1626,57 +1599,78 @@ class TR_Stage extends Component{
 
 						<div className="collapse navbar-collapse" id="myNavbar">
 							<ul className="nav navbar-nav navbar-right">
-                                <li className="nav-avatar-container">
-                                    <a href={`/stage/${this.state.loginUser.username}`} >
-                                        <img className="circular nav-container nav-avatar" src={ (this.state.loginUserAvatar) ? this.state.loginUserAvatar : '/img/icons/profilemenubaroutline.svg'} />
-                                    </a>
-                                    <div className="tooltips">
-                                        <span className="tooltiptext">My Canvas</span>
-                                    </div>
-                                </li>
-                                <li className="nav-home-container">
-                                    <a href="/home" >
-                                        <img className="circular nav-container nav-home" src="/img/icons/home_canvas.svg" />
-                                    </a>
-                                    <div className="tooltips">
-                                        <span className="tooltiptext">Home</span>
-                                    </div>
-                                </li>
-                                <li className="nav-notification-container">
-                                    <a href="#" onClick={this.toggleNotification} className={this.state.hasNewNoti ? 'new-notification' : ''}>
-                                        <img className="circular nav-container nav-notification" src="/img/icons/notifications_canvas.svg" />
-                                    </a>
-                                    <div className="tooltips">
-                                        <span className="tooltiptext">Notifications</span>
-                                    </div>
-                                </li>
-                                <li className="nav-timeline-container">
+                <li className="nav-avatar-container">
+									<a href={`/stage/${this.state.loginUser.username}`} >
+										<img className="circular nav-container nav-avatar" src={ (this.state.loginUserAvatar) ? this.state.loginUserAvatar : '/img/icons/profilemenubaroutline.svg'} />
+									</a>
+                  <div className="tooltips">
+                      <span className="tooltiptext">My Canvas</span>
+                  </div>
+								</li>
+                <li className="nav-home-container">
+                  <a href="/home" >
+                    <img className="circular nav-container nav-home" src="/img/icons/home_canvas.svg" />
+                  </a>
+                  <div className="tooltips">
+                      <span className="tooltiptext">Home</span>
+                  </div>
+                </li>
+                <li className="nav-notification-container">
+                    <a href="#" onClick={this.toggleNotification} className={this.state.hasNewNoti ? 'new-notification' : ''}>
+                          <img className="circular nav-container nav-notification" src="/img/icons/notifications_canvas.svg" />
+                    </a>
+                    <div className="tooltips">
+                        <span className="tooltiptext">Notifications</span>
+                    </div>
+                </li>
+                <li className="nav-timeline-container">
 									<a href="#" onClick={this.toggleTimeline}>
 										<img className="circular nav-container nav-timeline" src="/img/icons/timeline.svg" />
 									</a>
-                                    <div className="tooltips">
-                                        <span className="tooltiptext">Timeline</span>
-                                    </div>
+                  <div className="tooltips">
+                      <span className="tooltiptext">Timeline</span>
+                  </div>
 								</li>
-                                <li className="nav-theatre-container">
-                                    <a href="#" onClick={this.toggleTheatreMode}>
-                                        <img className="circular nav-container nav-theatre" src="/img/icons/theatre.svg" />
-                                    </a>
-                                    <div className="tooltips">
-                                        <span className="tooltiptext">Theatre</span>
-                                    </div>
-                                </li>
-                                {
-                                    this.state.hasPermission &&
-                                    <li className="nav-sidebar-container">
-                                        <a href="#" onClick={this.toggleSidebar}>
-                                            <img className="circular nav-container nav-sidebar" src="/img/icons/add_canvas.svg" />
-                                        </a>
-                                        <div className="tooltips">
-                                            <span className="tooltiptext">Open Sidebar Menu</span>
-                                        </div>
-                                    </li>
-                                }
+                <li className="nav-theatre-container">
+                  <a href="#" onClick={this.toggleTheatreMode}>
+                    <img className="circular nav-container nav-theatre" src="/img/icons/theatre.svg" />
+                  </a>
+                  <div className="tooltips">
+                      <span className="tooltiptext">Theatre</span>
+                  </div>
+                </li>
+                {
+                  this.state.hasPermission &&
+                  <div className="dropdown">
+                    <img className="dropbtn circular nav-add" src="/img/icons/add_canvas.svg" />
+                    <div className="dropdown-content">
+                      {
+                          this.state.hasPermission &&
+                          <li className="nav-image-container">
+                              <a href="#" onClick={this.addImageOrTextClick} id="add_image" data-toggle="modal" data-target="#add_image_modal">
+                                  <img className="circular nav-image" src="/img/icons/add_photo_fill.svg" /> ADD MEDIA
+                              </a>
+                          </li>
+                      }
+                      {
+                          this.state.hasPermission &&
+                          <li className="nav-text-container">
+                              <a href="#" onClick={this.addImageOrTextClick} id="add_text" data-toggle="modal" data-target="#add_text_modal">
+                                  <img className="circular nav-text" src="/img/icons/add_text.svg" /> ADD TEXT
+                              </a>
+                          </li>
+                      }
+                      {
+                          this.state.hasPermission &&
+                          <li className="nav-draw-container">
+                              <a href="#" id="drawing_mode" onClick={this.toggleDrawingMenu}>
+                                  <img className="circular nav-draw" src="/img/icons/add_draw_fill.svg" /> DRAW
+                              </a>
+                          </li>
+                      }
+                    </div>
+                  </div>
+                }
 							</ul>
 						</div>
 					</div>
@@ -1707,13 +1701,53 @@ class TR_Stage extends Component{
 					this.state.showOptMenu &&
 					<TROptMenu
 						toggleOptMenu = {this.toggleOptMenu}
-                        showOptMenu = {this.state.showOptMenu}
-                        showNotification = {this.state.showNotification}
-                        setShowNotification = {this.setShowNotification}
+            showOptMenu = {this.state.showOptMenu}
+            showNotification = {this.state.showNotification}
+            setShowNotification = {this.setShowNotification}
 						user_info = {this.state.loginUser}
 					/>
 				}
 
+				{/* Modal add image zone  */}
+				<div id="add_image_modal" className="modal fade" role="dialog">
+					<div className="modal-dialog">
+						<div className="modal-content">
+							<div className="modal-header">
+								<button type="button" className="close" data-dismiss="modal">×</button>
+								<h4 className="modal-title">Add Media</h4>
+							</div>
+							<div className="modal-body">
+								<form className="form-horizontal">
+									<div className="form-group">
+										<label htmlFor="image_link" className="control-label col-md-2">Link:</label>
+										<div className="col-md-10">
+											<input type="text" className="form-control" id="image_link"/>
+										</div>
+									</div>
+									<div className="form-group" style={{padding: "5px 0px 0px 0px",}}>
+										<label htmlFor="owner-caption" className="control-label col-md-2">Caption:</label>
+										<div className="col-md-10">
+											<input type="text" className="form-control" id="owner-caption" maxLength="100"/>
+										</div>
+									</div>
+									<div className="form-group">
+										<label htmlFor="image_link" className="control-label col-md-2">Link:</label>
+										<div className="col-md-10">
+											<Dropzone onDrop={this.handleDropElement}>
+													<p>DROP FILE OR CLICK TO UPLOAD.</p>
+											</Dropzone>
+										</div>
+									</div>
+
+								</form>
+							</div>
+							<div className="modal-footer">
+								<button type="button" className="btn btn-default" onClick={()=>this.handleAddLink($('#image_link').val(), $('#owner-caption').val())}  id="confirm_add_image">Add</button>
+								<button type="button" id="close_add_image_modal" className="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
 				{
 					this.state.showTheatre &&
 					<TRTheatre
@@ -1724,6 +1758,31 @@ class TR_Stage extends Component{
 						loginUser={this.state.loginUser}
 					/>
 				}
+				{/* Modal add text zone  */}
+				<div id="add_text_modal" className="modal fade" role="dialog">
+					<div className="modal-dialog">
+						<div className="modal-content">
+							<div className="modal-header">
+								<button type="button" className="close" data-dismiss="modal">×</button>
+								<h4 className="modal-title">Add Text</h4>
+							</div>
+							<div className="modal-body">
+								<form className="form-horizontal">
+									<div className="form-group">
+										<label htmlFor="text" className="control-label col-md-2">Content:</label>
+										<div className="col-md-10">
+											<input type="text" className="form-control" id="text" />
+										</div>
+									</div>
+								</form>
+							</div>
+							<div className="modal-footer">
+								<button type="button" className="btn btn-default" id="confirm_add_text" onClick={this.handleAddText}>Add</button>
+								<button type="button" id="close_add_text_modal" className="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				{/* Main Canvas's zone  */}
                 <section id="Stage__main">
@@ -1731,7 +1790,9 @@ class TR_Stage extends Component{
                         width={window.innerWidth}
                         height={window.innerHeight}
                         draggable={!this.state.showDrawTool}
-                        onContentMouseDown={this.handleStageContentMouseDown}>
+                        onContentMouseDown={this.handleStageContentMouseDown}
+                      >
+
 
                         <Layer ref={layer => (this.oldElements = layer)}>
                             {/*Render element on stage which is getting from Database*/}
@@ -1764,7 +1825,7 @@ class TR_Stage extends Component{
                                             uid={this.state.uid}
                                             ownerid={this.state.ownerid}
                                             dbkey={el._key}
-                                            src={el.content_video}
+                                            src={el.content}
                                             x={el.stage.x}
                                             y={el.stage.y}
                                             width={el.stage.width}
@@ -1774,8 +1835,8 @@ class TR_Stage extends Component{
                                             handleDblClick={this.toggleTheatreMode}
                                             el_type={el.type}
                                             caption={el.caption}
-                                            hasPermission={this.state.hasPermission}
-                                            showToast={this.showToast}
+                        hasPermission={this.state.hasPermission}
+                        showToast={this.showToast}
                                         />
                                 };
                             },this)}
@@ -1799,7 +1860,8 @@ class TR_Stage extends Component{
                                         />;
                                 };
                             }, this)}
-
+                        </Layer>
+                        <Layer>
                             {
                                 this.state.childs.map(function(item, i){
                                     switch(item.type){
@@ -1820,7 +1882,8 @@ class TR_Stage extends Component{
                                     return this.renderLineGroup(item)
                                 }, this)
                             }
-
+                        </Layer>
+                        <Layer>
                             <Group
                                 ref={node => (this.newLinesGroup = node)}
                                 name={Const.KONVA.NEW_LINES_CONTAINER_NAME}>
@@ -1837,46 +1900,6 @@ class TR_Stage extends Component{
                                     }, this)
                                 }
                             </Group>
-                        </Layer>
-                        {/* <Layer>
-                            {
-                                this.state.childs.map(function(item, i){
-                                    switch(item.type){
-                                        case "drawing:pen":
-                                        case "drawing:pencil":
-                                            return this.renderLine(item)
-                                        case "drawing:brush":
-                                            return this.renderLineBrush(item)
-                                        case "drawing:group":
-                                            return this.renderLineGroup(item)
-                                        default:
-                                            break;
-                                    };
-                                }, this)
-                            }
-                            {
-                                this.state.groupArr.map(function(item, i) {
-                                    return this.renderLineGroup(item)
-                                }, this)
-                            }
-                        </Layer> */}
-                        <Layer>
-                            {/* <Group
-                                ref={node => (this.newLinesGroup = node)}
-                                name={Const.KONVA.NEW_LINES_CONTAINER_NAME}>
-                                {
-                                    this.state.lines.map((item, index) => {
-                                        switch(item.stage.mode){
-                                            case "pen":
-                                            case "pencil":
-                                                return this.renderLine(item)
-                                            case "brush":
-                                                return this.renderLineBrush(item)
-                                            default:
-                                        }
-                                    }, this)
-                                }
-                            </Group> */}
                             <TRSelectMoveGroup
                                 trSelectedLinesRef={el => this.trSelectedLines = el}
                                 line={this.state.line}
@@ -1891,8 +1914,7 @@ class TR_Stage extends Component{
                                 ownerid={this.state.ownerid}
                                 showDrawTool={this.state.showDrawTool}
                                 toggleFollowingModal = {this.toggleFollowingModal}
-								updateAvatar = {this.callUserInfo}
-								showProfileWindow={this.handleOpenProfileWindow}
+                                updateAvatar = {this.callUserInfo}
                             />
                         </Layer>
                     </Stage>
@@ -1921,7 +1943,7 @@ class TR_Stage extends Component{
                 />
 
 				{/* Drawing menu*/}
-               {/*  <section id="Stage__drawing-menu">
+                <section id="Stage__drawing-menu">
                     <Stage
                         width={this.state.width}
                         height={(this.state.showDrawTool ? Const.MENU_HEIGHT : 0)}>
@@ -1935,14 +1957,14 @@ class TR_Stage extends Component{
                             />
                         </Layer>
                     </Stage>
-                </section> */}
+                </section>
 
 				{/* To select new profile image */}
 				<input type="file" id="profile_image" name="profile_image" accept="image/*" style={{display:'none'}}/>
 
 				{/*Input Edit text*/}
 				<div id="newTextWrapper" style={{display:'none'}}>
-                    <input type="text" id="newText"/>
+						<input type="text" id="newText"/>
 				</div>
 				{/*Saving message*/}
 				<div id="snackbar">Saving...</div>
@@ -1980,40 +2002,15 @@ class TR_Stage extends Component{
                     ref={(node) => {this.Progress = node}}
                     percent = {this.state.progressPercent}
                 />
-				{
-					this.state.openProfileWindow && 
-					<ProfileWindow
-						openProfileWindow={this.state.openProfileWindow}
-						username={this.state.userslug}
-						profileImage={this.state.user.picture}
-						uid={this.state.uid}
-						ownerid={this.state.ownerid}
-						showDrawTool={this.state.showDrawTool}
-						toggleFollowingModal = {this.toggleFollowingModal}
-						updateAvatar = {this.callUserInfo}
-						closeProfileWindow={this.handleCloseProfileWindow}
-					/>
-				}
-                <Sidebar 
-                    handleAddText={this.handleAddText} 
-                    handleDropElement={this.handleDropElement}
-                    handleAddLink={this.handleAddLink}
-                    handlerMenuChange={this.handlerMenuChange}
-                    handlerChangePointer={this.handlerChangePointer}
-                    options={this.state.options}
-                    handleMouseWheel={this.handleMouseWheel}
-                    toggleDrawingMenu={this.toggleDrawingMenu}
-                    showDrawTool = {this.state.showDrawTool}
-                />
                 {
                     this.state.showDrawTool &&
                     [
-                        <button key="btn-save-drawing"
-                            className="btn-close-feature btn-close-drawing"
-                            onClick={this.toggleDrawingMenu}
-                        >
-                            &#x2715;
-                        </button>,
+                      <button key="btn-save-drawing"
+                          className="btn-close-feature btn-close-drawing save"
+                          onClick={this.toggleDrawingMenu}
+                          >
+                              <img src="/img/tools/save.svg"/>
+                      </button>
                     ]
                 }
 			</div>

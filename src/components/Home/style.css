@@ -32,13 +32,17 @@
         width: 100%;
         height: auto; }
       .home-wrapper ul.canvaslist li h2 {
+        color: #333;
         margin-bottom: 20px;
-        text-align: center;
+        text-align: justify;
         word-break: break-all;
-        padding: 10px; }
+        padding: 10px;
+        font-family: 'Poppins'; }
       .home-wrapper ul.canvaslist li .canvasitem header {
         margin: 1% 0 0 0;
         color: #676767; }
+  .home-wrapper .see-all-comment {
+    color: #676767; }
 
 .listComments a li {
   color: #676767; }
@@ -165,5 +169,40 @@ body .home-wrapper {
 
 /*positioning of navigation only on HomePage */
 .home-wrapper ul.nav {
-  margin-left: 52%;
-  width: 55%; }
+  /*margin-left: 52%;
+  width: 55%;*/
+  min-width: 912px; }
+
+/* Loading code */
+.loader {
+  border: 12px solid #000;
+  border-radius: 50%;
+  border-top: 12px solid #fbc305;
+  border-right: 12px solid #172650;
+  border-bottom: 12px solid #e02228;
+  width: 35px;
+  height: 35px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  position: absolute;
+  left: 48%;
+  z-index: 100;
+  opacity: 1; }
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+@media screen and (max-width: 768px) {
+  .home-wrapper div.container-fluid {
+    border-bottom: 0px; }
+  .home-wrapper .navbar {
+    background-color: white; } }
