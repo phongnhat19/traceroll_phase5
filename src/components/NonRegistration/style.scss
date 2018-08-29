@@ -1,0 +1,146 @@
+@import '../mixins.scss';
+
+.login_wraper{
+    height: 100vh;
+    width: 100%;
+    background-image: url("/img/login/bg2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.login_wraper .loginmodal{
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    background-color: white;
+    top: calc((100vh - 500px)/2);
+    left: calc((100vw - 800px)/2);
+    animation: fadeInDown 1s;
+}
+.login_wraper .loginmodal .signup, .login_wraper .loginmodal .signform{
+    float: left;
+    height: 100%;
+    width: 50%;
+    opacity: 0;
+    animation: fadeInLeft 1s 1s forwards;
+}
+.login_wraper .loginmodal .signform h2{
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 50px;
+    letter-spacing: 1.25px;
+    font-family: $font-stack;
+    color: #797979;
+}
+
+.login_wraper .loginmodal .signform input{
+    background-color: #f4f4f4;
+    border: .7px solid #dadbdc;
+    border-radius: 5px;
+    color: #797979;
+    display: block;
+    font-size: 17px;
+    margin: 0 auto 8px;
+    padding-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    letter-spacing: .5px;
+    width: 90%;
+}
+
+.login_wraper .loginmodal .signform input:focus{
+    outline: none;
+
+}
+
+.login_wraper .loginmodal .signform .or_wrap{
+    width: 50%;
+    margin: auto;
+    padding: 10px 0px;
+    color: lightgrey;
+}
+
+.login_wraper .loginmodal .signform .br, .login_wraper .loginmodal .signform .or{
+    float: left;
+    width: 10%;
+    text-align: center;
+}
+
+.login_wraper .loginmodal .signform .br{
+    height: 1px;
+    background-color: lightgrey;
+    width: 45%;
+    margin-top: 10px;
+}
+
+.login_wraper .loginmodal .signform button:active{
+    border-bottom: none!important;
+    outline: none;
+}
+.login_wraper .loginmodal .signform button:focus{
+    outline: none;
+}
+.login_wraper .loginmodal .signup label{
+    margin-bottom: 1px;
+    margin-top: 5px;
+}
+.login_wraper .loginmodal .coverimg{
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    z-index: 3;
+    background-size: cover;
+    transition: all 1s ease;
+}
+.login_wraper .loginmodal .coverimg h2{
+    color: white;
+    font-family: $font-stack;
+    font-size: 45px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 1.5px;
+    margin-top: 55%;
+}
+
+#btn-change-passwd{
+    display: block;
+    height: 30px;
+    background-color: #3897f0;
+    margin: 10px auto 0px;
+    border-radius: 3px;
+    border: 0;
+    color: #fff;
+    font-weight: 600;
+    font-size: 16.56px;
+    letter-spacing: .5px;
+    border-bottom: 2px solid #1d8cc3;
+    width: 90%;
+}
+
+@media only screen and (max-width: 768px){
+    .login_wraper .loginmodal{
+        width: 100%;
+        left: 0px;
+    }
+}
+@media only screen and (max-width: 767px){
+    .login_wraper .loginmodal .coverimg{
+        display: none;
+    }
+    .login_wraper .loginmodal {
+        overflow: hidden;
+        width: 90%;
+        left: 5%;
+        background-color: rgba(255,255,255,0.9);
+    }
+    .login_wraper .loginmodal .signup, .login_wraper .loginmodal .signform{
+        width: 100%;
+    }
+    .login_wraper .loginmodal .signup, .login_wraper .loginmodal .signform{
+        animation: fadeInLeft 1s 0s forwards;
+    }
+}
+
+.show {
+    display: block !important;
+}

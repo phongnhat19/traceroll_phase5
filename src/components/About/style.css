@@ -34,6 +34,8 @@
     /* needed for container min-height */ }
     body.background p {
       font-weight: lighter; }
+  #about_wrapper .footer_content {
+    padding: 4% 1% 1%; }
 
 #about div.footer_content {
   position: absolute;

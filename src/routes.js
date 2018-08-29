@@ -1,9 +1,9 @@
 import React from 'react';
 import { Router, Route } from 'react-router';
-
+import Login from './components/Login';
 import NotFound from './components/NotFound';
 import Consent from './components/Consent';
-import Login from './components/Login';
+import SignUp from './components/SignUp';
 import Home from './components/Home';
 import Stage from './components/Stage';
 import About from './components/About';
@@ -16,6 +16,7 @@ const Routes = (props) => (
   <Router {...props}>
     <Route path="/" component={Home} />
     <Route path="/consent" component={Consent} />
+    <Route path="/intro" component={SignUp} />
     <Route path="/login" component={Login} />
     <Route path="/home" component={Home} />
     <Route path="/about" component={About} />

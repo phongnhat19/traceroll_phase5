@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Gaegu");
+@import url("https://fonts.googleapis.com/css?family=Poppins");
 @font-face {
   font-family: 'AvenirNext-Regular';
   /*src: url("/fonts/avenirnext/AvenirNext-Regular.eot");*/
@@ -12,9 +12,22 @@ body {
   padding: 0;
   font-family: sans-serif;
   overflow-x: hidden;
-  overflow-y: auto; }
+  overflow-y: auto;
+  /* overwriting rc-slider css*/ }
   body img {
     max-width: 100%; }
+  body .rc-slider {
+    width: 96.5%; }
+  body .rc-slider-handle {
+    border: 1px solid white;
+    background-color: #fbc305;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16); }
+  body .rc-slider-dot-active {
+    border-color: #95989a; }
+  body .rc-slider-track {
+    background-color: #172650; }
+  body .rc-slider-mark-text-active {
+    color: #767676; }
 
 a {
   cursor: pointer; }
