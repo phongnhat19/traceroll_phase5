@@ -379,7 +379,7 @@ span.rc-slider-mark-text {
   z-index: 1000; }
 
 .btn-close-drawing {
-  right: 15px;
+  left: 15px;
   bottom: 15px;
   width: 50px;
   height: 50px;

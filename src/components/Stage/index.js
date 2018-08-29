@@ -48,7 +48,7 @@ class TR_Stage extends Component{
 				picture: null
 			},
 			loginUser: {},
-      loginUserAvatar: '',
+            loginUserAvatar: '',
 			focusId: this.props.params.elementId || -1,
 			joinDate:0,
 			now:Date.now(),
@@ -1456,8 +1456,6 @@ class TR_Stage extends Component{
     	if (!showDrawTool) {
 			this.handlerChangePointer('pen')
         }
-        
-        console.log(123)
 
 		this.resetDefaultMode(showDrawTool, showTimeLine);
     }
@@ -1506,7 +1504,7 @@ class TR_Stage extends Component{
     	let rect = Utils.getRect(data);
     	return (
     		<TRLine
-          key={data._key}
+                key={data._key}
   				ref={data._key}
   				points={data.stage.points}
   				stroke={data.stage.color}
@@ -2005,8 +2003,19 @@ class TR_Stage extends Component{
                     options={this.state.options}
                     handleMouseWheel={this.handleMouseWheel}
                     toggleDrawingMenu={this.toggleDrawingMenu}
+                    showDrawTool = {this.state.showDrawTool}
                 />
-                
+                {
+                    this.state.showDrawTool &&
+                    [
+                        <button key="btn-save-drawing"
+                            className="btn-close-feature btn-close-drawing"
+                            onClick={this.toggleDrawingMenu}
+                        >
+                            &#x2715;
+                        </button>,
+                    ]
+                }
 			</div>
 		);
 	}

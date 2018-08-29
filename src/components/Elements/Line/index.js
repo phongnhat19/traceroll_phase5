@@ -37,6 +37,7 @@ class TRLine extends Component{
                 name={Const.SHAPE_TYPE.PEN}
                 points = {this.props.points}
                 stroke= {this.props.stroke}
+                fill={this.props.stroke}
                 strokeWidth={this.props.strokeWidth}
                 date_created = {this.props.date_created}
                 rect={this.rect}

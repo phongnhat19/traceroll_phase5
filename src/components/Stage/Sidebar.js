@@ -4,6 +4,7 @@ import {
     TRMenu
 } from './../Elements';
 import {Stage, Layer} from 'tr-react-konva';
+import {SliderPicker} from 'react-color';
 import $ from 'jquery';
 import './style.css'
 
@@ -25,6 +26,18 @@ class Sidebar extends Component {
         window.removeEventListener('wheel',this.props.handleMouseWheel)
     }
 
+    handlerMenuChange = (options) => {
+        this.props.handlerMenuChange && this.props.handlerMenuChange(options)
+    }
+
+    handlerChangePointer = (pointer) => {
+        this.props.handlerChangePointer && this.props.handlerChangePointer(pointer)
+    }
+
+    toggleDrawingMenu = () => {
+        this.props.toggleDrawingMenu && this.props.toggleDrawingMenu()
+    }
+
     render(){
         return(
             <div className="sidebar container" onMouseOut={() => this.mouseOut()} onMouseOver={() => this.mouseOver()}>
@@ -33,24 +46,41 @@ class Sidebar extends Component {
                         <strong>Drawing</strong>
                     </div>
                 </div>
-                <div className="sidebar-item row" >
-                    <section>
-                        <Stage
-                            width={this.state.width}
-                            height={80}>
-                            <Layer>
-                                <TRMenu
+                {
+                    this.props.showDrawTool && [
+                        <div className="sidebar-item row" >
+                            <section>
+                                <Stage
                                     width={this.state.width}
-                                    height={80}
-                                    handlerMenuChange={this.props.handlerMenuChange}
-                                    handlerChangePointer={this.props.handlerChangePointer}
-                                    options={this.props.options}
-                                    toggleDrawingMenu={this.props.toggleDrawingMenu}
+                                    height={80}>
+                                    <Layer>
+                                        <TRMenu
+                                            width={this.state.width}
+                                            height={80}
+                                            handlerMenuChange={this.handlerMenuChange}
+                                            handlerChangePointer={this.handlerChangePointer}
+                                            options={this.props.options}
+                                            toggleDrawingMenu={this.toggleDrawingMenu}
+                                        />
+                                    </Layer>
+                                </Stage>
+                            </section>
+                        </div>,
+                        <div className="sidebar-item row">
+                            <div className="col-md-12 col-xs-12 col-sm-12">
+                                <SliderPicker
+                                    color={this.props.options.color}
+                                    onChangeComplete={(color)=>{this.handlerMenuChange({mode:this.props.options.mode,color:color.hex})}}
                                 />
-                            </Layer>
-                        </Stage>
-                    </section>
-                </div> */}
+                            </div>
+                        </div>
+                    ]
+                }
+                {
+                    !this.props.showDrawTool && [
+                        <button onClick={this.props.toggleDrawingMenu}>Start Drawing</button>
+                    ]
+                }
                 <div className="sidebar-item row">
                     <div className="col-md-12 col-xs-12 col-sm-12">
                         <strong>Add stuff</strong>
