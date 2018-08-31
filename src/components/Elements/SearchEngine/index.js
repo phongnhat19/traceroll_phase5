@@ -112,7 +112,7 @@ class Search extends Component {
 
 				TrService.searchUser(requestBody, callback.bind(this))
 			}
-		}, 500);
+		}, 200);
 	}
 
 	render(){
@@ -146,7 +146,7 @@ class Search extends Component {
 									<img className="search-avatar" src={userObj.picture} />
 									<div className="d-inline-block">
 										<span>{userObj.userSlug}</span> <br/>
-										<span className="text-muted">{representName}</span>
+										<span className="text-muted">{fullName}</span>
 									</div>
 								</a>
 							</li>
