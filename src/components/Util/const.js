@@ -70,7 +70,8 @@ const Const = {
             height: 20
         },
 	},
-	DEFAULT_IMAGE_SIZE: 24576, //bytes
-	DEFAULT_VIDEO_SIZE: 204800 //bytes
+	DEFAULT_MAX_IMAGE_SIZE: 5242880, //bytes - 3MB
+	DEFAULT_MAX_VIDEO_SIZE: 26214400, //bytes - 25MB
+	DEFAULT_MAX_VIDEO_DURATION: 180 //seconds
 }
 export default Const

@@ -31,7 +31,11 @@ import ProfileWindow from './ProfileWindow';
 import './style.css';
 
 const { SELECT } = Const.MODE
-const { DEFAULT_IMAGE_SIZE, DEFAULT_VIDEO_SIZE } = Const;
+const { 
+    DEFAULT_MAX_IMAGE_SIZE,
+    DEFAULT_MAX_VIDEO_SIZE,
+    DEFAULT_MAX_VIDEO_DURATION,
+} = Const;
 
 class TR_Stage extends Component{
 	constructor(props){
@@ -1235,8 +1239,12 @@ class TR_Stage extends Component{
     }
     
     showAlertFileInvalidSize() {
-		alert('File is too large. The file must be less than 3MB for image and 25MB for video.');
-	}
+		alert('File is too large. The file must be less than 5MB for image and 25MB for video.');
+    }
+    
+    showAlertVideoDuration() {
+        alert('Video duration must be less than 3 minutes');
+    }
 
 	//=============================================
 	//Handle add image from modal - in progress
@@ -1368,8 +1376,8 @@ class TR_Stage extends Component{
         if (!this.validFileSize(fileUpload)) {
 			this.showAlertFileInvalidSize();
 			return false;
-		}
-
+        }
+        
 		document.getElementById('confirm_add_image').disabled = true;
 
 		const callback = function(response) {
@@ -1395,11 +1403,25 @@ class TR_Stage extends Component{
 			}else{
 				alert("Error happened during upload element");
 			}
-		}
+        }
+        
+        if (['video/mp4', 'video/ogg','video/webm'].indexOf(fileUpload.type) >= 0) {
+            let video = document.createElement('video');
+            video.preload = 'metadata';
+            video.onloadeddata = () => {
+                window.URL.revokeObjectURL(video.src);
 
-		TrService.uploadImage(fileUpload, callback.bind(this), this.updateProgress, this.Progress.show, this.Progress.hide)
-
-        this.closeAddImageModal()
+                if (video.duration <= DEFAULT_MAX_VIDEO_DURATION) {
+                    TrService.uploadImage(fileUpload, callback.bind(this), this.updateProgress, this.Progress.show, this.Progress.hide)
+                    this.closeAddImageModal()
+                } else {
+                    this.showAlertVideoDuration();
+                    return false;
+                }
+                
+            }
+            video.src = window.URL.createObjectURL(fileUpload);
+        }
 	}
 
     closeAddImageModal = () => {
@@ -1415,9 +1437,21 @@ class TR_Stage extends Component{
 		const type = file.type;
 		const size = file.size;
 		if (type.includes('image')) {
-			return size <= DEFAULT_IMAGE_SIZE;
+			return size <= DEFAULT_MAX_IMAGE_SIZE;
 		} else {
-			return size <= DEFAULT_VIDEO_SIZE;
+            // let video = document.createElement('video');
+            // let duration = 0;
+            // let isLoaded = false;
+            // video.preload = 'metadata';
+            // video.onloadeddata = () => {
+            //     window.URL.revokeObjectURL(video.src);
+            //     duration = video.duration;
+            //     isLoaded = true;
+                
+            // }
+            // video.src = window.URL.createObjectURL(file);
+
+            return size <= DEFAULT_MAX_VIDEO_SIZE;	
 		}
 	}
 
