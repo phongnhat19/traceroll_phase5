@@ -70,7 +70,7 @@ class Home extends Component {
 		window.addEventListener('scroll', this.handleScroll);
 
         const callback = function(response) {
-            const items = this.state.list,
+            let items = this.state.list,
                 body = response.data
             const data = body.data,
                 user = body.user
@@ -87,7 +87,21 @@ class Home extends Component {
             data.elements.map((item)=>{
                 this.handleLoadItem(items, item);
                 return true;
-            });
+			});
+			
+			if (items.length===0) {
+				const textLength = ("You haven’t followed anyone page").length
+				const fontSize = Utils.calculateTextSizeByTextLength(textLength);
+				items = [
+					<li>
+						<article className="canvasitem">
+							<div className="content">
+								<h2 style={{'fontSize': `${fontSize}px`}}>You haven’t followed anyone page</h2>
+							</div>
+						</article>
+					</li>
+				]
+			}
 
             this.setState({list: items});
         }

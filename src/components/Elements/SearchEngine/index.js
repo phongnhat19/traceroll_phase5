@@ -112,7 +112,7 @@ class Search extends Component {
 
 				TrService.searchUser(requestBody, callback.bind(this))
 			}
-		}, 200);
+		}, 150);
 	}
 
 	render(){
