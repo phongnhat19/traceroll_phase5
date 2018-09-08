@@ -141,22 +141,31 @@ var async = require('async'),
 	}
 
 	// GET Elements for newsfeed
-	Elements.getPagingElements = (page,limit,callback)=>{
+	Elements.getPagingElements = (userID,page,limit,callback)=>{
 		db.getSortedSetRevRange('elements:created-date', 0, -1, (err, elementIds)=>{
 			if (!elementIds || elementIds.length <= 0) {
 				return callback(new Error('Element is null by user'));
 			}
 			else {
-
-				var outElementsIds = elementIds.slice((page-1)*limit, page*limit);
-				Elements.getElements(outElementsIds, function(err, dataElements){
-					var data = {
-						"total" : elementIds.length,
-						"pageNum" : page,
-						"pageSize" : limit,
-						"elements" : dataElements,
+				db.getSortedSetRevRange(`user:${userID}:followings`,0,-1,(err,userIDs)=>{
+					if (err) {
+						return callback(new Error(JSON.stringify(err)))
 					}
-					callback(null, data);
+					else {
+						elementIds = elementIds.filter((item)=>{
+							return userIDs.indexOf(item.ownerid)!==-1
+						})
+						elementIds = elementIds.slice((page-1)*limit, page*limit);
+						Elements.getElements(elementIds, function(err, dataElements){
+							var data = {
+								"total" : elementIds.length,
+								"pageNum" : page,
+								"pageSize" : limit,
+								"elements" : dataElements,
+							}
+							callback(null, data);
+						});
+					}
 				});
 			}
 		})

@@ -220,7 +220,7 @@ apiController.getNewsfeed = function (req, res, next) {
 	let page = req.body.page || 1
 	let limit = req.body.limit || pageSize
 	
-	element.getPagingElements(page,limit,(err,data)=>{
+	element.getPagingElements(userId,page,limit,(err,data)=>{
 		if (err) {
             res.json({status:RESPONSE_STATUS.FAILED, reason:err});
         } else {
