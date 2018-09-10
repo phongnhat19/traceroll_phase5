@@ -33,6 +33,8 @@ import './style.css';
 const { SELECT } = Const.MODE
 const { 
     DEFAULT_MAX_IMAGE_SIZE,
+    DEFAULT_MAX_IMAGE_WIDTH,
+    DEFAULT_MAX_IMAGE_HEIGHT,
     DEFAULT_MAX_VIDEO_SIZE,
     DEFAULT_MAX_VIDEO_DURATION,
 } = Const;
@@ -1243,7 +1245,11 @@ class TR_Stage extends Component{
     }
     
     showAlertVideoDuration() {
-        alert('Video duration must be less than 3 minutes');
+        alert('Video duration must be less than 60 seconds');
+    }
+
+    showAlertImageResolution() {
+        alert('Image must be less than 2048x2048 pixels');
     }
 
 	//=============================================
@@ -1421,6 +1427,20 @@ class TR_Stage extends Component{
                 
             }
             video.src = window.URL.createObjectURL(fileUpload);
+        } else {
+            let image = new Image();
+            image.onload = () => {
+                window.URL.revokeObjectURL(image.src);
+
+                if (image.width <= DEFAULT_MAX_IMAGE_WIDTH && image.height <= DEFAULT_MAX_IMAGE_HEIGHT) {
+                    TrService.uploadImage(fileUpload, callback.bind(this), this.updateProgress, this.Progress.show, this.Progress.hide)
+                    this.closeAddImageModal()
+                } else {
+                    this.showAlertImageResolution();
+                    return false;
+                }
+            }
+            image.src = window.URL.createObjectURL(fileUpload);
         }
 	}
 
@@ -1439,18 +1459,6 @@ class TR_Stage extends Component{
 		if (type.includes('image')) {
 			return size <= DEFAULT_MAX_IMAGE_SIZE;
 		} else {
-            // let video = document.createElement('video');
-            // let duration = 0;
-            // let isLoaded = false;
-            // video.preload = 'metadata';
-            // video.onloadeddata = () => {
-            //     window.URL.revokeObjectURL(video.src);
-            //     duration = video.duration;
-            //     isLoaded = true;
-                
-            // }
-            // video.src = window.URL.createObjectURL(file);
-
             return size <= DEFAULT_MAX_VIDEO_SIZE;	
 		}
 	}
