@@ -70,8 +70,10 @@ const Const = {
             height: 20
         },
 	},
-	DEFAULT_MAX_IMAGE_SIZE: 5242880, //bytes - 3MB
+    DEFAULT_MAX_IMAGE_SIZE: 5242880, //bytes - 3MB
+    DEFAULT_MAX_IMAGE_WIDTH: 2048, // pixels
+    DEFAULT_MAX_IMAGE_HEIGHT: 2048, // pixels
 	DEFAULT_MAX_VIDEO_SIZE: 26214400, //bytes - 25MB
-	DEFAULT_MAX_VIDEO_DURATION: 180 //seconds
+	DEFAULT_MAX_VIDEO_DURATION: 60 //seconds
 }
 export default Const
