@@ -34,7 +34,8 @@ class TRText extends Component{
             this.setState({
                 width: text.width(),
 				height: text.height(),
-				whRatio: Math.round(text.width()/text.height())
+				whRatio: Math.round(text.width()/text.height()),
+				fontSizeRatio: Math.round(text.width()/this.props.fontSize)
             });
         }
     }
@@ -167,13 +168,10 @@ class TRText extends Component{
 			newHeight = endPos.y - originalPos.y,
 			text = this.text;
 
-		let ratio = newHeight / text.height()
-
         text.position(topLeftPos);
         text.width(Math.abs(newWidth));
-        text.height(Math.abs(newHeight));
-        text.fontSize(Math.round(Math.abs(text.fontSize()*ratio))); 
-        
+		text.height(Math.abs(newHeight));
+		text.fontSize(Math.round(Math.abs(newWidth/this.state.fontSizeRatio)));
     }
 
     updateCircleScale = () => {
